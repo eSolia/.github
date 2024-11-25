@@ -1,0 +1,49 @@
+name: Update Profile README
+
+on:
+  push:
+    # Run on main branch pushes or PRs
+    branches: [main]
+  pull_request:
+    branches: [ "main" ]
+  # Allow to manually trigger the workflow
+  workflow_dispatch:
+  schedule:
+    # Rebuild every day at 16:30 PM UTC
+    - cron: "30 16 * * *"
+
+jobs:
+  build:
+    # What OS to use
+    runs-on: ubuntu-latest
+    # Allow commits to the repository
+    permissions:
+      id-token: write
+      contents: write
+      pages: write
+
+    # What steps to run
+    steps:
+      - name: Clone repository
+        # Git clone the repository
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+
+      - name: Setup Deno environment
+        # Downloads deno and caches it
+        uses: denoland/setup-deno@v2
+        with:
+          # Latest Deno 2.x version
+          deno-version: v2.x
+
+      - name: Build site
+        # Run the build script from deno.json
+        run: deno task build
+
+      - name: Commit changes
+        # Commit the changes to the repository
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: Apply changes during gh actions build
+          status_options: '--untracked-files=no'
