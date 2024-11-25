@@ -1,0 +1,16 @@
+{
+  "imports": {
+    "lume/": "https://deno.land/x/lume@v2.4.2/"
+  },
+  "tasks": {
+    "lume": "echo \"import 'lume/cli.ts'\" | deno run --env-file -A -",
+    "build": "deno task lume",
+    "serve": "deno task lume -s",
+    "format": "echo '=== Regular deno fmt... ===' && deno fmt --ignore=_dist && echo '=== Deno fmt for vento... ===' && deno fmt --unstable-component --ignore=_dist"
+  },
+  "compilerOptions": {
+    "types": [
+      "lume/types.ts"
+    ]
+  }
+}

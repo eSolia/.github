@@ -1,0 +1,18 @@
+metas:
+  type: website
+  site: Rick Cogley's Github Profile Site
+  title: "=title"
+  bluesky: "@cogley.jp"
+  fediverse: "@cogley.jp"
+  icon: /avatar.jpg
+  lang: en
+  generator: true
+  keywords: [
+    Rick Cogley,
+    GitHub Profile,
+    Deno,
+    Lume,
+    Vento,
+    GitHub Actions,
+    Japan,
+  ]

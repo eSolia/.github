@@ -1,29 +1,31 @@
+---
+url: /repo-readme.md
+date: Git Last Modified
+---
 [![Proven.lol Lightweight Proof](https://img.shields.io/badge/Proven.lol-Lightweight_Proof-green?style=flat-square&logo=cachet)](proven.lol/fbd788)  
   
-**Last Updated:** November 25th, 2024 at 11:19:59 AM GMT+9  
-
+**Last Updated:** {{ date |> date('HUMAN_DATETIME') }}  
+{{ set today = todaysDateYYYYMMDD }}{{ if holidays[today] }}**Today is:** {{ holidays[today] }}{{ /if }}
 
 ### Hi there 👋
 
 Welcome to eSolia on GitHub. We're a Tokyo-based IT management consultancy, and we're glad you're here. 
 
 ## Latest Bluesky Posts:
-* [You can block vast swathes of jerks using the curated lists here: https://bsky.app/profile/skysentry.bsky.social](https://bsky.app/profile/cogley.jp/post/3lboxyzxqx22o)
-* [Saw “Samurai Timeslipper” yesterday after reading a review in the paper, and liked it. It’s Showaesque, low budget (eg the actual AD plays an AD, director dons many hats) warmly humorous, takes cues from the best of J cinema. 🥰 www.samutai.net](https://bsky.app/profile/cogley.jp/post/3lbnj6fifr727)
-* [Create a Dynamic GitHub Profile with Lume: https://cogley.jp/2024/11/22/create-a-dynamic.html](https://bsky.app/profile/cogley.jp/post/3lbk53o6vt727)
-
+{{ for item of bskyposts.entries }}* [{{ item.description.value }}]({{ item.links[0].href }})
+{{ /for }}
 
 ## Stats:
 
 | Item | Value |
 | --- | --- |
-| Repo Total Files | 1 |
-| Repo Size in MB | 117 |
-| Lume Version | v2.4.2 |
-| Deno Version | 2.1.1 |
-| V8 Version | 13.0.245.12-rusty |
-| Typescript Version | 5.6.2 |
-| Timezone | Asia/Tokyo |
+| Repo Total Files | {{ search.files("").length }} |
+| Repo Size in MB | {{ repoSizeKB }} |
+| Lume Version | {{ lumeVersion }} |
+| Deno Version | {{ Deno.version.deno }} |
+| V8 Version | {{ Deno.version.v8 }} |
+| Typescript Version | {{ Deno.version.typescript }} |
+| Timezone | {{ Deno.env.get("TZ") }} |
 
 ### How does this readme work? 
 
@@ -53,3 +55,6 @@ We're generating this readme using the Lume static site generator. See [this pag
 	<code><img width="30" src="https://github.com/marwin1991/profile-technology-icons/assets/76662862/2481dc48-be6b-4ebb-9e8c-3b957efe69fa" alt="Linux" title="Linux"/></code>
 </div>
 
+{{# ## Latest Blog Posts:
+{{ for item of microblogposts.entries }}* [{{ item.description.value |> slice(9,80) |> split(" ") |> slice(0,20) |> join(" ") |> concat(" ","...") }}]({{ item.id }})
+{{ /for }} #}}
