@@ -1,6 +1,6 @@
 [![Proven.lol Lightweight Proof](https://img.shields.io/badge/Proven.lol-Lightweight_Proof-green?style=flat-square&logo=cachet)](proven.lol/fbd788)  
   
-**Last Updated:** November 25th, 2024 at 11:19:59 AM GMT+9  
+**Last Updated:** November 25th, 2024 at 11:23:58 AM GMT+9  
 
 
 ### Hi there 👋
@@ -8,9 +8,9 @@
 Welcome to eSolia on GitHub. We're a Tokyo-based IT management consultancy, and we're glad you're here. 
 
 ## Latest Bluesky Posts:
-* [You can block vast swathes of jerks using the curated lists here: https://bsky.app/profile/skysentry.bsky.social](https://bsky.app/profile/cogley.jp/post/3lboxyzxqx22o)
-* [Saw “Samurai Timeslipper” yesterday after reading a review in the paper, and liked it. It’s Showaesque, low budget (eg the actual AD plays an AD, director dons many hats) warmly humorous, takes cues from the best of J cinema. 🥰 www.samutai.net](https://bsky.app/profile/cogley.jp/post/3lbnj6fifr727)
-* [Create a Dynamic GitHub Profile with Lume: https://cogley.jp/2024/11/22/create-a-dynamic.html](https://bsky.app/profile/cogley.jp/post/3lbk53o6vt727)
+* [For our 25th anniversary, we decided to refresh our look, and Lucie Baratte (designer extraordinaire &amp; founder of www.logology.co) came up with a look we love, that matches our brand well!](https://bsky.app/profile/esolia.com/post/3lbqdlnqdvs2k)
+* [Year-end &amp; New Year Holiday Season: Dec 27 (Fri) 12:00, 2024 to Jan 5 (Sun), 2025](https://bsky.app/profile/esolia.com/post/3lbptb7tc7m24)
+* [Hello Bluesky. eSolia is a 25 yr old IT consulting company based in Tokyo. We act as a kind of virtual IT dept for companies entering the Japan market.](https://bsky.app/profile/esolia.com/post/3lbpsykujsu24)
 
 
 ## Stats:
@@ -18,7 +18,7 @@ Welcome to eSolia on GitHub. We're a Tokyo-based IT management consultancy, and 
 | Item | Value |
 | --- | --- |
 | Repo Total Files | 1 |
-| Repo Size in MB | 117 |
+| Repo Size in MB | 140 |
 | Lume Version | v2.4.2 |
 | Deno Version | 2.1.1 |
 | V8 Version | 13.0.245.12-rusty |
