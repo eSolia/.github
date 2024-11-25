@@ -1,11 +1,26 @@
 [![Proven.lol Lightweight Proof](https://img.shields.io/badge/Proven.lol-Lightweight_Proof-green?style=flat-square&logo=cachet)](proven.lol/fbd788)  
   
-**Last Updated:** November 25th, 2024 at 11:23:58 AM GMT+9  
+**Last Updated:** November 25th, 2024 at 1:03:34 PM GMT+9  
 
 
-### Hi there 👋
+## Hi there 👋
 
-Welcome to eSolia on GitHub. We're a Tokyo-based IT management consultancy, and we're glad you're here. 
+Welcome to eSolia on GitHub. We're a Tokyo-based IT management consultancy, and we're glad you're here. We are a security conscious company, incorporating ISO 27001 good practices in our work, including software development. 
+
+Specifically, the following are the requirements mandated in ISO 27001:2022 Annex A Control 8.25 as "rules for the secure development of software and systems", and how we address them. 
+
+| Requirement | Actions |
+| --- | --- |
+| 1. Keeping development, testing, and production environments separate. | For typical jamstack websites (most of our sites), development refers to the developer's local environment, testing refers to a protected branch published for the client to review, and production is the published website. In the case of our PROdb cloud database, it is possible to make a combined dev and test environment, which is separate from production, then merge it to production when approved. |
+| 2. Offering guidance on security in the software development life cycle, in terms of general methodology and languages use. | We handle this via SOP. |
+| 3. Implementing security requirements during the specification and design phases. | Every project considers and specifies security during initial projects, or changes.  |
+| 4. Developing and using security checkpoints in projects. | We establish the basic security framework for a project in the specification phase, develop per the basic guideline established in the spec, then finally report how the project has implemented security. |
+| 5. Engaging in security and system testing. | For most website projects, security scanning entails checking security headers are in place. For cloud database projects, the platform vendor is running basic security penetration tests regularly, and we check relevant security areas at every step, in specific configuration areas such as table, view, form security. |
+| 6. Establishing secure repositories for storing source codes and configurations. | Only permitted personnel have write permissions (commit or merge access) to repositories. |
+| 7. Ensuring security in version control during change management. | Change management process considers version control security. |
+| 8. Ensuring all personnel involved in development have the required application security knowledge. | We are engaged in an ongoing effort to develop this knowledge. |
+| 9. Ensuring developers have the capacity to recognise and avert security flaws. | We take care to understand security and the lack thereof, within the websites we develop and the apps we configure. |
+| 10. Adhering to licensing requirements. | We are aware of licensing and adhere to all requirements. |
 
 ## Latest Bluesky Posts:
 * [For our 25th anniversary, we decided to refresh our look, and Lucie Baratte (designer extraordinaire &amp; founder of www.logology.co) came up with a look we love, that matches our brand well!](https://bsky.app/profile/esolia.com/post/3lbqdlnqdvs2k)
@@ -18,7 +33,7 @@ Welcome to eSolia on GitHub. We're a Tokyo-based IT management consultancy, and 
 | Item | Value |
 | --- | --- |
 | Repo Total Files | 1 |
-| Repo Size in MB | 140 |
+| Repo Size in MB | 144 |
 | Lume Version | v2.4.2 |
 | Deno Version | 2.1.1 |
 | V8 Version | 13.0.245.12-rusty |
