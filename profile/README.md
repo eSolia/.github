@@ -1,6 +1,6 @@
 [![Proven.lol Lightweight Proof](https://img.shields.io/badge/Proven.lol-Lightweight_Proof-green?style=flat-square&logo=cachet)](https://proven.lol/fbd788)  
   
-**Last Updated:** November 25th, 2024 at 1:09:02 PM GMT+9  
+**Last Updated:** November 25th, 2024 at 8:52:39 PM GMT+9  
 
 
 ## Hi there 👋
@@ -42,7 +42,7 @@ Specifically, the following are the requirements mandated in ISO 27001:2022 Anne
 
 ### How does this readme work? 
 
-We're generating this readme using the Lume static site generator. See [this page](https://rickcogley.github.io/rickcogley/) for details to get your own! 
+We're generating this readme using the [Lume](https://lume.land/) static site generator from within the eSolia [.github](https://github.com/esolia/.github) repository. See [this page](https://rickcogley.github.io/rickcogley/) for details to get your own dynamic readme! 
 
 ### Tech Stack
 
