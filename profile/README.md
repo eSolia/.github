@@ -1,6 +1,6 @@
 [![Proven.lol Lightweight Proof](https://img.shields.io/badge/Proven.lol-Lightweight_Proof-green?style=flat-square&logo=cachet)](https://proven.lol/fbd788)  
   
-**Last Updated:** December 19th, 2024 at 1:37:11 AM GMT+9  
+**Last Updated:** December 20th, 2024 at 1:36:10 AM GMT+9  
 
 
 ## Hi there 👋
@@ -23,9 +23,9 @@ Specifically, the following are the requirements mandated in ISO 27001:2022 Anne
 | 10. Adhering to licensing requirements. | We are aware of licensing and adhere to all requirements. |
 
 ## Latest Bluesky Posts:
+* [Our designer Lucie Baratte cofounder of Logology.co, created a slick new logo for our cloud database service PROdb. Thanks Lucie!](https://bsky.app/profile/esolia.com/post/3ldp6ge4pbk23)
 * [This year we marked our 25th anniversary and updated our logo. We&#39;ll be taking a break from Dec 27 at 12:00 through Jan 5. We can&#39;t wait to come back in 2025 stronger and better than ever. We&#39;re committed to keeping your information safe through our ISO 27001 efforts.🎍🎌](https://bsky.app/profile/esolia.com/post/3lclwayamsk2d)
 * [For our 25th anniversary, we decided to refresh our look, and Lucie Baratte (designer extraordinaire &amp; founder of www.logology.co) came up with a look we love, that matches our brand well!](https://bsky.app/profile/esolia.com/post/3lbqdlnqdvs2k)
-* [Year-end &amp; New Year Holiday Season: Dec 27 (Fri) 12:00, 2024 to Jan 5 (Sun), 2025](https://bsky.app/profile/esolia.com/post/3lbptb7tc7m24)
 
 
 ## Stats:
