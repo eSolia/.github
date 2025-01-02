@@ -1,7 +1,7 @@
 [![Proven.lol Lightweight Proof](https://img.shields.io/badge/Proven.lol-Lightweight_Proof-green?style=flat-square&logo=cachet)](https://proven.lol/fbd788)  
   
-**Last Updated:** January 1st, 2025 at 1:35:49 AM GMT+9  
-**Today is:** 元日
+**Last Updated:** January 2nd, 2025 at 1:35:48 AM GMT+9  
+
 
 ## Hi there 👋
 
