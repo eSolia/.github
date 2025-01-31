@@ -1,6 +1,6 @@
 [![Proven.lol Lightweight Proof](https://img.shields.io/badge/Proven.lol-Lightweight_Proof-green?style=flat-square&logo=cachet)](https://proven.lol/fbd788)  
   
-**Last Updated:** January 30th, 2025 at 1:35:52 AM GMT+9  
+**Last Updated:** January 31st, 2025 at 1:36:10 AM GMT+9  
 
 
 ## Hi there 👋
@@ -23,9 +23,9 @@ Specifically, the following are the requirements mandated in ISO 27001:2022 Anne
 | 10. Adhering to licensing requirements. | We are aware of licensing and adhere to all requirements. |
 
 ## Latest Bluesky Posts:
+* [神田大明神で初詣して株式会社イソリアを拝んでいただきました。頑張りましょう！ eSolia got traditional Shinto blessings for good business luck and employee health, at Kanda Daimyojin shrine.](https://bsky.app/profile/esolia.com/post/3lgyxpzj3k22o)
 * [謹賀新年。2025年が良い年になりますように、一緒に頑張りましょう！](https://bsky.app/profile/esolia.com/post/3lenqvdmwzk2g)
 * [Happy New Year everyone. May your 2025 be a great one! 🇯🇵🎍](https://bsky.app/profile/esolia.com/post/3lenovyyugc2b)
-* [Our designer Lucie Baratte cofounder of Logology.co, created a slick new logo for our cloud database service PROdb. Thanks Lucie!](https://bsky.app/profile/esolia.com/post/3ldp6ge4pbk23)
 
 
 ## Stats:
@@ -35,7 +35,7 @@ Specifically, the following are the requirements mandated in ISO 27001:2022 Anne
 | Repo Total Files | 1 |
 | Repo Size in MB | 148 |
 | Lume Version | v2.4.2 |
-| Deno Version | 2.1.7 |
+| Deno Version | 2.1.9 |
 | V8 Version | 13.0.245.12-rusty |
 | Typescript Version | 5.6.2 |
 | Timezone | Asia/Tokyo |
