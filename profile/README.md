@@ -1,6 +1,6 @@
 [![Proven.lol Lightweight Proof](https://img.shields.io/badge/Proven.lol-Lightweight_Proof-green?style=flat-square&logo=cachet)](https://proven.lol/fbd788)  
   
-**Last Updated:** May 9th, 2025 at 1:38:34 AM GMT+9  
+**Last Updated:** May 10th, 2025 at 1:37:02 AM GMT+9  
 
 
 ## Hi there 👋
@@ -23,9 +23,9 @@ Specifically, the following are the requirements mandated in ISO 27001:2022 Anne
 | 10. Adhering to licensing requirements. | We are aware of licensing and adhere to all requirements. |
 
 ## Latest Bluesky Posts:
+* [eSolia performed testing during the development phase of the Lume v3 static site generator, using it to refactor client and our own websites. Congratulations to Óscar Otero, its creator, for passing this significant milestone of features and functionality! 🎊&#xA;&#xA;[contains quote post or other embedded content]](https://bsky.app/profile/esolia.com/post/3lord5h4fbs2h)
 * [神田大明神で初詣して株式会社イソリアを拝んでいただきました。頑張りましょう！ eSolia got traditional Shinto blessings for good business luck and employee health, at Kanda Daimyojin shrine.](https://bsky.app/profile/esolia.com/post/3lgyxpzj3k22o)
 * [謹賀新年。2025年が良い年になりますように、一緒に頑張りましょう！](https://bsky.app/profile/esolia.com/post/3lenqvdmwzk2g)
-* [Happy New Year everyone. May your 2025 be a great one! 🇯🇵🎍](https://bsky.app/profile/esolia.com/post/3lenovyyugc2b)
 
 
 ## Stats:
