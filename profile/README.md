@@ -1,6 +1,6 @@
 [![Proven.lol Lightweight Proof](https://img.shields.io/badge/Proven.lol-Lightweight_Proof-green?style=flat-square&logo=cachet)](https://proven.lol/fbd788)  
   
-**Last Updated:** May 26th, 2025 at 1:36:53 AM GMT+9  
+**Last Updated:** May 27th, 2025 at 1:37:24 AM GMT+9  
 
 
 ## Hi there 👋
@@ -23,9 +23,9 @@ Specifically, the following are the requirements mandated in ISO 27001:2022 Anne
 | 10. Adhering to licensing requirements. | We are aware of licensing and adhere to all requirements. |
 
 ## Latest Bluesky Posts:
+* [🔍 Only 3 days to go!&#xA;We’ll be launching with 6 articles published all at once 🎉&#xA;From practical tips you can use right away&#xA;to real-world insights from the front lines&#xA;we&#39;re sharing carefully selected knowledge that’s truly helped us in the field&#xA;#eSolia #TechBlog #BilingualIT #3DaysToGo](https://bsky.app/profile/esolia.com/post/3lq62ubr6yk22)
+* [🔍 公開まであと3日&#xA;第1弾として、6本の記事を同時公開します🎉&#xA;その日から使えるちょっとしたヒントや、&#xA;現場ならではの視点でお届けするリアルな情報など&#xA;現場で本当に役立った知見を厳選してご紹介します。&#xA;#イソリア #eSolia #TechBlog #バイリンガルIT #あと3日](https://bsky.app/profile/esolia.com/post/3lq4p4ubhza2h)
 * [We’re excited to announce the launch of eSolia’s &#34;Tech It Easy Blog&#34; 🚀 &#xA;Based in Tokyo with 26 years of experience, we’ll share practical IT tips and insights. &#xA;ーThe site is scheduled to go live on Friday, May 30.ー follow us for updates!😉 &#xA;#eSolia #TechBlog #ITTips #ComingSoon](https://bsky.app/profile/esolia.com/post/3lptz435wej2t)
-* [この度イソリアの新しいブログ、”Tech It Easy Blog” が始動します🚀&#xA;東京拠点に26周年を迎えたイソリアが、現場で培ったノウハウから「知って得するTips」をお届けします。&#xA;ー公開は5月30日（金）予定ー&#xA;気になる方は、ぜひこのアカウントをフォローして最新情報をチェックしてください😉&#xA;#イソリア #eSolia #TechBlog #ITTips #ComingSoon](https://bsky.app/profile/esolia.com/post/3lpsnbbiepd2u)
-* [eSolia performed testing during the development phase of the Lume v3 static site generator, using it to refactor client and our own websites. Congratulations to Óscar Otero, its creator, for passing this significant milestone of features and functionality! 🎊&#xA;&#xA;[contains quote post or other embedded content]](https://bsky.app/profile/esolia.com/post/3lord5h4fbs2h)
 
 
 ## Stats:
