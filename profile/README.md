@@ -1,6 +1,6 @@
 [![Proven.lol Lightweight Proof](https://img.shields.io/badge/Proven.lol-Lightweight_Proof-green?style=flat-square&logo=cachet)](https://proven.lol/fbd788)  
   
-**Last Updated:** May 29th, 2025 at 1:38:37 AM GMT+9  
+**Last Updated:** May 30th, 2025 at 1:38:42 AM GMT+9  
 
 
 ## Hi there 👋
@@ -23,9 +23,9 @@ Specifically, the following are the requirements mandated in ISO 27001:2022 Anne
 | 10. Adhering to licensing requirements. | We are aware of licensing and adhere to all requirements. |
 
 ## Latest Bluesky Posts:
-* [📢 It’s almost here!&#xA;eSolia’s “Tech It Easy Blog” is finally launching tomorrow!&#xA;We’ll be sharing practical, insider IT tips discovered through 26 years of on-the-ground experience &#xA;📅 Launching Friday, May 30, 2025 at 17:00 PM (Japan Time) Stay tuned!&#xA;#eSolia #TechBlog #ITTips](https://bsky.app/profile/esolia.com/post/3lqd3sz4ljx2b)
-* [📢 いよいよ明日！&#xA;イソリアの “Tech It Easy Blog” がいよいよスタートします。 &#xA;26年の現場経験を通して見つけた「知って得するTips」を バイリンガルITサポートの最前線からお届けします。 &#xA;📅　2025年5月30日（金）17:00PM 公開予定 　お楽しみに♪&#xA;#イソリア #eSolia #TechBlog #ITTips](https://bsky.app/profile/esolia.com/post/3lqbq2vwq2l2h)
-* [🔍 Only 3 days to go!&#xA;We’ll be launching with 6 articles published all at once 🎉&#xA;From practical tips you can use right away&#xA;to real-world insights from the front lines&#xA;we&#39;re sharing carefully selected knowledge that’s truly helped us in the field&#xA;#eSolia #TechBlog #BilingualIT #3DaysToGo](https://bsky.app/profile/esolia.com/post/3lq62ubr6yk22)
+* [&gt;&gt; Tech It Easy Blog is now live &lt;&lt;&#xA;We’ve published 6 articles at once 🎉&#xA;👇 Feel free to stop by and have a read!&#xA;🔗 blog.esolia.pro &#xA;#eSolia #ITTips #BilingualBlog #ITForBeginners&#xA;https://blog.esolia.pro/](https://bsky.app/profile/esolia.com/post/3lqf6rbcy5a2j)
+* [&gt;&gt; Tech It Easy Blog 公開しました &lt;&lt;&#xA;6本の記事を同時公開しています🎉&#xA;👇 まずは気軽に読みに来てください&#xA;🔗 blog.esolia.pro&#xA;#eSolia #ITTips #BilingualBlog #IT初心者歓迎&#xA;https://blog.esolia.pro](https://bsky.app/profile/esolia.com/post/3lqewz7qiwc2l)
+* [&gt;&gt; Tech It Easy Blog 公開しました &lt;&lt;&#xA;6本の記事を同時公開しています🎉&#xA;👇 まずは気軽に読みに来てください&#xA;🔗 blog.esolia.pro&#xA;#eSolia #ITTips #BilingualBlog #IT初心者歓迎&#xA;https://blog.esolia.pro](https://bsky.app/profile/esolia.com/post/3lqewz7qiwc2l)
 
 
 ## Stats:
@@ -35,7 +35,7 @@ Specifically, the following are the requirements mandated in ISO 27001:2022 Anne
 | Repo Total Files | 1 |
 | Repo Size in MB | 149 |
 | Lume Version | v2.4.2 |
-| Deno Version | 2.3.3 |
+| Deno Version | 2.3.5 |
 | V8 Version | 13.7.152.6-rusty |
 | Typescript Version | 5.8.3 |
 | Timezone | Asia/Tokyo |
