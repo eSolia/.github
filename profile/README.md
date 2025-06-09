@@ -1,6 +1,6 @@
 [![Proven.lol Lightweight Proof](https://img.shields.io/badge/Proven.lol-Lightweight_Proof-green?style=flat-square&logo=cachet)](https://proven.lol/fbd788)  
   
-**Last Updated:** June 8th, 2025 at 1:37:19 AM GMT+9  
+**Last Updated:** June 9th, 2025 at 1:37:38 AM GMT+9  
 
 
 ## Hi there 👋
@@ -23,9 +23,9 @@ Specifically, the following are the requirements mandated in ISO 27001:2022 Anne
 | 10. Adhering to licensing requirements. | We are aware of licensing and adhere to all requirements. |
 
 ## Latest Bluesky Posts:
+* [📣 New Blog Post&#xA;Wondering if your battery’s wearing out? Here&#39;s a quick way to find out.👉&#xA;https://blog.esolia.pro/en/posts/20250411-check-battery-health-en/](https://bsky.app/profile/esolia.com/post/3lr6qv5puje2h)
+* [📣 New Blog Post &#xA;「なんか最近バッテリーの減りが早い気がする…」&#xA;そんなときに役立つ、バッテリーの劣化具合を確認する方法をまとめました。&#xA;記事はこちらから👇&#xA;https://blog.esolia.pro/posts/20250411-%E3%83%90%E3%83%83%E3%83%86%E3%83%AA%E3%83%BC%E3%81%AE%E3%83%98%E3%82%BF%E3%83%AA%E5%85%B7%E5%90%88%E3%82%92%E7%A2%BA%E8%AA%8D%E3%81%99%E3%82%8B%E6%96%B9%E6%B3%95-ja/](https://bsky.app/profile/esolia.com/post/3lr5vwelsc52j)
 * [&gt;&gt; Tech It Easy Blog is now live &lt;&lt;&#xA;We’ve published 6 articles at once 🎉&#xA;👇 Feel free to stop by and have a read!&#xA;🔗 blog.esolia.pro &#xA;#eSolia #ITTips #BilingualBlog #ITForBeginners&#xA;https://blog.esolia.pro/](https://bsky.app/profile/esolia.com/post/3lqf6rbcy5a2j)
-* [&gt;&gt; Tech It Easy Blog 公開しました &lt;&lt;&#xA;6本の記事を同時公開しています🎉&#xA;👇 まずは気軽に読みに来てください&#xA;🔗 blog.esolia.pro&#xA;#eSolia #ITTips #BilingualBlog #IT初心者歓迎&#xA;https://blog.esolia.pro](https://bsky.app/profile/esolia.com/post/3lqewz7qiwc2l)
-* [&gt;&gt; Tech It Easy Blog 公開しました &lt;&lt;&#xA;6本の記事を同時公開しています🎉&#xA;👇 まずは気軽に読みに来てください&#xA;🔗 blog.esolia.pro&#xA;#eSolia #ITTips #BilingualBlog #IT初心者歓迎&#xA;https://blog.esolia.pro](https://bsky.app/profile/esolia.com/post/3lqewz7qiwc2l)
 
 
 ## Stats:
