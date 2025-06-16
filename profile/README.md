@@ -1,6 +1,6 @@
 [![Proven.lol Lightweight Proof](https://img.shields.io/badge/Proven.lol-Lightweight_Proof-green?style=flat-square&logo=cachet)](https://proven.lol/fbd788)  
   
-**Last Updated:** June 15th, 2025 at 1:36:48 AM GMT+9  
+**Last Updated:** June 16th, 2025 at 1:37:26 AM GMT+9  
 
 
 ## Hi there 👋
@@ -23,9 +23,9 @@ Specifically, the following are the requirements mandated in ISO 27001:2022 Anne
 | 10. Adhering to licensing requirements. | We are aware of licensing and adhere to all requirements. |
 
 ## Latest Bluesky Posts:
+* [📣 New Blog Post &#xA;&#34;My PC froze... What should I do?&#34;&#xA;Here are 7 simple solutions anyone can try when their computer freezes.&#xA;Check out the article here:&#xA;https://blog.esolia.pro/en/posts/20250412-my-computer-froze-7-easy-fixes-for-beginners-en/](https://bsky.app/profile/esolia.com/post/3lrqeamvmnp2t)
+* [📣 New Blog Post&#xA;「PCがフリーズ…どうしよう？」&#xA;そんなお困りの場面で役立つ、初心者でもできる7つの対処法を紹介しています。 &#xA;記事はこちらから⬇️&#xA;https://blog.esolia.pro/posts/20250412-%E3%83%91%E3%82%BD%E3%82%B3%E3%83%B3%E3%81%8C%E3%83%95%E3%83%AA%E3%83%BC%E3%82%BA%E3%81%97%E3%81%9F-%E5%88%9D%E5%BF%83%E8%80%85%E3%81%A7%E3%82%82%E3%81%A7%E3%81%8D%E3%82%8B7%E3%81%A4%E3%81%AE%E5%AF%BE%E5%87%A6%E6%B3%95-ja/](https://bsky.app/profile/esolia.com/post/3lroygfmkmi2j)
 * [📣 New Blog Post&#xA;Wondering if your battery’s wearing out? Here&#39;s a quick way to find out.👉&#xA;https://blog.esolia.pro/en/posts/20250411-check-battery-health-en/](https://bsky.app/profile/esolia.com/post/3lr6qv5puje2h)
-* [📣 New Blog Post &#xA;「なんか最近バッテリーの減りが早い気がする…」&#xA;そんなときに役立つ、バッテリーの劣化具合を確認する方法をまとめました。&#xA;記事はこちらから👇&#xA;https://blog.esolia.pro/posts/20250411-%E3%83%90%E3%83%83%E3%83%86%E3%83%AA%E3%83%BC%E3%81%AE%E3%83%98%E3%82%BF%E3%83%AA%E5%85%B7%E5%90%88%E3%82%92%E7%A2%BA%E8%AA%8D%E3%81%99%E3%82%8B%E6%96%B9%E6%B3%95-ja/](https://bsky.app/profile/esolia.com/post/3lr5vwelsc52j)
-* [&gt;&gt; Tech It Easy Blog is now live &lt;&lt;&#xA;We’ve published 6 articles at once 🎉&#xA;👇 Feel free to stop by and have a read!&#xA;🔗 blog.esolia.pro &#xA;#eSolia #ITTips #BilingualBlog #ITForBeginners&#xA;https://blog.esolia.pro/](https://bsky.app/profile/esolia.com/post/3lqf6rbcy5a2j)
 
 
 ## Stats:
