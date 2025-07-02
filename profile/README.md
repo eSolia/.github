@@ -1,6 +1,6 @@
 [![Proven.lol Lightweight Proof](https://img.shields.io/badge/Proven.lol-Lightweight_Proof-green?style=flat-square&logo=cachet)](https://proven.lol/fbd788)  
   
-**Last Updated:** July 1st, 2025 at 1:38:54 AM GMT+9  
+**Last Updated:** July 2nd, 2025 at 1:39:16 AM GMT+9  
 
 
 ## Hi there 👋
@@ -23,9 +23,9 @@ Specifically, the following are the requirements mandated in ISO 27001:2022 Anne
 | 10. Adhering to licensing requirements. | We are aware of licensing and adhere to all requirements. |
 
 ## Latest Bluesky Posts:
+* [📣 New Blog Post&#xA;Is your company’s SharePoint Online migration going smoothly?&#xA;“We can’t open the files!” — Sound familiar?&#xA;We’re tackling this common issue with a 2-part blog series on the causes and solutions.&#xA;Check out Part 1 below:&#xA;https://blog.esolia.pro/en/posts/20250702-sharepoint-online-post-migration-problems-solutions-en/ &#xA;#MustReadForIT #Microsoft365](https://bsky.app/profile/esolia.com/post/3lsylsus5bt2j)
+* [📣 New Blog Post &#xA;社内のSharePoint Online移行、トラブルなく進んでいますか？&#xA;ファイルが開けない…そんな“あるある”トラブルの原因と解決法を【2週連続】でお届けします！&#xA;第1弾の記事はこちらから&#xA;https://blog.esolia.pro/posts/20250702-sharepoint-online-%E7%A7%BB%E8%A1%8C%E5%BE%8C%E5%95%8F%E9%A1%8C%E5%8E%9F%E5%9B%A0%E3%81%A8%E5%AF%BE%E7%AD%96-ja/ &#xA;#IT担当者必見 #Sharepoint #Microsoft365 #業務改善](https://bsky.app/profile/esolia.com/post/3lsx6zxxq4i2u)
 * [📣 New Blog Post &#xA;&#34;Are you neglecting password reuse?&#34;&#xA;We&#39;ve summarized 5 highly practical tips every IT professional should know to strengthen internal password management.&#xA;Check out the article here:&#xA;https://blog.esolia.pro/en/posts/20250623-how-to-strengthen-password-management-in-your-company-en/](https://bsky.app/profile/esolia.com/post/3lsbxhlksbx2h)
-* [📣 New Blog Post &#xA;「パスワードの使い回し、放置していませんか？」&#xA;IT担当者が知っておきたい社内のパスワード管理を強化するための5つの超実践ポイントをまとめました&#xA;記事はこちらから⬇️&#xA;https://blog.esolia.pro/posts/20250623-it%E6%8B%85%E5%BD%93%E8%80%85%E5%BF%85%E8%A6%8B-%E7%A4%BE%E5%86%85%E3%81%AE%E3%83%91%E3%82%B9%E3%83%AF%E3%83%BC%E3%83%89%E7%AE%A1%E7%90%86%E3%82%92%E5%BC%B7%E5%8C%96%E3%81%99%E3%82%8B%E6%96%B9%E6%B3%95-ja/](https://bsky.app/profile/esolia.com/post/3lsaktrioqx2e)
-* [📣 New Blog Post &#xA;&#34;My PC froze... What should I do?&#34;&#xA;Here are 7 simple solutions anyone can try when their computer freezes.&#xA;Check out the article here:&#xA;https://blog.esolia.pro/en/posts/20250412-my-computer-froze-7-easy-fixes-for-beginners-en/](https://bsky.app/profile/esolia.com/post/3lrqeamvmnp2t)
 
 
 ## Stats:
@@ -35,7 +35,7 @@ Specifically, the following are the requirements mandated in ISO 27001:2022 Anne
 | Repo Total Files | 1 |
 | Repo Size in MB | 149 |
 | Lume Version | v2.4.2 |
-| Deno Version | 2.3.7 |
+| Deno Version | 2.4.0 |
 | V8 Version | 13.7.152.6-rusty |
 | Typescript Version | 5.8.3 |
 | Timezone | Asia/Tokyo |
