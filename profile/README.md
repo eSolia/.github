@@ -1,6 +1,6 @@
 [![Proven.lol Lightweight Proof](https://img.shields.io/badge/Proven.lol-Lightweight_Proof-green?style=flat-square&logo=cachet)](https://proven.lol/fbd788)  
   
-**Last Updated:** July 7th, 2025 at 1:37:27 AM GMT+9  
+**Last Updated:** July 8th, 2025 at 1:39:10 AM GMT+9  
 
 
 ## Hi there 👋
@@ -35,7 +35,7 @@ Specifically, the following are the requirements mandated in ISO 27001:2022 Anne
 | Repo Total Files | 1 |
 | Repo Size in MB | 149 |
 | Lume Version | v2.4.2 |
-| Deno Version | 2.4.0 |
+| Deno Version | 2.4.1 |
 | V8 Version | 13.7.152.6-rusty |
 | Typescript Version | 5.8.3 |
 | Timezone | Asia/Tokyo |
