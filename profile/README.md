@@ -1,6 +1,6 @@
 [![Proven.lol Lightweight Proof](https://img.shields.io/badge/Proven.lol-Lightweight_Proof-green?style=flat-square&logo=cachet)](https://proven.lol/fbd788)  
   
-**Last Updated:** July 15th, 2025 at 1:39:42 AM GMT+9  
+**Last Updated:** July 16th, 2025 at 1:39:49 AM GMT+9  
 
 
 ## Hi there 👋
@@ -23,9 +23,9 @@ Specifically, the following are the requirements mandated in ISO 27001:2022 Anne
 | 10. Adhering to licensing requirements. | We are aware of licensing and adhere to all requirements. |
 
 ## Latest Bluesky Posts:
+* [📣 New Blog Post&#xA;What should you do if your laptop gets wet?&#xA;With all the rain this season, it&#39;s good to know the do&#39;s and don&#39;ts of emergency response.&#xA;Written from an IT support perspective 👉 Read the article here:&#xA;https://blog.esolia.pro/en/posts/20250716-when-your-pc-gets-soaked-en/](https://bsky.app/profile/esolia.com/post/3lu3s6i37f32y)
+* [📣 New Blog Post &#xA;ノートPCが水に濡れた！そんなとき、まず何をすればいい？&#xA;雨が多いこの時期に知っておきたい、応急処置とNG行動をまとめました。&#xA;ITサポート目線で解説してます👉 記事はこちらから&#xA;https://blog.esolia.pro/posts/20250716-pc%E3%81%8C%E6%B0%B4%E6%B2%A1%E3%81%97%E3%81%9F%E3%81%A8%E3%81%8D-ja/ &#xA;#梅雨対策 #PC水没 #応急処置](https://bsky.app/profile/esolia.com/post/3lu2fkzv2hj2k)
 * [📣 New Blog Post &#xA;Is your company&#39;s migration to SharePoint Online going smoothly?&#xA;&#34;We can&#39;t open the file...&#34; — We&#39;re sharing common issues like this and how to solve them in a two-part series!&#xA;This week, Part 2 is now available! Check out the article here:&#xA;https://blog.esolia.pro/en/posts/20250709-sharepoint-online-post-migration-problems-solutions-part-2-en/](https://bsky.app/profile/esolia.com/post/3ltnnxgypac2l)
-* [📣 New Blog Post &#xA;社内のSharePoint Online移行、トラブルなく進んでいますか？ ファイルが開けない…そんな“あるある”トラブルの原因と解決法を【2週連続】でお届けしています！&#xA;今週は第2弾を公開！記事はこちらから &#xA;https://blog.esolia.pro/posts/20250709-sharepoint-online%E7%A7%BB%E8%A1%8C%E5%BE%8C%E3%81%AB%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB%E3%81%8C%E9%96%8B%E3%81%91%E3%81%AA%E3%81%84-part2-ja/ &#xA;#IT担当者必見 #Sharepoint #Microsoft365 #業務改善](https://bsky.app/profile/esolia.com/post/3ltischsdg22e)
-* [📣 New Blog Post&#xA;Is your company’s SharePoint Online migration going smoothly?&#xA;“We can’t open the files!” — Sound familiar?&#xA;We’re tackling this common issue with a 2-part blog series on the causes and solutions.&#xA;Check out Part 1 below:&#xA;https://blog.esolia.pro/en/posts/20250702-sharepoint-online-post-migration-problems-solutions-en/ &#xA;#MustReadForIT #Microsoft365](https://bsky.app/profile/esolia.com/post/3lsylsus5bt2j)
 
 
 ## Stats:
@@ -35,8 +35,8 @@ Specifically, the following are the requirements mandated in ISO 27001:2022 Anne
 | Repo Total Files | 1 |
 | Repo Size in MB | 149 |
 | Lume Version | v2.4.2 |
-| Deno Version | 2.4.1 |
-| V8 Version | 13.7.152.6-rusty |
+| Deno Version | 2.4.2 |
+| V8 Version | 13.7.152.14-rusty |
 | Typescript Version | 5.8.3 |
 | Timezone | Asia/Tokyo |
 
