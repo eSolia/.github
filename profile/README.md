@@ -1,6 +1,6 @@
 [![Proven.lol Lightweight Proof](https://img.shields.io/badge/Proven.lol-Lightweight_Proof-green?style=flat-square&logo=cachet)](https://proven.lol/fbd788)  
   
-**Last Updated:** July 22nd, 2025 at 1:39:58 AM GMT+9  
+**Last Updated:** July 23rd, 2025 at 1:40:34 AM GMT+9  
 
 
 ## Hi there 👋
@@ -23,9 +23,9 @@ Specifically, the following are the requirements mandated in ISO 27001:2022 Anne
 | 10. Adhering to licensing requirements. | We are aware of licensing and adhere to all requirements. |
 
 ## Latest Bluesky Posts:
+* [📣 New Blog Post &#xA;I’ve heard ChatGPT is useful, but how well does it really work?&#xA;I put together some simple ways it can help with both work and everyday life✍️&#xA;I hope it gives you some “Wow, I didn’t know it could do that!” kind of moments💡&#xA;#ChatGPT #AIHowTo&#xA;https://blog.esolia.pro/en/posts/20250723-practical-ai-for-everyday-life-how-i-use-chatgpt-en/](https://bsky.app/profile/esolia.com/post/3lunfhnvhfj2e)
+* [📣 New Blog Post &#xA;ChatGPTって便利らしいけど、実際どうなの？&#xA;仕事に、暮らしに、ちょっと役立つ使い方をまとめてみました✍️&#xA;「こんなことにも使えるんだ」という発見に繫がれば嬉しいです💡 &#xA;#ChatGPT #AI活用術&#xA;https://blog.esolia.pro/posts/20250723-%E6%97%A5%E5%B8%B8%E3%81%AB%E5%BD%B9%E7%AB%8B%E3%81%A4ai-chatgpt%E6%B4%BB%E7%94%A8%E3%81%AE%E3%83%AA%E3%82%A2%E3%83%AB-ja/](https://bsky.app/profile/esolia.com/post/3lulyt2vpp52v)
 * [📣 New Blog Post&#xA;What should you do if your laptop gets wet?&#xA;With all the rain this season, it&#39;s good to know the do&#39;s and don&#39;ts of emergency response.&#xA;Written from an IT support perspective 👉 Read the article here:&#xA;https://blog.esolia.pro/en/posts/20250716-when-your-pc-gets-soaked-en/](https://bsky.app/profile/esolia.com/post/3lu3s6i37f32y)
-* [📣 New Blog Post &#xA;ノートPCが水に濡れた！そんなとき、まず何をすればいい？&#xA;雨が多いこの時期に知っておきたい、応急処置とNG行動をまとめました。&#xA;ITサポート目線で解説してます👉 記事はこちらから&#xA;https://blog.esolia.pro/posts/20250716-pc%E3%81%8C%E6%B0%B4%E6%B2%A1%E3%81%97%E3%81%9F%E3%81%A8%E3%81%8D-ja/ &#xA;#梅雨対策 #PC水没 #応急処置](https://bsky.app/profile/esolia.com/post/3lu2fkzv2hj2k)
-* [📣 New Blog Post &#xA;Is your company&#39;s migration to SharePoint Online going smoothly?&#xA;&#34;We can&#39;t open the file...&#34; — We&#39;re sharing common issues like this and how to solve them in a two-part series!&#xA;This week, Part 2 is now available! Check out the article here:&#xA;https://blog.esolia.pro/en/posts/20250709-sharepoint-online-post-migration-problems-solutions-part-2-en/](https://bsky.app/profile/esolia.com/post/3ltnnxgypac2l)
 
 
 ## Stats:
