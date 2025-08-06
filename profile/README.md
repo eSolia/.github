@@ -1,6 +1,6 @@
 [![Proven.lol Lightweight Proof](https://img.shields.io/badge/Proven.lol-Lightweight_Proof-green?style=flat-square&logo=cachet)](https://proven.lol/fbd788)  
   
-**Last Updated:** August 5th, 2025 at 1:41:46 AM GMT+9  
+**Last Updated:** August 6th, 2025 at 1:37:04 AM GMT+9  
 
 
 ## Hi there 👋
@@ -23,9 +23,9 @@ Specifically, the following are the requirements mandated in ISO 27001:2022 Anne
 | 10. Adhering to licensing requirements. | We are aware of licensing and adhere to all requirements. |
 
 ## Latest Bluesky Posts:
+* [📣 New Blog Post &#xA;Have you ever had trouble receiving calls in Microsoft Teams when Cisco IP Communicator is running?&#xA;It&#39;s a common issue in the field — we&#39;ve summarized the cause and how to fix it.&#xA;Check out the details 👇&#xA;https://blog.esolia.pro/en/posts/20250806-receive-teams-call-with-cisco-ip-communicator-en/ &#xA;#ForITAdmins #TeamsTroubleshooting](https://bsky.app/profile/esolia.com/post/3lvqlwm6kdd2n)
+* [📣 New Blog Post &#xA;「Cisco IP Communicator」が起動していると「Microsoft Teams」で着信できない不具合、ありませんか？現場でよくあるこのトラブルについて原因と対応策をまとめました。&#xA;記事はこちらから👇 &#xA;https://blog.esolia.pro/posts/20250806-cisco-ip-communicator%E8%B5%B7%E5%8B%95%E4%B8%AD%E3%81%ABteams%E3%82%B3%E3%83%BC%E3%83%AB%E3%81%AE%E5%8F%97%E4%BF%A1%E6%96%B9%E6%B3%95-ja/ &#xA;#情シス向け #Teamsトラブル対応 #CiscoIPCommunicator](https://bsky.app/profile/esolia.com/post/3lvp7dxlrpv2a)
 * [📣 New Blog Post &#xA;Taking screenshots the usual way?&#xA;There might be an easier method!&#xA;Here are 3 handy tips like “capture in one go” or “save the whole screen at once” ✨&#xA;Packed with time-saving tricks every Windows user should know!&#xA;Check out the article:&#xA;https://blog.esolia.pro/en/posts/20250730-3-easy-ways-to-take-a-screenshot-instantly-en/ &#xA;#Screenshot](https://bsky.app/profile/esolia.com/post/3lv6ymcsfii2b)
-* [📣 New Blog Post &#xA;いつもの画面のスクショ、実はもっと楽にできるかも？&#xA;「一発で撮れる」「全画面まとめて保存できる」 など便利ワザ3選を紹介✨&#xA;Windowsユーザーなら知っておきたい時短テク満載です！  &#xA;記事はこちら：&#xA;https://blog.esolia.pro/posts/20250730-%E3%82%B9%E3%82%AF%E3%83%AA%E3%83%BC%E3%83%B3%E3%82%B7%E3%83%A7%E3%83%83%E3%83%88%E3%82%92%E4%B8%80%E7%99%BA%E3%81%A7%E6%92%AE%E3%82%8A%E3%81%9F%E3%81%84%E4%BA%BA%E3%81%AE%E3%81%9F%E3%82%81%E3%81%AE%E4%BE%BF%E5%88%A9%E3%83%AF%E3%82%B63%E9%81%B8-ja/ &#xA;#スクリーンショット #時短術 #Windows便利技](https://bsky.app/profile/esolia.com/post/3lv5m3j74sh2n)
-* [📣 New Blog Post &#xA;I’ve heard ChatGPT is useful, but how well does it really work?&#xA;I put together some simple ways it can help with both work and everyday life✍️&#xA;I hope it gives you some “Wow, I didn’t know it could do that!” kind of moments💡&#xA;#ChatGPT #AIHowTo&#xA;https://blog.esolia.pro/en/posts/20250723-practical-ai-for-everyday-life-how-i-use-chatgpt-en/](https://bsky.app/profile/esolia.com/post/3lunfhnvhfj2e)
 
 
 ## Stats:
@@ -33,7 +33,7 @@ Specifically, the following are the requirements mandated in ISO 27001:2022 Anne
 | Item | Value |
 | --- | --- |
 | Repo Total Files | 1 |
-| Repo Size in MB | 149 |
+| Repo Size in MB | 150 |
 | Lume Version | v2.4.2 |
 | Deno Version | 2.4.3 |
 | V8 Version | 13.7.152.14-rusty |
