@@ -1,6 +1,6 @@
 [![Proven.lol Lightweight Proof](https://img.shields.io/badge/Proven.lol-Lightweight_Proof-green?style=flat-square&logo=cachet)](https://proven.lol/fbd788)  
   
-**Last Updated:** August 26th, 2025 at 1:38:21 AM GMT+9  
+**Last Updated:** August 27th, 2025 at 1:37:22 AM GMT+9  
 
 
 ## Hi there 👋
@@ -23,9 +23,9 @@ Specifically, the following are the requirements mandated in ISO 27001:2022 Anne
 | 10. Adhering to licensing requirements. | We are aware of licensing and adhere to all requirements. |
 
 ## Latest Bluesky Posts:
+* [📣 New Blog Post &#xA;Just a few simple tweaks with OneDrive can make your daily file management much easier 💻✨&#xA;Even if you’re not familiar with it yet, these beginner-friendly tips are easy to try 🔰&#xA;Check out the article here:&#xA;https://blog.esolia.pro/en/posts/20250827-make-the-most-of-onedrive-en/ &#xA;#OneDrive #CloudTips #FileManagement](https://bsky.app/profile/esolia.com/post/3lxffo5xcvi2j)
+* [📣 New Blog Post &#xA;OneDriveをちょっと工夫するだけで、毎日のファイル管理が快適になります💻慣れない方でも簡単に試せるコツを紹介しています🔰 記事はこちらから：&#xA;https://blog.esolia.pro/posts/20250827-onedrive%E3%82%92%E3%82%82%E3%81%A3%E3%81%A8%E4%BE%BF%E5%88%A9%E3%81%AB-ja/ &#xA;#OneDrive #クラウド活用 #業務効率化 #ファイル管理](https://bsky.app/profile/esolia.com/post/3lxdycpuqyy2o)
 * [📣 New Blog Post &#xA;Curious about the much-talked-about Microsoft Copilot?&#xA;This post gives you a clear overview—from how to use the free version, to what you can do with the paid plan, plus handy features you can put to work.&#xA;Check it out here 👉&#xA;#MSCopilot #AIforWork&#xA;https://blog.esolia.pro/en/posts/20250822-what-is-microsoft-copilot-en/](https://bsky.app/profile/esolia.com/post/3lwytd6ddts2q)
-* [📣 New Blog Post &#xA;最近話題の「Microsoft Copilot」、気になってませんか？  &#xA;この記事では無料版の使い方から、有料版でできること、そして便利な活用機能まで具体的にまとめています。 詳しくはこちらから👉&#xA;#MSCopilot #AI活用 #業務効率化&#xA;https://blog.esolia.pro/posts/20250822-microsoft-copilot%E3%81%A3%E3%81%A6%E3%81%AA%E3%81%AB-ja/](https://bsky.app/profile/esolia.com/post/3lwxygepwvr2q)
-* [📣 New Blog Post &#xA;Have you ever had trouble receiving calls in Microsoft Teams when Cisco IP Communicator is running?&#xA;It&#39;s a common issue in the field — we&#39;ve summarized the cause and how to fix it.&#xA;Check out the details 👇&#xA;https://blog.esolia.pro/en/posts/20250806-receive-teams-call-with-cisco-ip-communicator-en/ &#xA;#ForITAdmins #TeamsTroubleshooting](https://bsky.app/profile/esolia.com/post/3lvqlwm6kdd2n)
 
 
 ## Stats:
