@@ -1,6 +1,6 @@
 [![Proven.lol Lightweight Proof](https://img.shields.io/badge/Proven.lol-Lightweight_Proof-green?style=flat-square&logo=cachet)](https://proven.lol/fbd788)  
   
-**Last Updated:** September 9th, 2025 at 1:37:24 AM GMT+9  
+**Last Updated:** September 10th, 2025 at 1:37:40 AM GMT+9  
 
 
 ## Hi there 👋
@@ -23,9 +23,9 @@ Specifically, the following are the requirements mandated in ISO 27001:2022 Anne
 | 10. Adhering to licensing requirements. | We are aware of licensing and adhere to all requirements. |
 
 ## Latest Bluesky Posts:
+* [📣 New Blog Post &#xA;As the return-to-office trend grows, isn’t it time to rethink telework?&#xA;We’ve put together IT-team insights and practical tips—check out the article here 👇&#xA;https://blog.esolia.pro/en/posts/20250910-proactive-telework-2025-en/ &#xA;#Telework #RemoteWork](https://bsky.app/profile/esolia.com/post/3lyimbmzjgw2g)
+* [📣 New Blog Post &#xA;オフィス回帰が進む今だからこそ、テレワークを再考しませんか？&#xA;情シス目線でできる工夫とヒントをまとめています。記事はこちらから👇&#xA;https://blog.esolia.pro/posts/20250910-2025%E5%B9%B4%E7%89%88%E6%94%BB%E3%82%81%E3%81%AE%E3%83%86%E3%83%AC%E3%83%AF%E3%83%BC%E3%82%AF-ja/&#xA;#テレワーク #在宅勤務](https://bsky.app/profile/esolia.com/post/3lyh6tk2af72d)
 * [📣 New Blog Post &#xA;Just a few simple tweaks with OneDrive can make your daily file management much easier 💻✨&#xA;Even if you’re not familiar with it yet, these beginner-friendly tips are easy to try 🔰&#xA;Check out the article here:&#xA;https://blog.esolia.pro/en/posts/20250827-make-the-most-of-onedrive-en/ &#xA;#OneDrive #CloudTips #FileManagement](https://bsky.app/profile/esolia.com/post/3lxffo5xcvi2j)
-* [📣 New Blog Post &#xA;OneDriveをちょっと工夫するだけで、毎日のファイル管理が快適になります💻慣れない方でも簡単に試せるコツを紹介しています🔰 記事はこちらから：&#xA;https://blog.esolia.pro/posts/20250827-onedrive%E3%82%92%E3%82%82%E3%81%A3%E3%81%A8%E4%BE%BF%E5%88%A9%E3%81%AB-ja/ &#xA;#OneDrive #クラウド活用 #業務効率化 #ファイル管理](https://bsky.app/profile/esolia.com/post/3lxdycpuqyy2o)
-* [📣 New Blog Post &#xA;Curious about the much-talked-about Microsoft Copilot?&#xA;This post gives you a clear overview—from how to use the free version, to what you can do with the paid plan, plus handy features you can put to work.&#xA;Check it out here 👉&#xA;#MSCopilot #AIforWork&#xA;https://blog.esolia.pro/en/posts/20250822-what-is-microsoft-copilot-en/](https://bsky.app/profile/esolia.com/post/3lwytd6ddts2q)
 
 
 ## Stats:
@@ -35,9 +35,9 @@ Specifically, the following are the requirements mandated in ISO 27001:2022 Anne
 | Repo Total Files | 1 |
 | Repo Size in MB | 149 |
 | Lume Version | v2.4.2 |
-| Deno Version | 2.4.5 |
-| V8 Version | 13.7.152.14-rusty |
-| Typescript Version | 5.8.3 |
+| Deno Version | 2.5.0 |
+| V8 Version | 14.0.365.4-rusty |
+| Typescript Version | 5.9.2 |
 | Timezone | Asia/Tokyo |
 
 ### How does this readme work? 
