@@ -1,6 +1,6 @@
 [![Proven.lol Lightweight Proof](https://img.shields.io/badge/Proven.lol-Lightweight_Proof-green?style=flat-square&logo=cachet)](https://proven.lol/fbd788)  
   
-**Last Updated:** September 30th, 2025 at 1:33:51 AM GMT+9  
+**Last Updated:** October 1st, 2025 at 1:37:20 AM GMT+9  
 
 
 ## Hi there 👋
@@ -23,9 +23,9 @@ Specifically, the following are the requirements mandated in ISO 27001:2022 Anne
 | 10. Adhering to licensing requirements. | We are aware of licensing and adhere to all requirements. |
 
 ## Latest Bluesky Posts:
+* [📣 New Blog Post &#xA;Have you ever experienced a situation where the network suddenly stops working?&#xA;This article covers the steps to try when neither Wi-Fi nor wired connections work, how to rebuild your network, and tips to prevent it from happening again.&#xA;https://blog.esolia.pro/en/posts/20251001-how-to-fix-internet-connection-en/](https://bsky.app/profile/esolia.com/post/3m25g33b5m522)
+* [📣 New Blog Post &#xA;ネットワークが “急につながらない” という事態、経験ありませんか？ Wi-Fi／有線とも全くつながらないときに試すべき手順、ネットワーク再構築の方法、再発防止策まで紹介しています。 https://blog.esolia.pro/posts/20251001-pc%E3%81%8C%E3%83%8D%E3%83%83%E3%83%88%E3%81%AB%E7%B9%8B%E3%81%8C%E3%82%89%E3%81%AA%E3%81%84%E3%81%A8%E3%81%8D%E3%81%AE%E5%AF%BE%E5%87%A6%E6%B3%95-ja/](https://bsky.app/profile/esolia.com/post/3m23zyxxxld2f)
 * [📣 New Blog Post &#xA;As the return-to-office trend grows, isn’t it time to rethink telework?&#xA;We’ve put together IT-team insights and practical tips—check out the article here 👇&#xA;https://blog.esolia.pro/en/posts/20250910-proactive-telework-2025-en/ &#xA;#Telework #RemoteWork](https://bsky.app/profile/esolia.com/post/3lyimbmzjgw2g)
-* [📣 New Blog Post &#xA;オフィス回帰が進む今だからこそ、テレワークを再考しませんか？&#xA;情シス目線でできる工夫とヒントをまとめています。記事はこちらから👇&#xA;https://blog.esolia.pro/posts/20250910-2025%E5%B9%B4%E7%89%88%E6%94%BB%E3%82%81%E3%81%AE%E3%83%86%E3%83%AC%E3%83%AF%E3%83%BC%E3%82%AF-ja/&#xA;#テレワーク #在宅勤務](https://bsky.app/profile/esolia.com/post/3lyh6tk2af72d)
-* [📣 New Blog Post &#xA;Just a few simple tweaks with OneDrive can make your daily file management much easier 💻✨&#xA;Even if you’re not familiar with it yet, these beginner-friendly tips are easy to try 🔰&#xA;Check out the article here:&#xA;https://blog.esolia.pro/en/posts/20250827-make-the-most-of-onedrive-en/ &#xA;#OneDrive #CloudTips #FileManagement](https://bsky.app/profile/esolia.com/post/3lxffo5xcvi2j)
 
 
 ## Stats:
