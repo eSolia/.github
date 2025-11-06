@@ -1,6 +1,6 @@
 [![Proven.lol Lightweight Proof](https://img.shields.io/badge/Proven.lol-Lightweight_Proof-green?style=flat-square&logo=cachet)](https://proven.lol/fbd788)  
   
-**Last Updated:** November 5th, 2025 at 1:37:54 AM GMT+9  
+**Last Updated:** November 6th, 2025 at 1:39:30 AM GMT+9  
 
 
 ## Hi there 👋
@@ -23,9 +23,9 @@ Specifically, the following are the requirements mandated in ISO 27001:2022 Anne
 | 10. Adhering to licensing requirements. | We are aware of licensing and adhere to all requirements. |
 
 ## Latest Bluesky Posts:
+* [📣 New Blog Post&#xA;Have your network shared folders suddenly disappeared? 🤔&#xA;It might be caused by the Offline Files feature in Windows Sync Center.&#xA;Check out our quick guide explaining the cause and how to fix it 👉 https://blog.esolia.pro/en/posts/20251106-online-folders-are-not-visible-en/ &#xA;#WindowsIssue #FileSharing #OfflineFiles](https://bsky.app/profile/esolia.com/post/3m4xwufk7ma2j)
+* [📣 New Blog Post &#xA;ネットワーク共有フォルダーが突然見えなくなった…そんな時は Windows Sync Center のオフラインファイル機能を疑ってみてください。手順と原因を簡潔に解説しました👉&#xA;https://blog.esolia.pro/posts/20251106-%E5%90%8C%E6%9C%9F%E3%82%BB%E3%83%B3%E3%82%BF-%E3%83%95%E3%82%A9%E3%83%AB%E3%83%80%E3%81%8C%E8%A1%A8%E7%A4%BA%E3%81%95%E3%82%8C%E3%81%AA%E3%81%84-ja/](https://bsky.app/profile/esolia.com/post/3m4wpl7xkcq2a)
 * [📣 New Blog Post&#xA;Modern phishing emails can look almost identical to legitimate ones.&#xA;In this post, we introduce five simple keys to help you spot suspicious emails — even if you’re not an expert. 👉&#xA;https://blog.esolia.pro/en/posts/20251023-how-to-spot-phishing-emails-en/](https://bsky.app/profile/esolia.com/post/3m3uqdonpfl2a)
-* [📣 New Blog Post &#xA;最近のフィッシングメールは、本物そっくりに作られています。今回のブログでは初心者にも分かりやすく、怪しいメールを見分ける5つのカギ を具体的に紹介しています 👉&#xA;https://blog.esolia.pro/posts/20251023-%E5%88%9D%E5%BF%83%E8%80%85%E5%90%91%E3%81%91-%E3%83%95%E3%82%A3%E3%83%83%E3%82%B7%E3%83%B3%E3%82%B0%E3%83%A1%E3%83%BC%E3%83%AB-%E8%A6%8B%E5%88%86%E3%81%91%E6%96%B9-ja/](https://bsky.app/profile/esolia.com/post/3m3tdptdt442l)
-* [📣 New Blog Post &#xA;Have you ever experienced a situation where the network suddenly stops working?&#xA;This article covers the steps to try when neither Wi-Fi nor wired connections work, how to rebuild your network, and tips to prevent it from happening again.&#xA;https://blog.esolia.pro/en/posts/20251001-how-to-fix-internet-connection-en/](https://bsky.app/profile/esolia.com/post/3m25g33b5m522)
 
 
 ## Stats:
