@@ -1,6 +1,6 @@
 [![Proven.lol Lightweight Proof](https://img.shields.io/badge/Proven.lol-Lightweight_Proof-green?style=flat-square&logo=cachet)](https://proven.lol/fbd788)  
   
-**Last Updated:** November 19th, 2025 at 1:40:29 AM GMT+9  
+**Last Updated:** November 20th, 2025 at 1:39:48 AM GMT+9  
 
 
 ## Hi there 👋
@@ -23,9 +23,9 @@ Specifically, the following are the requirements mandated in ISO 27001:2022 Anne
 | 10. Adhering to licensing requirements. | We are aware of licensing and adhere to all requirements. |
 
 ## Latest Bluesky Posts:
+* [📣 New Blog Post &#xA;Have you upgraded to Windows 11 yet?&#xA;I’ve highlighted three useful features in my latest blog post — they might just boost your productivity. Check out the article here👇&#xA;https://blog.esolia.pro/en/posts/20251120-windows-11-features-en/ &#xA;#Windows11Tips　#Windows11Features](https://bsky.app/profile/esolia.com/post/3m635bycpd42a)
+* [📣 New Blog Post &#xA;Windows 11 のアップグレード、完了しましたか？使える機能３つをブログで紹介しています。あなたの作業効率が変わるかも。記事はこちらから👇&#xA;https://blog.esolia.pro/posts/20251120-windows11%E7%A7%BB%E8%A1%8C%E3%83%A6%E3%83%BC%E3%82%B6%E3%83%BC%E5%BF%85%E8%A6%8B-ja/ &#xA;#Windows11Tips　#Windows11Features](https://bsky.app/profile/esolia.com/post/3m5zp3w2inb2r)
 * [📣 New Blog Post&#xA;Have your network shared folders suddenly disappeared? 🤔&#xA;It might be caused by the Offline Files feature in Windows Sync Center.&#xA;Check out our quick guide explaining the cause and how to fix it 👉 https://blog.esolia.pro/en/posts/20251106-online-folders-are-not-visible-en/ &#xA;#WindowsIssue #FileSharing #OfflineFiles](https://bsky.app/profile/esolia.com/post/3m4xwufk7ma2j)
-* [📣 New Blog Post &#xA;ネットワーク共有フォルダーが突然見えなくなった…そんな時は Windows Sync Center のオフラインファイル機能を疑ってみてください。手順と原因を簡潔に解説しました👉&#xA;https://blog.esolia.pro/posts/20251106-%E5%90%8C%E6%9C%9F%E3%82%BB%E3%83%B3%E3%82%BF-%E3%83%95%E3%82%A9%E3%83%AB%E3%83%80%E3%81%8C%E8%A1%A8%E7%A4%BA%E3%81%95%E3%82%8C%E3%81%AA%E3%81%84-ja/](https://bsky.app/profile/esolia.com/post/3m4wpl7xkcq2a)
-* [📣 New Blog Post&#xA;Modern phishing emails can look almost identical to legitimate ones.&#xA;In this post, we introduce five simple keys to help you spot suspicious emails — even if you’re not an expert. 👉&#xA;https://blog.esolia.pro/en/posts/20251023-how-to-spot-phishing-emails-en/](https://bsky.app/profile/esolia.com/post/3m3uqdonpfl2a)
 
 
 ## Stats:
