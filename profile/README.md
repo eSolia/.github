@@ -1,7 +1,7 @@
 [![Proven.lol Lightweight Proof](https://img.shields.io/badge/Proven.lol-Lightweight_Proof-green?style=flat-square&logo=cachet)](https://proven.lol/fbd788)  
   
-**Last Updated:** November 23rd, 2025 at 1:36:31 AM GMT+9  
-**Today is:** 勤労感謝の日
+**Last Updated:** November 24th, 2025 at 1:36:30 AM GMT+9  
+**Today is:** 勤労感謝の日 振替休日
 
 ## Hi there 👋
 
