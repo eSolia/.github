@@ -1,6 +1,6 @@
 [![Proven.lol Lightweight Proof](https://img.shields.io/badge/Proven.lol-Lightweight_Proof-green?style=flat-square&logo=cachet)](https://proven.lol/fbd788)  
   
-**Last Updated:** December 11th, 2025 at 1:40:50 AM GMT+9  
+**Last Updated:** December 12th, 2025 at 1:42:44 AM GMT+9  
 
 
 ## Hi there 👋
@@ -23,9 +23,9 @@ Specifically, the following are the requirements mandated in ISO 27001:2022 Anne
 | 10. Adhering to licensing requirements. | We are aware of licensing and adhere to all requirements. |
 
 ## Latest Bluesky Posts:
+* [📣 New Blog Post &#xA;We’ve summarized the key basics and tips for using Microsoft Teams Webinars.&#xA;It’s easy to follow—perfect for first-time hosts. Check it out👇&#xA;https://blog.esolia.pro/en/posts/20251212-teams-webinar-en/ &#xA;#MicrosoftTeams #Webinar #OnlineEvents #RemoteWork #TeamsTips](https://bsky.app/profile/esolia.com/post/3m7shlkwwuw2c)
+* [📣 New Blog Post &#xA;Microsoft Teamsのウェビナー機能の基本と活用方法をまとめました！初めての方にもわかりやすく解説しています。オンラインイベント開催の参考にぜひご覧ください👇&#xA;https://blog.esolia.pro/posts/20251212-teams-webinar-%E5%9F%BA%E6%9C%AC%E3%81%A8%E6%B4%BB%E7%94%A8-ja/ &#xA;#MicrosoftTeams #ウェビナー #オンラインイベント #リモートワーク #TeamsTips #Webinar #オンラインセミナー](https://bsky.app/profile/esolia.com/post/3m7r2ztdxad2e)
 * [📣 New Blog Post &#xA;Have you upgraded to Windows 11 yet?&#xA;I’ve highlighted three useful features in my latest blog post — they might just boost your productivity. Check out the article here👇&#xA;https://blog.esolia.pro/en/posts/20251120-windows-11-features-en/ &#xA;#Windows11Tips　#Windows11Features](https://bsky.app/profile/esolia.com/post/3m635bycpd42a)
-* [📣 New Blog Post &#xA;Windows 11 のアップグレード、完了しましたか？使える機能３つをブログで紹介しています。あなたの作業効率が変わるかも。記事はこちらから👇&#xA;https://blog.esolia.pro/posts/20251120-windows11%E7%A7%BB%E8%A1%8C%E3%83%A6%E3%83%BC%E3%82%B6%E3%83%BC%E5%BF%85%E8%A6%8B-ja/ &#xA;#Windows11Tips　#Windows11Features](https://bsky.app/profile/esolia.com/post/3m5zp3w2inb2r)
-* [📣 New Blog Post&#xA;Have your network shared folders suddenly disappeared? 🤔&#xA;It might be caused by the Offline Files feature in Windows Sync Center.&#xA;Check out our quick guide explaining the cause and how to fix it 👉 https://blog.esolia.pro/en/posts/20251106-online-folders-are-not-visible-en/ &#xA;#WindowsIssue #FileSharing #OfflineFiles](https://bsky.app/profile/esolia.com/post/3m4xwufk7ma2j)
 
 
 ## Stats:
