@@ -1,6 +1,6 @@
 [![Proven.lol Lightweight Proof](https://img.shields.io/badge/Proven.lol-Lightweight_Proof-green?style=flat-square&logo=cachet)](https://proven.lol/fbd788)
 
-**Last Updated:** December 17th, 2025 at 9:32:11 AM GMT+9
+**Last Updated:** December 17th, 2025 at 9:41:44 AM GMT+9
 
 
 ## Welcome 👋
@@ -25,16 +25,20 @@ All three emphasize **physical data isolation per client** — we don't do share
 
 We build primarily on **Cloudflare's platform** (Workers, Pages, D1, R2, Queues) for its compelling security-to-cost ratio: enterprise-grade edge security, DDoS protection, and WAF capabilities without enterprise pricing. For applications requiring Deno KV's strong consistency model, we deploy to **Deno Deploy**.
 
-```
-┌─────────────────────────────────────────────────────────────────┐
-│  CORE PRINCIPLES                                                │
-├─────────────────────────────────────────────────────────────────┤
-│  OWASP Top 10        → Every project, every review             │
-│  ISO 27001           → Incorporated into dev practices         │
-│  Defense in depth    → Multiple security layers, not one wall  │
-│  Edge-first          → Security and performance at the edge    │
-└─────────────────────────────────────────────────────────────────┘
-```
+### Core Principles
+
+| Principle | Policy |
+|---------|---------|
+| **OWASP Top 10** | → Every project, every review: Compliance-grade applications must adhere to the OWASP Top 10 security risks. |
+| **ISO 27001** | → Incorporated into dev practices for comprehensive security management. |
+| **Defense in depth** | → Multiple security layers, not one wall. |
+| **Continuous Integration/Continuous Deployment (CI/CD)** | → Automated testing and deployment pipelines ensure quality and security. |
+| **Security by Design** | → Security is integrated into the design and development process. |
+| **Security Automation** | → Automated security tools and processes for faster response and prevention. |
+| **Security Awareness Training** | → Regular training for developers and users to understand and mitigate security risks. |
+| **Security Monitoring** | → Continuous monitoring for threats and anomalies. |
+| **Edge-first** | → Security and performance at the edge. |
+| **Zero Trust** | → Trust no one, verify everything. |
 
 ### Technologies
 
@@ -93,7 +97,7 @@ We incorporate **ISO 27001:2022** good practices into our development work. Here
 | Item | Value |
 | --- | --- |
 | Repo Total Files | 1 |
-| Repo Size in MB | 152 |
+| Repo Size in MB | 154 |
 | Lume Version | v2.4.2 |
 | Deno Version | 2.6.0 |
 | V8 Version | 14.2.231.17-rusty |
