@@ -1,50 +1,42 @@
-[![Proven.lol Lightweight Proof](https://img.shields.io/badge/Proven.lol-Lightweight_Proof-green?style=flat-square&logo=cachet)](https://proven.lol/fbd788)  
-  
-**Last Updated:** December 16th, 2025 at 1:42:32 AM GMT+9  
+[![Proven.lol Lightweight Proof](https://img.shields.io/badge/Proven.lol-Lightweight_Proof-green?style=flat-square&logo=cachet)](https://proven.lol/fbd788)
+
+**Last Updated:** December 17th, 2025 at 9:32:11 AM GMT+9
 
 
-## Hi there 👋
+## Welcome 👋
 
-Welcome to eSolia on GitHub. We're a Tokyo-based IT management consultancy, and we're glad you're here. We are a security conscious company, incorporating ISO 27001 good practices in our work, including software development. 
+We're eSolia — a Tokyo-based IT consultancy that builds software. Since 1999, we've helped international companies navigate Japan's business technology landscape, and along the way, we've developed serious software engineering capabilities.
 
-Specifically, the following are the requirements mandated in ISO 27001:2022 Annex A Control 8.25 as "rules for the secure development of software and systems", and how we address them. 
+This GitHub profile is where we share our work: internal tools that solve real problems for our clients, and open-source utilities that might help you too.
 
-| Requirement | Actions |
-| --- | --- |
-| 1. Keeping development, testing, and production environments separate. | For typical jamstack websites (most of our sites), development refers to the developer's local environment, testing refers to a protected branch published for the client to review, and production is the published website. In the case of our PROdb cloud database, it is possible to make a combined dev and test environment, which is separate from production, then merge it to production when approved. |
-| 2. Offering guidance on security in the software development life cycle, in terms of general methodology and languages use. | We handle this via SOP. |
-| 3. Implementing security requirements during the specification and design phases. | Every project considers and specifies security during initial projects, or changes.  |
-| 4. Developing and using security checkpoints in projects. | We establish the basic security framework for a project in the specification phase, develop per the basic guideline established in the spec, then finally report how the project has implemented security. |
-| 5. Engaging in security and system testing. | For most website projects, security scanning entails checking security headers are in place. For cloud database projects, the platform vendor is running basic security penetration tests regularly, and we check relevant security areas at every step, in specific configuration areas such as table, view, form security. |
-| 6. Establishing secure repositories for storing source codes and configurations. | Only permitted personnel have write permissions (commit or merge access) to repositories. |
-| 7. Ensuring security in version control during change management. | Change management process considers version control security. |
-| 8. Ensuring all personnel involved in development have the required application security knowledge. | We are engaged in an ongoing effort to develop this knowledge. |
-| 9. Ensuring developers have the capacity to recognise and avert security flaws. | We take care to understand security and the lack thereof, within the websites we develop and the apps we configure. |
-| 10. Adhering to licensing requirements. | We are aware of licensing and adhere to all requirements. |
+## What We're Building
 
-## Latest Bluesky Posts:
-* [📣 New Blog Post &#xA;We’ve summarized the key basics and tips for using Microsoft Teams Webinars.&#xA;It’s easy to follow—perfect for first-time hosts. Check it out👇&#xA;https://blog.esolia.pro/en/posts/20251212-teams-webinar-en/ &#xA;#MicrosoftTeams #Webinar #OnlineEvents #RemoteWork #TeamsTips](https://bsky.app/profile/esolia.com/post/3m7shlkwwuw2c)
-* [📣 New Blog Post &#xA;Microsoft Teamsのウェビナー機能の基本と活用方法をまとめました！初めての方にもわかりやすく解説しています。オンラインイベント開催の参考にぜひご覧ください👇&#xA;https://blog.esolia.pro/posts/20251212-teams-webinar-%E5%9F%BA%E6%9C%AC%E3%81%A8%E6%B4%BB%E7%94%A8-ja/ &#xA;#MicrosoftTeams #ウェビナー #オンラインイベント #リモートワーク #TeamsTips #Webinar #オンラインセミナー](https://bsky.app/profile/esolia.com/post/3m7r2ztdxad2e)
-* [📣 New Blog Post &#xA;Have you upgraded to Windows 11 yet?&#xA;I’ve highlighted three useful features in my latest blog post — they might just boost your productivity. Check out the article here👇&#xA;https://blog.esolia.pro/en/posts/20251120-windows-11-features-en/ &#xA;#Windows11Tips　#Windows11Features](https://bsky.app/profile/esolia.com/post/3m635bycpd42a)
+We develop business software focused on **security**, **compliance**, and **operational visibility** for international companies in Japan.
 
+| Product | Purpose | Stack |
+|---------|---------|-------|
+| **Pulse** | Compliance dashboard for SOC 2, ISO 27001, PCI-DSS — accumulates evidence against vetted control lists with secure, shareable executive reports | SvelteKit, Cloudflare Pages, D1, R2 |
+| **Periodic** | DNS drift monitoring and alerting — detects unauthorized changes before they become security incidents | SvelteKit, Bits UI, Deno Deploy |
+| **Nexus** | Secure document sharing with provenance — watermarking, audit trails, and expiring access for sensitive materials | SvelteKit, Cloudflare R2 |
 
-## Stats:
+All three emphasize **physical data isolation per client** — we don't do shared databases with logical separation for compliance-grade applications.
 
-| Item | Value |
-| --- | --- |
-| Repo Total Files | 1 |
-| Repo Size in MB | 149 |
-| Lume Version | v2.4.2 |
-| Deno Version | 2.6.0 |
-| V8 Version | 14.2.231.17-rusty |
-| Typescript Version | 5.9.2 |
-| Timezone | Asia/Tokyo |
+## Our Stack
 
-### How does this readme work? 
+We build primarily on **Cloudflare's platform** (Workers, Pages, D1, R2, Queues) for its compelling security-to-cost ratio: enterprise-grade edge security, DDoS protection, and WAF capabilities without enterprise pricing. For applications requiring Deno KV's strong consistency model, we deploy to **Deno Deploy**.
 
-We're generating this readme using the [Lume](https://lume.land/) static site generator from within the eSolia [.github](https://github.com/esolia/.github) repository. See [this page](https://rickcogley.github.io/rickcogley/) for details to get your own dynamic readme! 
+```
+┌─────────────────────────────────────────────────────────────────┐
+│  CORE PRINCIPLES                                                │
+├─────────────────────────────────────────────────────────────────┤
+│  OWASP Top 10        → Every project, every review             │
+│  ISO 27001           → Incorporated into dev practices         │
+│  Defense in depth    → Multiple security layers, not one wall  │
+│  Edge-first          → Security and performance at the edge    │
+└─────────────────────────────────────────────────────────────────┘
+```
 
-### Tech Stack
+### Technologies
 
 <div align="center">
 	<code><img width="30" src="https://user-images.githubusercontent.com/25181517/192158954-f88b5814-d510-4564-b285-dff7d6400dad.png" alt="HTML" title="HTML"/></code>
@@ -67,4 +59,56 @@ We're generating this readme using the [Lume](https://lume.land/) static site ge
 	<code><img width="30" src="https://user-images.githubusercontent.com/25181517/186884152-ae609cca-8cf1-4175-8d60-1ce1fa078ca2.png" alt="macOS" title="macOS"/></code>
 	<code><img width="30" src="https://github.com/marwin1991/profile-technology-icons/assets/76662862/2481dc48-be6b-4ebb-9e8c-3b957efe69fa" alt="Linux" title="Linux"/></code>
 </div>
+
+## Security Practices
+
+We incorporate **ISO 27001:2022** good practices into our development work. Here's how we address Annex A Control 8.25 ("rules for secure development of software and systems"):
+
+<details>
+<summary><strong>ISO 27001:2022 Annex A Control 8.25 Compliance</strong></summary>
+
+| Requirement | How We Address It |
+|-------------|-------------------|
+| Separate dev, test, and production environments | Local development → protected preview branches → production. For PROdb, combined dev/test environments merge to production after approval. |
+| Security guidance in SDLC | Handled via SOP with OWASP Top 10 as baseline for every project. |
+| Security requirements in design phase | Every project specifies security requirements during initial specification. |
+| Security checkpoints in projects | Security framework established in spec → developed per guidelines → security implementation reported. |
+| Security and system testing | Security header validation for websites. Platform vendor penetration testing plus our checks on table, view, and form security for database projects. |
+| Secure source code repositories | Write permissions (commit/merge) restricted to permitted personnel only. |
+| Version control security | Change management process explicitly considers version control security. |
+| Developer security knowledge | Ongoing training and knowledge development program. |
+| Flaw recognition capability | Active effort to understand and identify security weaknesses in our work. |
+| Licensing compliance | Full awareness and adherence to all licensing requirements. |
+
+</details>
+
+## Latest Bluesky Posts:
+* [📣 New Blog Post &#xA;We’ve summarized the key basics and tips for using Microsoft Teams Webinars.&#xA;It’s easy to follow—perfect for first-time hosts. Check it out👇&#xA;https://blog.esolia.pro/en/posts/20251212-teams-webinar-en/ &#xA;#MicrosoftTeams #Webinar #OnlineEvents #RemoteWork #TeamsTips](https://bsky.app/profile/esolia.com/post/3m7shlkwwuw2c)
+* [📣 New Blog Post &#xA;Microsoft Teamsのウェビナー機能の基本と活用方法をまとめました！初めての方にもわかりやすく解説しています。オンラインイベント開催の参考にぜひご覧ください👇&#xA;https://blog.esolia.pro/posts/20251212-teams-webinar-%E5%9F%BA%E6%9C%AC%E3%81%A8%E6%B4%BB%E7%94%A8-ja/ &#xA;#MicrosoftTeams #ウェビナー #オンラインイベント #リモートワーク #TeamsTips #Webinar #オンラインセミナー](https://bsky.app/profile/esolia.com/post/3m7r2ztdxad2e)
+* [📣 New Blog Post &#xA;Have you upgraded to Windows 11 yet?&#xA;I’ve highlighted three useful features in my latest blog post — they might just boost your productivity. Check out the article here👇&#xA;https://blog.esolia.pro/en/posts/20251120-windows-11-features-en/ &#xA;#Windows11Tips　#Windows11Features](https://bsky.app/profile/esolia.com/post/3m635bycpd42a)
+
+
+## Stats:
+
+| Item | Value |
+| --- | --- |
+| Repo Total Files | 1 |
+| Repo Size in MB | 152 |
+| Lume Version | v2.4.2 |
+| Deno Version | 2.6.0 |
+| V8 Version | 14.2.231.17-rusty |
+| Typescript Version | 5.9.2 |
+| Timezone | Asia/Tokyo |
+
+### How does this readme work?
+
+We're generating this readme using the [Lume](https://lume.land/) static site generator from within the eSolia [.github](https://github.com/esolia/.github) repository. See [this page](https://rickcogley.github.io/rickcogley/) for details to get your own dynamic readme!
+
+<details>
+<summary><strong>How does this README work?</strong></summary>
+
+We generate this README using the [Lume](https://lume.land/) static site generator from within the eSolia [.github](https://github.com/esolia/.github) repository. See [this page](https://rickcogley.github.io/rickcogley/) for details to get your own dynamic README.
+
+</details>
+
 
