@@ -1,6 +1,6 @@
 [![Proven.lol Lightweight Proof](https://img.shields.io/badge/Proven.lol-Lightweight_Proof-green?style=flat-square&logo=cachet)](https://proven.lol/fbd788)
 
-**Last Updated:** December 20th, 2025 at 1:39:41 AM GMT+9
+**Last Updated:** December 21st, 2025 at 9:12:37 PM GMT+9
 
 
 ## Welcome 👋
@@ -15,11 +15,14 @@ We develop business software focused on **security**, **compliance**, and **oper
 
 | Product | Purpose | Stack |
 |---------|---------|-------|
+| **Nexus** | Central platform hub — OAuth provider, secure file sharing with provenance, unified client management across all apps | Hono, Cloudflare Workers, D1, R2, Queues |
 | **Pulse** | Compliance dashboard for SOC 2, ISO 27001, PCI-DSS — accumulates evidence against vetted control lists with secure, shareable executive reports | SvelteKit, Cloudflare Pages, D1, R2 |
-| **Periodic** | DNS drift monitoring and alerting — detects unauthorized changes before they become security incidents | SvelteKit, Bits UI, Deno Deploy |
-| **Nexus** | Secure document sharing with provenance — watermarking, audit trails, and expiring access for sensitive materials | SvelteKit, Cloudflare R2 |
+| **Periodic** | DNS drift monitoring and alerting — detects unauthorized changes before they become security incidents | SvelteKit, Cloudflare Pages, D1 |
+| **Courier** | Desktop secure file sharing — PIN-protected document delivery with BCC-trigger workflow for frictionless sharing | SvelteKit, Cloudflare Pages |
+| **Chōchō** | ESL listening comprehension trainer — pre-generated multi-accent TTS audio for Japanese staff preparing for international calls | SvelteKit PWA, Cloudflare Pages, D1, R2 |
+| **Codex** *(coming soon)* | Unified knowledge infrastructure — single source of truth with dual authoring (CMS for staff, Git for power users), AI-powered RAG search, and SharePoint integration. Ask Miko (巫女) | SvelteKit, Cloudflare Pages, D1, R2 |
 
-All three emphasize **physical data isolation per client** — we don't do shared databases with logical separation for compliance-grade applications.
+All apps emphasize **physical data isolation per client** — we don't do shared databases with logical separation for compliance-grade applications. Nexus provides **single sign-on** across the suite via OAuth2/OIDC with Microsoft 365 SSO and magic link authentication.
 
 ## Our Stack
 
@@ -91,7 +94,7 @@ We incorporate **ISO 27001:2022** good practices into our development work. Here
 | Item | Value |
 | --- | --- |
 | Repo Total Files | 1 |
-| Repo Size in MB | 147 |
+| Repo Size in MB | 149 |
 | Lume Version | v2.4.2 |
 | Deno Version | 2.6.3 |
 | V8 Version | 14.2.231.17-rusty |
