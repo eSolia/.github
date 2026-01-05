@@ -63,7 +63,28 @@ We build primarily on **Cloudflare's platform** (Workers, Pages, D1, R2, Queues)
 
 ## Security Practices
 
-We incorporate **ISO 27001:2022** good practices into our development work. Here's how we address Annex A Control 8.25 ("rules for secure development of software and systems"):
+We incorporate **ISO 27001:2022** good practices into our development work, backed by automated security scanning in CI/CD.
+
+### Centralized Security Scanning
+
+We maintain a **reusable security workflow** ([`security.yml`](.github/workflows/security.yml)) that runs comprehensive OWASP-aligned checks across all our repositories:
+
+| Scanner | Coverage |
+|---------|----------|
+| **Semgrep SAST** | OWASP Top 10, TypeScript/JavaScript patterns, secrets detection |
+| **Trivy** | Dependency vulnerabilities, embedded secrets, license compliance |
+| **Gitleaks** | Git history secret scanning |
+| **Dependency Audit** | npm/pnpm/yarn vulnerability database |
+| **ASVS Compliance** | OWASP Application Security Verification Standard checks |
+| **TypeScript** | Type safety verification |
+| **ESLint** | Code quality and security linting |
+
+Any repository can adopt this workflow with minimal configuration:
+```yaml
+jobs:
+  security:
+    uses: eSolia/.github/.github/workflows/security.yml@main
+```
 
 <details>
 <summary><strong>ISO 27001:2022 Annex A Control 8.25 Compliance</strong></summary>
@@ -94,7 +115,7 @@ We incorporate **ISO 27001:2022** good practices into our development work. Here
 | Item | Value |
 | --- | --- |
 | Repo Total Files | 1 |
-| Repo Size in MB | 897 |
+| Repo Size in MB | 909 |
 | Lume Version | v2.4.2 |
 | Deno Version | 2.6.3 |
 | V8 Version | 14.2.231.17-rusty |
