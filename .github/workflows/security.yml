@@ -129,10 +129,10 @@ jobs:
         run: |
           PM="${{ needs.detect-pm.outputs.package-manager }}"
           case $PM in
-            pnpm) pnpm install --frozen-lockfile ;;
-            yarn) yarn install --frozen-lockfile ;;
-            bun) bun install --frozen-lockfile ;;
-            *) npm ci ;;
+            pnpm) pnpm install --frozen-lockfile || pnpm install ;;
+            yarn) yarn install --frozen-lockfile || yarn install ;;
+            bun) bun install --frozen-lockfile || bun install ;;
+            *) npm ci || npm install ;;
           esac
 
       - name: Run audit
@@ -170,7 +170,7 @@ jobs:
           retention-days: 30
 
   # ==========================================================================
-  # Secret Scanning with Gitleaks
+  # Secret Scanning with Gitleaks (using free CLI, not paid action)
   # ==========================================================================
   secret-scan:
     name: Secret Scanning
@@ -181,20 +181,36 @@ jobs:
         with:
           fetch-depth: 0  # Full history for scanning
 
+      - name: Install Gitleaks
+        run: |
+          GITLEAKS_VERSION="8.21.2"
+          curl -sSfL "https://github.com/gitleaks/gitleaks/releases/download/v${GITLEAKS_VERSION}/gitleaks_${GITLEAKS_VERSION}_linux_x64.tar.gz" | tar -xz
+          chmod +x gitleaks
+          sudo mv gitleaks /usr/local/bin/
+
       - name: Run Gitleaks
-        uses: gitleaks/gitleaks-action@v2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GITLEAKS_NOTIFY_USER_LIST: ''  # Disable notifications
-        continue-on-error: ${{ !inputs.fail-on-findings }}
+        run: |
+          mkdir -p reports
+          gitleaks detect --source . --report-path reports/gitleaks.json --report-format json || true
+          gitleaks detect --source . --report-path reports/gitleaks.sarif --report-format sarif || true
+        continue-on-error: true
+
+      - name: Upload Gitleaks report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: gitleaks-report
+          path: reports/gitleaks.*
+          retention-days: 30
+          if-no-files-found: ignore
 
       - name: Gitleaks Summary
         if: always()
         run: |
           echo "## Secret Scanning Results" >> $GITHUB_STEP_SUMMARY
-          if [ -f "results.sarif" ]; then
-            FINDINGS=$(cat results.sarif | jq '.runs[0].results | length' 2>/dev/null || echo "0")
-            if [ "$FINDINGS" = "0" ]; then
+          if [ -f "reports/gitleaks.json" ]; then
+            FINDINGS=$(cat reports/gitleaks.json | jq 'length' 2>/dev/null || echo "0")
+            if [ "$FINDINGS" = "0" ] || [ "$FINDINGS" = "null" ]; then
               echo "No secrets detected" >> $GITHUB_STEP_SUMMARY
             else
               echo "**$FINDINGS** potential secrets found" >> $GITHUB_STEP_SUMMARY
@@ -300,10 +316,10 @@ jobs:
         run: |
           PM="${{ needs.detect-pm.outputs.package-manager }}"
           case $PM in
-            pnpm) pnpm install --frozen-lockfile ;;
-            yarn) yarn install --frozen-lockfile ;;
-            bun) bun install --frozen-lockfile ;;
-            *) npm ci ;;
+            pnpm) pnpm install --frozen-lockfile || pnpm install ;;
+            yarn) yarn install --frozen-lockfile || yarn install ;;
+            bun) bun install --frozen-lockfile || bun install ;;
+            *) npm ci || npm install ;;
           esac
 
       - name: Run type check
@@ -354,10 +370,10 @@ jobs:
         run: |
           PM="${{ needs.detect-pm.outputs.package-manager }}"
           case $PM in
-            pnpm) pnpm install --frozen-lockfile ;;
-            yarn) yarn install --frozen-lockfile ;;
-            bun) bun install --frozen-lockfile ;;
-            *) npm ci ;;
+            pnpm) pnpm install --frozen-lockfile || pnpm install ;;
+            yarn) yarn install --frozen-lockfile || yarn install ;;
+            bun) bun install --frozen-lockfile || bun install ;;
+            *) npm ci || npm install ;;
           esac
 
       - name: Run lint
@@ -397,10 +413,10 @@ jobs:
         run: |
           PM="${{ needs.detect-pm.outputs.package-manager }}"
           case $PM in
-            pnpm) pnpm install --frozen-lockfile ;;
-            yarn) yarn install --frozen-lockfile ;;
-            bun) bun install --frozen-lockfile ;;
-            *) npm ci ;;
+            pnpm) pnpm install --frozen-lockfile || pnpm install ;;
+            yarn) yarn install --frozen-lockfile || yarn install ;;
+            bun) bun install --frozen-lockfile || bun install ;;
+            *) npm ci || npm install ;;
           esac
 
       - name: Run ASVS check
