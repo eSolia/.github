@@ -268,22 +268,8 @@ jobs:
           if [ -f reports/semgrep.json ]; then
             FINDINGS=$(cat reports/semgrep.json | python3 -c "import json,sys; d=json.load(sys.stdin); print(len(d.get('results', [])))" 2>/dev/null || echo "0")
             echo "Found **$FINDINGS** potential issues" >> $GITHUB_STEP_SUMMARY
-
-            # Show breakdown by severity if findings exist
-            if [ "$FINDINGS" != "0" ]; then
-              echo "" >> $GITHUB_STEP_SUMMARY
-              echo "### By Severity" >> $GITHUB_STEP_SUMMARY
-              python3 -c "
-import json, sys
-from collections import Counter
-try:
-    d = json.load(open('reports/semgrep.json'))
-    severities = Counter(r.get('extra', {}).get('severity', 'UNKNOWN') for r in d.get('results', []))
-    for sev, count in sorted(severities.items()):
-        print(f'- {sev}: {count}')
-except: pass
-" >> $GITHUB_STEP_SUMMARY 2>/dev/null || true
-            fi
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "See uploaded artifact for details." >> $GITHUB_STEP_SUMMARY
           else
             echo "No report generated" >> $GITHUB_STEP_SUMMARY
           fi
