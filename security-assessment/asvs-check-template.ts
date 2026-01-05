@@ -1268,6 +1268,11 @@ function runChecks(): CheckResult[] {
   });
 
   // V9.1.3 - Certificate Pinning (L2)
+  // Check if deployed to Cloudflare (which handles TLS termination with strict settings)
+  const isCloudflareDeployment =
+    existsSync(join(process.cwd(), 'wrangler.jsonc')) ||
+    existsSync(join(process.cwd(), 'wrangler.toml')) ||
+    existsSync(join(process.cwd(), 'wrangler.json'));
   const certPinningLocations = searchPattern(
     allFiles,
     /certificate.*pin|pinned.*certificate|public.*key.*pin|HPKP|pin-sha256/i
@@ -1276,8 +1281,14 @@ function runChecks(): CheckResult[] {
     id: 'V9.1.3',
     category: 'V9 Communication',
     name: 'Certificate Pinning',
-    status: certPinningLocations.length > 0 ? 'pass' : 'info',
-    description: 'Certificate pinning for high-value connections',
+    status: isCloudflareDeployment
+      ? 'not-applicable'
+      : certPinningLocations.length > 0
+        ? 'pass'
+        : 'info',
+    description: isCloudflareDeployment
+      ? 'Cloudflare handles TLS termination with managed certificates'
+      : 'Certificate pinning for high-value connections',
     locations: certPinningLocations.slice(0, 3),
     asvsRef: 'V9.1.3',
     automatable: true,
