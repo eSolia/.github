@@ -58,24 +58,32 @@ export const repoSizeMB = Math.trunc(repoSizeLong/1024/1024);
 // Import rss feed and convert to json
 import { parseFeed } from "https://deno.land/x/rss/mod.ts";
 async function fetchAndConvertRSS(url: string, limit: number) {
-  // Fetch the RSS feed
-  const response = await fetch(url);
-  const xml = await response.text();
-  // Parse the RSS feed
-  const feed = await parseFeed(xml);
-  // Limit the number of entries
-  const limitedEntries = feed.entries.slice(0, limit);
-  // Convert to JSON
-  // const json = JSON.stringify( {...feed, entries: limitedEntries }, null, 2);
-  const json = { ...feed, entries: limitedEntries };
-  return json;
+  try {
+    // Fetch the RSS feed
+    const response = await fetch(url);
+    if (!response.ok) {
+      console.warn(`Feed fetch failed: ${url} (HTTP ${response.status})`);
+      return { entries: [] };
+    }
+    const xml = await response.text();
+    // Parse the RSS feed
+    const feed = await parseFeed(xml);
+    // Limit the number of entries
+    const limitedEntries = feed.entries.slice(0, limit);
+    // Convert to JSON
+    const json = { ...feed, entries: limitedEntries };
+    return json;
+  } catch (err) {
+    console.warn(`Feed parse failed: ${url}`, err);
+    return { entries: [] };
+  }
 }
 const rssUrl = "https://rick.status.lol/feed/rss";
 const limit = 5;
 fetchAndConvertRSS(rssUrl,limit).then(console.log).catch(console.error);
 export const statuses = await fetchAndConvertRSS(rssUrl,limit);
 
-const rssUrl2 = "https://cogley.jp/feed.xml";
+const rssUrl2 = "https://api.cogley.jp/feed.xml";
 const limit2 = 5;
 fetchAndConvertRSS(rssUrl2,limit2).then(console.log).catch(console.error);
 export const microblogposts = await fetchAndConvertRSS(rssUrl2,limit2);
