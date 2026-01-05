@@ -175,6 +175,71 @@ jobs:
           retention-days: 30
 
   # ==========================================================================
+  # Trivy - Comprehensive vulnerability, secret, and license scanning
+  # ==========================================================================
+  trivy:
+    name: Trivy Security Scan
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Trivy
+        run: |
+          sudo apt-get install -y wget apt-transport-https gnupg lsb-release
+          wget -qO - https://aquasecurity.github.io/trivy-repo/deb/public.key | sudo apt-key add -
+          echo "deb https://aquasecurity.github.io/trivy-repo/deb $(lsb_release -sc) main" | sudo tee /etc/apt/sources.list.d/trivy.list
+          sudo apt-get update
+          sudo apt-get install -y trivy
+
+      - name: Run Trivy filesystem scan
+        run: |
+          mkdir -p reports
+          # Vulnerability scan (dependencies)
+          trivy fs --scanners vuln --format json --output reports/trivy-vulns.json . || true
+          # Secret scan
+          trivy fs --scanners secret --format json --output reports/trivy-secrets.json . || true
+          # License scan
+          trivy fs --scanners license --format json --output reports/trivy-licenses.json . || true
+          # Combined scan for summary
+          trivy fs --format table . || true
+        continue-on-error: true
+
+      - name: Upload Trivy reports
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: trivy-reports
+          path: reports/trivy-*.json
+          retention-days: 30
+          if-no-files-found: ignore
+
+      - name: Trivy Summary
+        if: always()
+        run: |
+          echo "## Trivy Security Scan Results" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          # Vulnerabilities
+          if [ -f "reports/trivy-vulns.json" ]; then
+            CRITICAL=$(cat reports/trivy-vulns.json | jq '[.Results[]?.Vulnerabilities[]? | select(.Severity=="CRITICAL")] | length' 2>/dev/null || echo "0")
+            HIGH=$(cat reports/trivy-vulns.json | jq '[.Results[]?.Vulnerabilities[]? | select(.Severity=="HIGH")] | length' 2>/dev/null || echo "0")
+            echo "### Vulnerabilities" >> $GITHUB_STEP_SUMMARY
+            echo "- Critical: $CRITICAL" >> $GITHUB_STEP_SUMMARY
+            echo "- High: $HIGH" >> $GITHUB_STEP_SUMMARY
+          fi
+
+          # Secrets
+          if [ -f "reports/trivy-secrets.json" ]; then
+            SECRETS=$(cat reports/trivy-secrets.json | jq '[.Results[]?.Secrets[]?] | length' 2>/dev/null || echo "0")
+            echo "### Secrets" >> $GITHUB_STEP_SUMMARY
+            echo "- Found: $SECRETS" >> $GITHUB_STEP_SUMMARY
+          fi
+
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "See artifacts for full details." >> $GITHUB_STEP_SUMMARY
+
+  # ==========================================================================
   # Secret Scanning with Gitleaks (using free CLI, not paid action)
   # ==========================================================================
   secret-scan:
@@ -448,7 +513,7 @@ jobs:
   security-summary:
     name: Security Summary
     runs-on: ubuntu-latest
-    needs: [dependency-audit, secret-scan, semgrep]
+    needs: [dependency-audit, trivy, secret-scan, semgrep]
     if: always()
     steps:
       - name: Generate Summary
@@ -458,7 +523,8 @@ jobs:
           echo "| Check | Status |" >> $GITHUB_STEP_SUMMARY
           echo "|-------|--------|" >> $GITHUB_STEP_SUMMARY
           echo "| Dependency Audit | ${{ needs.dependency-audit.result }} |" >> $GITHUB_STEP_SUMMARY
-          echo "| Secret Scanning | ${{ needs.secret-scan.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Trivy (vulns/secrets/licenses) | ${{ needs.trivy.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Gitleaks Secrets | ${{ needs.secret-scan.result }} |" >> $GITHUB_STEP_SUMMARY
           echo "| Semgrep SAST | ${{ needs.semgrep.result }} |" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "See individual job artifacts for detailed reports." >> $GITHUB_STEP_SUMMARY
