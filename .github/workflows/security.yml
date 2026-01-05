@@ -1,0 +1,461 @@
+# ============================================================================
+# Universal Security Scanning Workflow
+# ============================================================================
+# Reusable workflow for SvelteKit, TypeScript, Hono, and Cloudflare projects.
+#
+# Usage in calling repo:
+#   jobs:
+#     security:
+#       uses: eSolia/.github/.github/workflows/security.yml@main
+#       with:
+#         package-manager: npm
+#         source-paths: src/
+#
+# For personal repos (rickcogley/*), reference the same workflow:
+#   uses: eSolia/.github/.github/workflows/security.yml@main
+# ============================================================================
+
+name: Security Scanning
+
+on:
+  workflow_call:
+    inputs:
+      package-manager:
+        description: 'Package manager (npm, pnpm, yarn, or auto)'
+        required: false
+        type: string
+        default: 'auto'
+      node-version:
+        description: 'Node.js version'
+        required: false
+        type: string
+        default: '22'
+      source-paths:
+        description: 'Space-separated paths to scan (e.g., "src/ apps/ packages/")'
+        required: false
+        type: string
+        default: 'src/'
+      run-typecheck:
+        description: 'Run TypeScript type checking'
+        required: false
+        type: boolean
+        default: true
+      run-lint:
+        description: 'Run ESLint'
+        required: false
+        type: boolean
+        default: true
+      run-asvs:
+        description: 'Run ASVS compliance check (requires scripts/asvs-check.ts)'
+        required: false
+        type: boolean
+        default: false
+      semgrep-config:
+        description: 'Semgrep rule configurations (space-separated)'
+        required: false
+        type: string
+        default: 'p/owasp-top-ten p/typescript p/javascript p/secrets'
+      fail-on-findings:
+        description: 'Fail workflow if security issues found'
+        required: false
+        type: boolean
+        default: false
+    secrets:
+      SEMGREP_APP_TOKEN:
+        description: 'Optional Semgrep App token for enhanced rules'
+        required: false
+
+jobs:
+  # ==========================================================================
+  # Detect Package Manager (if auto)
+  # ==========================================================================
+  detect-pm:
+    name: Detect Package Manager
+    runs-on: ubuntu-latest
+    outputs:
+      package-manager: ${{ steps.detect.outputs.pm }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            package-lock.json
+            pnpm-lock.yaml
+            yarn.lock
+            bun.lockb
+
+      - name: Detect package manager
+        id: detect
+        run: |
+          if [ "${{ inputs.package-manager }}" != "auto" ]; then
+            echo "pm=${{ inputs.package-manager }}" >> $GITHUB_OUTPUT
+            echo "Using specified package manager: ${{ inputs.package-manager }}"
+          elif [ -f "pnpm-lock.yaml" ]; then
+            echo "pm=pnpm" >> $GITHUB_OUTPUT
+            echo "Detected pnpm"
+          elif [ -f "yarn.lock" ]; then
+            echo "pm=yarn" >> $GITHUB_OUTPUT
+            echo "Detected yarn"
+          elif [ -f "bun.lockb" ]; then
+            echo "pm=bun" >> $GITHUB_OUTPUT
+            echo "Detected bun"
+          else
+            echo "pm=npm" >> $GITHUB_OUTPUT
+            echo "Detected npm (default)"
+          fi
+
+  # ==========================================================================
+  # Dependency Audit
+  # ==========================================================================
+  dependency-audit:
+    name: Dependency Audit
+    runs-on: ubuntu-latest
+    needs: detect-pm
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        if: needs.detect-pm.outputs.package-manager == 'pnpm'
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ inputs.node-version }}
+          cache: ${{ needs.detect-pm.outputs.package-manager }}
+
+      - name: Install dependencies
+        run: |
+          PM="${{ needs.detect-pm.outputs.package-manager }}"
+          case $PM in
+            pnpm) pnpm install --frozen-lockfile ;;
+            yarn) yarn install --frozen-lockfile ;;
+            bun) bun install --frozen-lockfile ;;
+            *) npm ci ;;
+          esac
+
+      - name: Run audit
+        id: audit
+        run: |
+          PM="${{ needs.detect-pm.outputs.package-manager }}"
+          mkdir -p reports
+
+          case $PM in
+            pnpm)
+              pnpm audit --audit-level=moderate --json > reports/audit.json 2>&1 || true
+              pnpm audit --audit-level=moderate || echo "::warning::Vulnerabilities found"
+              ;;
+            yarn)
+              yarn audit --level moderate --json > reports/audit.json 2>&1 || true
+              yarn audit --level moderate || echo "::warning::Vulnerabilities found"
+              ;;
+            bun)
+              # Bun doesn't have audit yet, skip
+              echo '{"vulnerabilities": "audit not available for bun"}' > reports/audit.json
+              echo "::notice::Bun audit not available, skipping"
+              ;;
+            *)
+              npm audit --audit-level=moderate --json > reports/audit.json 2>&1 || true
+              npm audit --audit-level=moderate || echo "::warning::Vulnerabilities found"
+              ;;
+          esac
+        continue-on-error: true
+
+      - name: Upload audit report
+        uses: actions/upload-artifact@v4
+        with:
+          name: dependency-audit-report
+          path: reports/audit.json
+          retention-days: 30
+
+  # ==========================================================================
+  # Secret Scanning with Gitleaks
+  # ==========================================================================
+  secret-scan:
+    name: Secret Scanning
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Full history for scanning
+
+      - name: Run Gitleaks
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITLEAKS_NOTIFY_USER_LIST: ''  # Disable notifications
+        continue-on-error: ${{ !inputs.fail-on-findings }}
+
+      - name: Gitleaks Summary
+        if: always()
+        run: |
+          echo "## Secret Scanning Results" >> $GITHUB_STEP_SUMMARY
+          if [ -f "results.sarif" ]; then
+            FINDINGS=$(cat results.sarif | jq '.runs[0].results | length' 2>/dev/null || echo "0")
+            if [ "$FINDINGS" = "0" ]; then
+              echo "No secrets detected" >> $GITHUB_STEP_SUMMARY
+            else
+              echo "**$FINDINGS** potential secrets found" >> $GITHUB_STEP_SUMMARY
+            fi
+          else
+            echo "No secrets detected" >> $GITHUB_STEP_SUMMARY
+          fi
+
+  # ==========================================================================
+  # SAST with Semgrep
+  # ==========================================================================
+  semgrep:
+    name: Semgrep SAST
+    runs-on: ubuntu-latest
+    container:
+      image: semgrep/semgrep
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Run Semgrep
+        env:
+          SEMGREP_APP_TOKEN: ${{ secrets.SEMGREP_APP_TOKEN }}
+        run: |
+          mkdir -p reports
+
+          # Build config string
+          CONFIG_ARGS=""
+          for config in ${{ inputs.semgrep-config }}; do
+            CONFIG_ARGS="$CONFIG_ARGS --config $config"
+          done
+
+          # Determine paths to scan
+          SCAN_PATHS="${{ inputs.source-paths }}"
+
+          # Run semgrep
+          semgrep scan \
+            $CONFIG_ARGS \
+            --json \
+            --output reports/semgrep.json \
+            $SCAN_PATHS \
+            || true
+
+          # Also generate SARIF for GitHub integration
+          semgrep scan \
+            $CONFIG_ARGS \
+            --sarif \
+            --output reports/semgrep.sarif \
+            $SCAN_PATHS \
+            || true
+        continue-on-error: true
+
+      - name: Upload Semgrep reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: semgrep-report
+          path: reports/semgrep.*
+          retention-days: 30
+
+      - name: Upload to GitHub Security
+        uses: github/codeql-action/upload-sarif@v3
+        if: always()
+        with:
+          sarif_file: reports/semgrep.sarif
+        continue-on-error: true
+
+      - name: Semgrep Summary
+        if: always()
+        run: |
+          echo "## Semgrep SAST Results" >> $GITHUB_STEP_SUMMARY
+          if [ -f reports/semgrep.json ]; then
+            FINDINGS=$(cat reports/semgrep.json | python3 -c "import json,sys; d=json.load(sys.stdin); print(len(d.get('results', [])))" 2>/dev/null || echo "0")
+            echo "Found **$FINDINGS** potential issues" >> $GITHUB_STEP_SUMMARY
+
+            # Show breakdown by severity if findings exist
+            if [ "$FINDINGS" != "0" ]; then
+              echo "" >> $GITHUB_STEP_SUMMARY
+              echo "### By Severity" >> $GITHUB_STEP_SUMMARY
+              python3 -c "
+import json, sys
+from collections import Counter
+try:
+    d = json.load(open('reports/semgrep.json'))
+    severities = Counter(r.get('extra', {}).get('severity', 'UNKNOWN') for r in d.get('results', []))
+    for sev, count in sorted(severities.items()):
+        print(f'- {sev}: {count}')
+except: pass
+" >> $GITHUB_STEP_SUMMARY 2>/dev/null || true
+            fi
+          else
+            echo "No report generated" >> $GITHUB_STEP_SUMMARY
+          fi
+
+  # ==========================================================================
+  # TypeScript Type Checking (optional)
+  # ==========================================================================
+  typecheck:
+    name: TypeScript Check
+    runs-on: ubuntu-latest
+    needs: detect-pm
+    if: inputs.run-typecheck
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        if: needs.detect-pm.outputs.package-manager == 'pnpm'
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ inputs.node-version }}
+          cache: ${{ needs.detect-pm.outputs.package-manager }}
+
+      - name: Install dependencies
+        run: |
+          PM="${{ needs.detect-pm.outputs.package-manager }}"
+          case $PM in
+            pnpm) pnpm install --frozen-lockfile ;;
+            yarn) yarn install --frozen-lockfile ;;
+            bun) bun install --frozen-lockfile ;;
+            *) npm ci ;;
+          esac
+
+      - name: Run type check
+        run: |
+          PM="${{ needs.detect-pm.outputs.package-manager }}"
+          # Try common type check commands
+          if [ -f "turbo.json" ]; then
+            # Monorepo with turbo
+            case $PM in
+              pnpm) pnpm run check || pnpm run typecheck || pnpm run type-check ;;
+              yarn) yarn check || yarn typecheck || yarn type-check ;;
+              *) npm run check || npm run typecheck || npm run type-check ;;
+            esac
+          else
+            # Single package
+            case $PM in
+              pnpm) pnpm run check || pnpm exec tsc --noEmit ;;
+              yarn) yarn check || yarn tsc --noEmit ;;
+              bun) bun run check || bun tsc --noEmit ;;
+              *) npm run check || npx tsc --noEmit ;;
+            esac
+          fi
+        continue-on-error: true
+
+  # ==========================================================================
+  # ESLint (optional)
+  # ==========================================================================
+  lint:
+    name: ESLint
+    runs-on: ubuntu-latest
+    needs: detect-pm
+    if: inputs.run-lint
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        if: needs.detect-pm.outputs.package-manager == 'pnpm'
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ inputs.node-version }}
+          cache: ${{ needs.detect-pm.outputs.package-manager }}
+
+      - name: Install dependencies
+        run: |
+          PM="${{ needs.detect-pm.outputs.package-manager }}"
+          case $PM in
+            pnpm) pnpm install --frozen-lockfile ;;
+            yarn) yarn install --frozen-lockfile ;;
+            bun) bun install --frozen-lockfile ;;
+            *) npm ci ;;
+          esac
+
+      - name: Run lint
+        run: |
+          PM="${{ needs.detect-pm.outputs.package-manager }}"
+          case $PM in
+            pnpm) pnpm run lint ;;
+            yarn) yarn lint ;;
+            bun) bun run lint ;;
+            *) npm run lint ;;
+          esac
+        continue-on-error: true
+
+  # ==========================================================================
+  # ASVS Compliance Check (optional)
+  # ==========================================================================
+  asvs-check:
+    name: ASVS Compliance
+    runs-on: ubuntu-latest
+    needs: detect-pm
+    if: inputs.run-asvs
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        if: needs.detect-pm.outputs.package-manager == 'pnpm'
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ inputs.node-version }}
+          cache: ${{ needs.detect-pm.outputs.package-manager }}
+
+      - name: Install dependencies
+        run: |
+          PM="${{ needs.detect-pm.outputs.package-manager }}"
+          case $PM in
+            pnpm) pnpm install --frozen-lockfile ;;
+            yarn) yarn install --frozen-lockfile ;;
+            bun) bun install --frozen-lockfile ;;
+            *) npm ci ;;
+          esac
+
+      - name: Run ASVS check
+        run: |
+          if [ -f "scripts/asvs-check.ts" ]; then
+            mkdir -p reports
+            npx tsx scripts/asvs-check.ts --format json --output reports/asvs.json
+          else
+            echo "::notice::No scripts/asvs-check.ts found, skipping ASVS check"
+          fi
+        continue-on-error: true
+
+      - name: Upload ASVS report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: asvs-compliance-report
+          path: reports/asvs.json
+          retention-days: 90
+          if-no-files-found: ignore
+
+  # ==========================================================================
+  # Security Summary
+  # ==========================================================================
+  security-summary:
+    name: Security Summary
+    runs-on: ubuntu-latest
+    needs: [dependency-audit, secret-scan, semgrep]
+    if: always()
+    steps:
+      - name: Generate Summary
+        run: |
+          echo "## Security Scan Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Check | Status |" >> $GITHUB_STEP_SUMMARY
+          echo "|-------|--------|" >> $GITHUB_STEP_SUMMARY
+          echo "| Dependency Audit | ${{ needs.dependency-audit.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Secret Scanning | ${{ needs.secret-scan.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Semgrep SAST | ${{ needs.semgrep.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "See individual job artifacts for detailed reports." >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "---" >> $GITHUB_STEP_SUMMARY
+          echo "*Workflow: [eSolia/.github](https://github.com/eSolia/.github)*" >> $GITHUB_STEP_SUMMARY
