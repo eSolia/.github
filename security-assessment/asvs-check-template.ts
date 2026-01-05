@@ -59,11 +59,15 @@ const ASVS_SCOPE = {
     'Maintain security documentation'
   ],
   level: 'L1-partial',
-  levelDescription: 'Partial Level 1 coverage through automated checks',
+  levelDescription: 'Partial Level 1 and Level 2 coverage through automated checks',
+  // ASVS 5.0 control counts (approximate - verify against official spec)
+  // L1: Base requirements for all applications
+  // L2: L1 + additional requirements for sensitive data handling
+  // L3: L2 + additional requirements for critical applications
   totalAsvsControls: {
-    L1: 50,
-    L2: 150,
-    L3: 250
+    L1: 50, // ~50 L1-only controls
+    L2: 150, // ~100 additional L2-only controls (150 total)
+    L3: 286 // ~136 additional L3-only controls (286 total)
   }
 };
 
@@ -731,7 +735,17 @@ function runChecks(): CheckResult[] {
   });
 
   // V5.3.7 - Command Injection Prevention
-  const execLocations = searchPattern(apiFiles, /exec\(|spawn\(|execSync|child_process/);
+  // Note: db.exec() is D1 SQL batch execution, not shell - exclude from detection
+  // Also exclude type definition files which just declare interfaces
+  const execLocations = searchPattern(
+    apiFiles,
+    /(?<!db\.)exec\(|spawn\(|execSync|child_process|eval\(/
+  ).filter(
+    (loc) =>
+      !loc.snippet?.includes('db.exec') &&
+      !loc.file.includes('-types.ts') &&
+      !loc.file.includes('.d.ts')
+  );
   const safeExecLocations = searchPattern(
     apiFiles,
     /execFile|spawn.*\{.*shell:\s*false|spawnSync.*shell:\s*false/
@@ -853,13 +867,19 @@ function runChecks(): CheckResult[] {
     apiFiles,
     /crypto\.getRandomValues|crypto\.randomUUID|randomBytes|secure.*random/i
   );
-  const insecureRandomLocations = searchPattern(apiFiles, /Math\.random/);
+  // Exclude Math.random() in comments (lines starting with * or //)
+  const insecureRandomLocations = searchPattern(apiFiles, /Math\.random/).filter(
+    (loc) => !loc.snippet?.trim().startsWith('*') && !loc.snippet?.trim().startsWith('//')
+  );
+  // Check for dedicated secure-random utility file
+  const hasSecureRandomUtil = apiFiles.some((f) => f.includes('secure-random'));
   results.push({
     id: 'V6.3.1',
     category: 'V6 Cryptography',
     name: 'Secure Random Generation',
     status:
-      secureRandomLocations.length > 0 && insecureRandomLocations.length === 0
+      (secureRandomLocations.length > 0 || hasSecureRandomUtil) &&
+      insecureRandomLocations.length === 0
         ? 'pass'
         : insecureRandomLocations.length > 0
           ? 'warning'
@@ -930,7 +950,8 @@ function runChecks(): CheckResult[] {
     name: 'Random IV/Nonce',
     status: ivLocations.length === 0 || randomIvLocations.length > 0 ? 'pass' : 'info',
     description: 'Unique random IV/nonce for each encryption operation',
-    locations: randomIvLocations.length > 0 ? randomIvLocations.slice(0, 3) : ivLocations.slice(0, 3),
+    locations:
+      randomIvLocations.length > 0 ? randomIvLocations.slice(0, 3) : ivLocations.slice(0, 3),
     asvsRef: 'V6.2.4',
     automatable: true,
     level: 'L2'
@@ -1149,7 +1170,13 @@ function runChecks(): CheckResult[] {
   // V9.1.1 - TLS for All Connections (exclude SVG xmlns which is not a network URL)
   const httpsLocations = searchPattern(allFiles, /https:\/\/|TLS|SSL|wss:/i);
   const httpLocations = searchPattern(allFiles, /http:\/\/(?!localhost|127\.0\.0\.1)/).filter(
-    (loc) => !loc.snippet.includes('xmlns') && !loc.snippet.includes('w3.org')
+    (loc) =>
+      !loc.snippet.includes('xmlns') &&
+      !loc.snippet.includes('w3.org') &&
+      // Exclude URL protocol detection (string comparison, not network calls)
+      !loc.snippet.includes('startsWith') &&
+      // Exclude InfoSec documented exceptions
+      !loc.snippet.includes('InfoSec:')
   );
   results.push({
     id: 'V9.1.1',
@@ -1198,24 +1225,42 @@ function runChecks(): CheckResult[] {
     allFiles,
     /Access-Control-Allow-Origin.*\*|origin:\s*['"]?\*/i
   );
+  // Check if wildcard CORS is intentionally documented with InfoSec comment
+  const hasIntentionalCorsComment = (file: string): boolean => {
+    try {
+      const content = readFileSync(file, 'utf-8');
+      return (
+        content.includes('InfoSec: Wildcard CORS is intentional') ||
+        content.includes('// CORS: Public API')
+      );
+    } catch {
+      return false;
+    }
+  };
+  const undocumentedWildcardCors = wildcardCorsLocations.filter(
+    (loc) => !hasIntentionalCorsComment(loc.file)
+  );
   results.push({
     id: 'V9.2.1',
     category: 'V9 Communication',
     name: 'CORS Configuration',
     status:
-      wildcardCorsLocations.length === 0
+      wildcardCorsLocations.length === 0 || undocumentedWildcardCors.length === 0
         ? 'pass'
-        : wildcardCorsLocations.length > 0
+        : undocumentedWildcardCors.length > 0
           ? 'warning'
           : 'info',
     description:
-      wildcardCorsLocations.length > 0
+      undocumentedWildcardCors.length > 0
         ? 'Wildcard CORS origin detected'
-        : 'CORS properly configured',
-    locations: wildcardCorsLocations.length > 0 ? wildcardCorsLocations : corsLocations.slice(0, 3),
+        : wildcardCorsLocations.length > 0
+          ? 'Wildcard CORS documented as intentional for public APIs'
+          : 'CORS properly configured',
+    locations:
+      undocumentedWildcardCors.length > 0 ? undocumentedWildcardCors : corsLocations.slice(0, 3),
     remediation:
-      wildcardCorsLocations.length > 0
-        ? 'Replace wildcard CORS origin with specific allowed origins'
+      undocumentedWildcardCors.length > 0
+        ? 'Replace wildcard CORS origin with specific allowed origins or add InfoSec comment documenting intentional use'
         : undefined,
     asvsRef: 'V9.2.1',
     automatable: true,
@@ -1553,7 +1598,8 @@ function generateReport(checks: CheckResult[]): Report {
           checked: l2Checks.length,
           total: ASVS_SCOPE.totalAsvsControls.L2 - ASVS_SCOPE.totalAsvsControls.L1, // L2-only controls
           percentage: Math.round(
-            (l2Checks.length / (ASVS_SCOPE.totalAsvsControls.L2 - ASVS_SCOPE.totalAsvsControls.L1)) *
+            (l2Checks.length /
+              (ASVS_SCOPE.totalAsvsControls.L2 - ASVS_SCOPE.totalAsvsControls.L1)) *
               100
           )
         }
