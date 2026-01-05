@@ -60,6 +60,11 @@ on:
         required: false
         type: boolean
         default: false
+      upload-sarif:
+        description: 'Upload SARIF to GitHub Security tab (requires Code Security enabled, paid for private repos)'
+        required: false
+        type: boolean
+        default: false
     secrets:
       SEMGREP_APP_TOKEN:
         description: 'Optional Semgrep App token for enhanced rules'
@@ -271,11 +276,10 @@ jobs:
           retention-days: 30
 
       - name: Upload to GitHub Security
-        uses: github/codeql-action/upload-sarif@v3
-        if: always()
+        uses: github/codeql-action/upload-sarif@v4
+        if: inputs.upload-sarif
         with:
           sarif_file: reports/semgrep.sarif
-        continue-on-error: true
 
       - name: Semgrep Summary
         if: always()
