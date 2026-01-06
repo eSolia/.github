@@ -1,6 +1,6 @@
 [![Proven.lol Lightweight Proof](https://img.shields.io/badge/Proven.lol-Lightweight_Proof-green?style=flat-square&logo=cachet)](https://proven.lol/fbd788)
 
-**Last Updated:** January 5th, 2026 at 5:23:49 PM GMT+9
+**Last Updated:** January 6th, 2026 at 1:41:28 AM GMT+9
 
 
 ## Welcome 👋
@@ -105,9 +105,9 @@ jobs:
 </details>
 
 ## Latest Bluesky Posts:
+* [📣 New Blog Post &#xA;A clear overview of PDF features, use cases, and the role of Acrobat—useful for both work and everyday life. Read more 👇&#xA;https://blog.esolia.pro/en/posts/20260106-what-is-pdf-en/](https://bsky.app/profile/esolia.com/post/3mbrd6eglht2h)
+* [📣 New Blog Post &#xA;PDFの特徴や利用シーン、Acrobatの役割まで丁寧に解説しています。仕事でもプライベートでも役立つ知識です。記事はこちらから👇&#xA;https://blog.esolia.pro/posts/20260106-pdf%E3%81%AE%E5%9F%BA%E6%9C%AC-ja/](https://bsky.app/profile/esolia.com/post/3mbqicokzrp2h)
 * [📣 New Blog Post &#xA;We’ve summarized the key basics and tips for using Microsoft Teams Webinars.&#xA;It’s easy to follow—perfect for first-time hosts. Check it out👇&#xA;https://blog.esolia.pro/en/posts/20251212-teams-webinar-en/ &#xA;#MicrosoftTeams #Webinar #OnlineEvents #RemoteWork #TeamsTips](https://bsky.app/profile/esolia.com/post/3m7shlkwwuw2c)
-* [📣 New Blog Post &#xA;Microsoft Teamsのウェビナー機能の基本と活用方法をまとめました！初めての方にもわかりやすく解説しています。オンラインイベント開催の参考にぜひご覧ください👇&#xA;https://blog.esolia.pro/posts/20251212-teams-webinar-%E5%9F%BA%E6%9C%AC%E3%81%A8%E6%B4%BB%E7%94%A8-ja/ &#xA;#MicrosoftTeams #ウェビナー #オンラインイベント #リモートワーク #TeamsTips #Webinar #オンラインセミナー](https://bsky.app/profile/esolia.com/post/3m7r2ztdxad2e)
-* [📣 New Blog Post &#xA;Have you upgraded to Windows 11 yet?&#xA;I’ve highlighted three useful features in my latest blog post — they might just boost your productivity. Check out the article here👇&#xA;https://blog.esolia.pro/en/posts/20251120-windows-11-features-en/ &#xA;#Windows11Tips　#Windows11Features](https://bsky.app/profile/esolia.com/post/3m635bycpd42a)
 
 
 ## Stats:
@@ -117,7 +117,7 @@ jobs:
 | Repo Total Files | 1 |
 | Repo Size in MB | 269 |
 | Lume Version | v2.4.2 |
-| Deno Version | 2.6.3 |
+| Deno Version | 2.6.4 |
 | V8 Version | 14.2.231.17-rusty |
 | Typescript Version | 5.9.2 |
 | Timezone | Asia/Tokyo |
