@@ -1,6 +1,6 @@
 [![Proven.lol Lightweight Proof](https://img.shields.io/badge/Proven.lol-Lightweight_Proof-green?style=flat-square&logo=cachet)](https://proven.lol/fbd788)
 
-**Last Updated:** January 21st, 2026 at 1:43:38 AM GMT+9
+**Last Updated:** January 22nd, 2026 at 1:46:16 AM GMT+9
 
 
 ## Welcome 👋
@@ -105,9 +105,9 @@ jobs:
 </details>
 
 ## Latest Bluesky Posts:
+* [📣 New Blog Post&#xA;Feeling digital overload?&#xA;Discover simple digital detox habits used by IT professionals—like fewer notifications and more offline time. Easy tips for everyday life.&#xA;https://blog.esolia.pro/en/posts/20260122-digital-detox-habits-en/ &#xA;#DigitalDetox #OfflineTime #ScreenTime](https://bsky.app/profile/esolia.com/post/3mczkncfyhz22)
+* [📣 New Blog Post &#xA;デジタル過多の時代、意識しないうちに情報疲れになっていませんか？&#xA;この記事ではIT担当者が実践する“無理なく続けるデジタルデトックス習慣”をまとめています。通知を減らす、小さなオフライン時間を作る…日常に取り入れやすいヒント満載！記事はこちらから👇&#xA;https://blog.esolia.pro/posts/20260122-%E3%83%87%E3%82%B8%E3%82%BF%E3%83%AB%E3%83%87%E3%83%88%E3%83%83%E3%82%AF%E3%82%B9-ja/ &#xA;#デジタルデトックス#オフライン時間#スクリーンタイム](https://bsky.app/profile/esolia.com/post/3mcy65kx5pt27)
 * [📣 New Blog Post &#xA;A clear overview of PDF features, use cases, and the role of Acrobat—useful for both work and everyday life. Read more 👇&#xA;https://blog.esolia.pro/en/posts/20260106-what-is-pdf-en/](https://bsky.app/profile/esolia.com/post/3mbrd6eglht2h)
-* [📣 New Blog Post &#xA;PDFの特徴や利用シーン、Acrobatの役割まで丁寧に解説しています。仕事でもプライベートでも役立つ知識です。記事はこちらから👇&#xA;https://blog.esolia.pro/posts/20260106-pdf%E3%81%AE%E5%9F%BA%E6%9C%AC-ja/](https://bsky.app/profile/esolia.com/post/3mbqicokzrp2h)
-* [📣 New Blog Post &#xA;We’ve summarized the key basics and tips for using Microsoft Teams Webinars.&#xA;It’s easy to follow—perfect for first-time hosts. Check it out👇&#xA;https://blog.esolia.pro/en/posts/20251212-teams-webinar-en/ &#xA;#MicrosoftTeams #Webinar #OnlineEvents #RemoteWork #TeamsTips](https://bsky.app/profile/esolia.com/post/3m7shlkwwuw2c)
 
 
 ## Stats:
