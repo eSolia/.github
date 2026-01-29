@@ -1,6 +1,6 @@
 [![Proven.lol Lightweight Proof](https://img.shields.io/badge/Proven.lol-Lightweight_Proof-green?style=flat-square&logo=cachet)](https://proven.lol/fbd788)
 
-**Last Updated:** January 28th, 2026 at 1:42:06 AM GMT+9
+**Last Updated:** January 29th, 2026 at 1:44:02 AM GMT+9
 
 
 ## Welcome 👋
@@ -117,8 +117,8 @@ jobs:
 | Repo Total Files | 1 |
 | Repo Size in MB | 269 |
 | Lume Version | v2.4.2 |
-| Deno Version | 2.6.6 |
-| V8 Version | 14.2.231.17-rusty |
+| Deno Version | 2.6.7 |
+| V8 Version | 14.5.201.2-rusty |
 | Typescript Version | 5.9.2 |
 | Timezone | Asia/Tokyo |
 
