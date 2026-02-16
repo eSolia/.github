@@ -1,6 +1,6 @@
 [![Proven.lol Lightweight Proof](https://img.shields.io/badge/Proven.lol-Lightweight_Proof-green?style=flat-square&logo=cachet)](https://proven.lol/fbd788)
 
-**Last Updated:** February 15th, 2026 at 1:42:43 AM GMT+9
+**Last Updated:** February 16th, 2026 at 1:43:02 AM GMT+9
 
 
 ## Welcome 👋
@@ -105,9 +105,9 @@ jobs:
 </details>
 
 ## Latest Bluesky Posts:
+* [📣 New Blog Post &#xA;“My monitor suddenly won’t turn on!”&#xA;We shared a simple checklist IT teams use to troubleshoot this issue.&#xA;Check the article here👇&#xA;#TechTips #Troubleshooting #MonitorIssue&#xA;https://blog.esolia.pro/en/posts/20260216-monitor-won%E2%80%99t-display-en/](https://bsky.app/profile/esolia.com/post/3meygbl3qrz27)
+* [📣 New Blog Post &#xA;「モニターが急に映らない！」そんなトラブルに、情シスが実際にやっているチェックリストをまとめました。&#xA;思い当たるところからサクッと確認してみてください。記事はこちらから👇&#xA;#モニター故障 #モニタートラブル &#xA;https://blog.esolia.pro/posts/20220216-%E3%83%A2%E3%83%8B%E3%82%BF%E3%83%BC%E3%81%8C%E6%98%A0%E3%82%89%E3%81%AA%E3%81%84-ja/](https://bsky.app/profile/esolia.com/post/3mexlfyqbtn2g)
 * [📣 New Blog Post&#xA;Feeling digital overload?&#xA;Discover simple digital detox habits used by IT professionals—like fewer notifications and more offline time. Easy tips for everyday life.&#xA;https://blog.esolia.pro/en/posts/20260122-digital-detox-habits-en/ &#xA;#DigitalDetox #OfflineTime #ScreenTime](https://bsky.app/profile/esolia.com/post/3mczkncfyhz22)
-* [📣 New Blog Post &#xA;デジタル過多の時代、意識しないうちに情報疲れになっていませんか？&#xA;この記事ではIT担当者が実践する“無理なく続けるデジタルデトックス習慣”をまとめています。通知を減らす、小さなオフライン時間を作る…日常に取り入れやすいヒント満載！記事はこちらから👇&#xA;https://blog.esolia.pro/posts/20260122-%E3%83%87%E3%82%B8%E3%82%BF%E3%83%AB%E3%83%87%E3%83%88%E3%83%83%E3%82%AF%E3%82%B9-ja/ &#xA;#デジタルデトックス#オフライン時間#スクリーンタイム](https://bsky.app/profile/esolia.com/post/3mcy65kx5pt27)
-* [📣 New Blog Post &#xA;A clear overview of PDF features, use cases, and the role of Acrobat—useful for both work and everyday life. Read more 👇&#xA;https://blog.esolia.pro/en/posts/20260106-what-is-pdf-en/](https://bsky.app/profile/esolia.com/post/3mbrd6eglht2h)
 
 
 ## Stats:
