@@ -4,8 +4,10 @@ date: Git Last Modified
 ---
 [![Proven.lol Lightweight Proof](https://img.shields.io/badge/Proven.lol-Lightweight_Proof-green?style=flat-square&logo=cachet)](https://proven.lol/fbd788)
 
-**Last Updated:** {{ date |> date('HUMAN_DATETIME') }}
-{{ set today = todaysDateYYYYMMDD }}{{ if holidays[today] }}**Today is:** {{ holidays[today] }}{{ /if }}
+**Last Updated:** {{ date |> date('HUMAN_DATETIME') }} &nbsp; **Today is:** {{ todaysDateENUS }}
+{{ set today = todaysDateYYYYMMDD }}{{ if holidays[today] }}
+**It's a holiday in Japan:** {{ holidays[today] }}
+{{ /if }}
 
 ## Welcome 👋
 
@@ -108,33 +110,39 @@ jobs:
 
 </details>
 
-## Latest Bluesky Posts:
-{{ for item of bskyposts.entries }}* [{{ item.description.value }}]({{ item.links[0].href }})
+## Latest from Our Blog
+
+### English
+
+{{ set enItems = [] }}{{ for item of blogPostsEN.items.slice(0, 3) }}{{ set enItems = enItems.concat("- [" + item.title + "](" + item.url + ") — _" + item.summary.substring(0, 100) + "..._") }}{{ /for }}
+{{ for line of enItems }}
+{{ line }}
 {{ /for }}
 
-## Stats:
+### 日本語
+
+{{ set jaItems = [] }}{{ for item of blogPostsJA.items.slice(0, 3) }}{{ set jaItems = jaItems.concat("- [" + item.title + "](" + item.url + ")") }}{{ /for }}
+{{ for line of jaItems }}
+{{ line }}
+{{ /for }}
+
+## Build Stats
 
 | Item | Value |
 | --- | --- |
 | Repo Total Files | {{ search.files("").length }} |
-| Repo Size in MB | {{ repoSizeKB }} |
+| Repo Size in KB | {{ repoSizeKB }} |
 | Lume Version | {{ lumeVersion }} |
 | Deno Version | {{ Deno.version.deno }} |
 | V8 Version | {{ Deno.version.v8 }} |
 | Typescript Version | {{ Deno.version.typescript }} |
 | Timezone | {{ Deno.env.get("TZ") }} |
 
-### How does this readme work?
-
-We're generating this readme using the [Lume](https://lume.land/) static site generator from within the eSolia [.github](https://github.com/esolia/.github) repository. See [this page](https://rickcogley.github.io/rickcogley/) for details to get your own dynamic readme!
-
 <details>
 <summary><strong>How does this README work?</strong></summary>
 
-We generate this README using the [Lume](https://lume.land/) static site generator from within the eSolia [.github](https://github.com/esolia/.github) repository. See [this page](https://rickcogley.github.io/rickcogley/) for details to get your own dynamic README.
+We generate this profile README using the [Lume](https://lume.land/) static site generator. A [Vento](https://vento.js.org/) template fetches live data from our [blog JSON feed](https://blog.esolia.pro/feed.en.json) and the [Japanese holidays API](https://holidays-jp.github.io/api/v1/date.json) at build time, producing a markdown file that GitHub displays as our org profile. A GitHub Actions workflow rebuilds it daily.
+
+See [this page](https://rickcogley.github.io/rickcogley/) for a guide on building your own.
 
 </details>
-
-{{# ## Latest Blog Posts:
-{{ for item of microblogposts.entries }}* [{{ item.description.value |> slice(9,80) |> split(" ") |> slice(0,20) |> join(" ") |> concat(" ","...") }}]({{ item.id }})
-{{ /for }} #}}

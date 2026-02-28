@@ -1,6 +1,6 @@
 [![Proven.lol Lightweight Proof](https://img.shields.io/badge/Proven.lol-Lightweight_Proof-green?style=flat-square&logo=cachet)](https://proven.lol/fbd788)
 
-**Last Updated:** February 27th, 2026 at 1:46:43 AM GMT+9
+**Last Updated:** January 5th, 2026 at 1:42:47 PM GMT+9 &nbsp; **Today is:** Saturday, February 28, 2026
 
 
 ## Welcome 👋
@@ -104,33 +104,47 @@ jobs:
 
 </details>
 
-## Latest Bluesky Posts:
-* [📣 New Blog Post &#xA;“My monitor suddenly won’t turn on!”&#xA;We shared a simple checklist IT teams use to troubleshoot this issue.&#xA;Check the article here👇&#xA;#TechTips #Troubleshooting #MonitorIssue&#xA;https://blog.esolia.pro/en/posts/20260216-monitor-won%E2%80%99t-display-en/](https://bsky.app/profile/esolia.com/post/3meygbl3qrz27)
-* [📣 New Blog Post &#xA;「モニターが急に映らない！」そんなトラブルに、情シスが実際にやっているチェックリストをまとめました。&#xA;思い当たるところからサクッと確認してみてください。記事はこちらから👇&#xA;#モニター故障 #モニタートラブル &#xA;https://blog.esolia.pro/posts/20220216-%E3%83%A2%E3%83%8B%E3%82%BF%E3%83%BC%E3%81%8C%E6%98%A0%E3%82%89%E3%81%AA%E3%81%84-ja/](https://bsky.app/profile/esolia.com/post/3mexlfyqbtn2g)
-* [📣 New Blog Post&#xA;Feeling digital overload?&#xA;Discover simple digital detox habits used by IT professionals—like fewer notifications and more offline time. Easy tips for everyday life.&#xA;https://blog.esolia.pro/en/posts/20260122-digital-detox-habits-en/ &#xA;#DigitalDetox #OfflineTime #ScreenTime](https://bsky.app/profile/esolia.com/post/3mczkncfyhz22)
+## Latest from Our Blog
+
+### English
 
 
-## Stats:
+
+- [What to Do When Your Monitor Won’t Display: Troubleshooting Tips from IT Support](https://blog.esolia.pro/en/posts/20260216-monitor-won’t-display-en/) — _Having trouble with your monitor not displaying? This guide walks you through real-world IT support ..._
+
+- [Small Digital Detox Habits](https://blog.esolia.pro/en/posts/20260122-digital-detox-habits-en/) — _Introducing simple and sustainable digital detox tips practiced by an IT professional—find your perf..._
+
+- [What is PDF? How is it related to Adobe Acrobat?](https://blog.esolia.pro/en/posts/20260106-what-is-pdf-en/) — _We will explore the basics of PDFs and their relationship with Adobe Acrobat...._
+
+
+### 日本語
+
+
+
+- [モニターが映らないときの対処法：情シスがよくやるチェックリストを公開](https://blog.esolia.pro/posts/20220216-モニターが映らない-ja/)
+
+- [IT担当者が続ける小さなデジタルデトックス習慣](https://blog.esolia.pro/posts/20260122-デジタルデトックス-ja/)
+
+- [PDFって何？ Adobe Acrobatとの関係は？](https://blog.esolia.pro/posts/20260106-pdfの基本-ja/)
+
+
+## Build Stats
 
 | Item | Value |
 | --- | --- |
 | Repo Total Files | 1 |
-| Repo Size in MB | 269 |
+| Repo Size in KB | 1328 |
 | Lume Version | v2.4.2 |
 | Deno Version | 2.7.1 |
 | V8 Version | 14.5.201.2-rusty |
 | Typescript Version | 5.9.2 |
 | Timezone | Asia/Tokyo |
 
-### How does this readme work?
-
-We're generating this readme using the [Lume](https://lume.land/) static site generator from within the eSolia [.github](https://github.com/esolia/.github) repository. See [this page](https://rickcogley.github.io/rickcogley/) for details to get your own dynamic readme!
-
 <details>
 <summary><strong>How does this README work?</strong></summary>
 
-We generate this README using the [Lume](https://lume.land/) static site generator from within the eSolia [.github](https://github.com/esolia/.github) repository. See [this page](https://rickcogley.github.io/rickcogley/) for details to get your own dynamic README.
+We generate this profile README using the [Lume](https://lume.land/) static site generator. A [Vento](https://vento.js.org/) template fetches live data from our [blog JSON feed](https://blog.esolia.pro/feed.en.json) and the [Japanese holidays API](https://holidays-jp.github.io/api/v1/date.json) at build time, producing a markdown file that GitHub displays as our org profile. A GitHub Actions workflow rebuilds it daily.
+
+See [this page](https://rickcogley.github.io/rickcogley/) for a guide on building your own.
 
 </details>
-
-

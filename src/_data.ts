@@ -1,29 +1,73 @@
 // Simple constants
 export const cacheBuster = `${new Date().getTime()}`;
-export const todaysDateYYYYMMDD = `${new Date().toISOString('ja-JP', { timeZone: 'Asia/Tokyo' }).split("T")[0]}`;
-// export const todaysDateYYYYMMDD2 = `${new Date().toISOString().slice(0, 10)}`;
-export const todaysDateJAJP = `${new Date().toLocaleString('ja-JP',{ year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' })}`;
-export const todaysDateENUS = `${new Date().toLocaleString('en-US',{ year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' })}`;
-
-// const tzoptions = { timeZone: 'America/Los_Angeles' };
-// console.log(date.toLocaleString('en-US', tzoptions));
-// export const todaysDateYYYYMMDD2 = `${new Date().toISOString().split("T")[0]}`;
-console.log(`${new Date().toLocaleString('ja-JP', { timeZone: 'Asia/Tokyo' })}`);
-//console.log(event.toLocaleString('ko-KR', { timeZone: 'Asia/Tokyo' }));
-console.log(`${new Date().toISOString('ja-JP', { timeZone: 'Asia/Tokyo' })}`);
-
-// Fetch holidays
-const response = await fetch('https://holidays-jp.github.io/api/v1/date.json', {
-  method: 'GET',
-  mode: 'no-cors',
-  headers: {
-    'Accept': 'application/json'
-  }
+export const todaysDateYYYYMMDD = new Date().toLocaleDateString("sv-SE", {
+  timeZone: "Asia/Tokyo",
 });
-const holidays = await response.json();
-export {
-  holidays,
-};
+export const todaysDateJAJP = `${
+  new Date().toLocaleString("ja-JP", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+    weekday: "long",
+  })
+}`;
+export const todaysDateENUS = `${
+  new Date().toLocaleString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+    weekday: "long",
+  })
+}`;
+
+// Generic JSON fetcher with error handling
+async function fetchJSON<T>(url: string, fallback: T): Promise<T> {
+  try {
+    const response = await fetch(url, {
+      headers: { "Accept": "application/json" },
+    });
+    if (!response.ok) {
+      console.error(`Fetch error ${response.status} for ${url}`);
+      return fallback;
+    }
+    return await response.json() as T;
+  } catch (error) {
+    console.error(`Failed to fetch ${url}:`, error);
+    return fallback;
+  }
+}
+
+// Fetch Japanese holidays
+const holidayData = await fetchJSON<Record<string, string>>(
+  "https://holidays-jp.github.io/api/v1/date.json",
+  {},
+);
+export { holidayData as holidays };
+
+// Fetch eSolia blog posts (JSON Feed format)
+interface BlogPost {
+  id: string;
+  url: string;
+  title: string;
+  summary: string;
+  date_published: string;
+  tags: string[];
+  author: { name: string };
+}
+
+interface JSONFeed {
+  items: BlogPost[];
+}
+
+export const blogPostsEN = await fetchJSON<JSONFeed>(
+  "https://blog.esolia.pro/feed.en.json",
+  { items: [] },
+);
+
+export const blogPostsJA = await fetchJSON<JSONFeed>(
+  "https://blog.esolia.pro/feed.ja.json",
+  { items: [] },
+);
 
 // Get repo folder size
 import { join } from "https://deno.land/std/path/mod.ts";
@@ -43,57 +87,6 @@ async function getFolderSize(path: string): Promise<number> {
   return totalSize;
 }
 const folderPath = "./";
-getFolderSize(folderPath).then(size => {
-  console.log(`Total size: ${size/1024/1024} MB`);
-});
 export const repoSizeLong = await getFolderSize(folderPath);
-export const repoSizeKB = Math.trunc(repoSizeLong/1024);
-export const repoSizeMB = Math.trunc(repoSizeLong/1024/1024);
-
-// Shuffle
-// https://en.wikipedia.org/wiki/Fisher-Yates_shuffle
-// import shuffle from "https://deno.land/x/shuffle/mod.ts";
-// console.log(shuffle(["i","ro","ha","ni","ho","he","to"]));
-
-// Import rss feed and convert to json
-import { parseFeed } from "https://deno.land/x/rss/mod.ts";
-async function fetchAndConvertRSS(url: string, limit: number) {
-  try {
-    // Fetch the RSS feed
-    const response = await fetch(url);
-    if (!response.ok) {
-      console.warn(`Feed fetch failed: ${url} (HTTP ${response.status})`);
-      return { entries: [] };
-    }
-    const xml = await response.text();
-    // Parse the RSS feed
-    const feed = await parseFeed(xml);
-    // Limit the number of entries
-    const limitedEntries = feed.entries.slice(0, limit);
-    // Convert to JSON
-    const json = { ...feed, entries: limitedEntries };
-    return json;
-  } catch (err) {
-    console.warn(`Feed parse failed: ${url}`, err);
-    return { entries: [] };
-  }
-}
-const rssUrl = "https://rick.status.lol/feed/rss";
-const limit = 5;
-fetchAndConvertRSS(rssUrl,limit).then(console.log).catch(console.error);
-export const statuses = await fetchAndConvertRSS(rssUrl,limit);
-
-const rssUrl2 = "https://api.cogley.jp/feed.xml";
-const limit2 = 5;
-fetchAndConvertRSS(rssUrl2,limit2).then(console.log).catch(console.error);
-export const microblogposts = await fetchAndConvertRSS(rssUrl2,limit2);
-
-const rssUrl3 = "https://bsky.app/profile/did:plc:3d3xvl3mifda2nkb7svwqlvf/rss";
-const limit3 = 3;
-fetchAndConvertRSS(rssUrl3,limit3).then(console.log).catch(console.error);
-export const bskyposts = await fetchAndConvertRSS(rssUrl3,limit3);
-
-const envdenoinstall = Deno.env.get("DENO_INSTALL");
-console.log("DENO_INSTALL:", envdenoinstall);
-// const env = Deno.env.toObject();
-// console.log("env:", env);
+export const repoSizeKB = Math.trunc(repoSizeLong / 1024);
+export const repoSizeMB = Math.trunc(repoSizeLong / 1024 / 1024);
