@@ -1,6 +1,6 @@
 [![Proven.lol Lightweight Proof](https://img.shields.io/badge/Proven.lol-Lightweight_Proof-green?style=flat-square&logo=cachet)](https://proven.lol/fbd788)
 
-**Last Updated:** March 1st, 2026 at 1:39:29 AM GMT+9 &nbsp; **Today is:** Monday, March 2, 2026
+**Last Updated:** March 2nd, 2026 at 1:41:14 AM GMT+9 &nbsp; **Today is:** Tuesday, March 3, 2026
 
 
 ## Welcome 👋
@@ -110,22 +110,22 @@ jobs:
 
 
 
+- [How Should You Manage Your Passwords?](https://blog.esolia.pro/en/posts/20260302-manage-your-passwords-en/) — _We’ll look at how to manage passwords safely, and how to create stronger, harder-to-guess passwords ..._
+
 - [What to Do When Your Monitor Won’t Display: Troubleshooting Tips from IT Support](https://blog.esolia.pro/en/posts/20260216-monitor-won’t-display-en/) — _Having trouble with your monitor not displaying? This guide walks you through real-world IT support ..._
 
 - [Small Digital Detox Habits](https://blog.esolia.pro/en/posts/20260122-digital-detox-habits-en/) — _Introducing simple and sustainable digital detox tips practiced by an IT professional—find your perf..._
-
-- [What is PDF? How is it related to Adobe Acrobat?](https://blog.esolia.pro/en/posts/20260106-what-is-pdf-en/) — _We will explore the basics of PDFs and their relationship with Adobe Acrobat...._
 
 
 ### 日本語
 
 
 
+- [パスワードはどう管理する？初心者向けパスワード管理法](https://blog.esolia.pro/posts/20260302-パスワードはどう管理する-ja/)
+
 - [モニターが映らないときの対処法：情シスがよくやるチェックリストを公開](https://blog.esolia.pro/posts/20220216-モニターが映らない-ja/)
 
 - [IT担当者が続ける小さなデジタルデトックス習慣](https://blog.esolia.pro/posts/20260122-デジタルデトックス-ja/)
-
-- [PDFって何？ Adobe Acrobatとの関係は？](https://blog.esolia.pro/posts/20260106-pdfの基本-ja/)
 
 
 ## Build Stats
