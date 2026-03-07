@@ -71,6 +71,12 @@ on:
         required: false
 
 
+# NOTE: Per-job permissions blocks are intentionally omitted.
+# GitHub Actions does not support per-job permissions in reusable workflows
+# called via workflow_call — they cause startup_failure. The caller's permissions
+# (inherited from the org default: read) apply to all jobs.
+# The org default is set to 'read' so all jobs get least-privilege by default.
+
 jobs:
   # ==========================================================================
   # Detect Package Manager (if auto)
@@ -78,8 +84,6 @@ jobs:
   detect-pm:
     name: Detect Package Manager
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
     outputs:
       package-manager: ${{ steps.detect.outputs.pm }}
     steps:
@@ -122,8 +126,6 @@ jobs:
     name: Dependency Audit
     runs-on: ubuntu-latest
     needs: detect-pm
-    permissions:
-      contents: read
     steps:
       - name: Checkout
         uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
@@ -192,8 +194,6 @@ jobs:
   trivy:
     name: Trivy Security Scan
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
     steps:
       - name: Checkout
         uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
@@ -261,8 +261,6 @@ jobs:
   secret-scan:
     name: Secret Scanning
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
     steps:
       - name: Checkout
         uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
@@ -314,9 +312,6 @@ jobs:
   semgrep:
     name: Semgrep SAST
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      security-events: write  # Required for SARIF upload
     container:
       image: semgrep/semgrep
     steps:
@@ -390,8 +385,6 @@ jobs:
     runs-on: ubuntu-latest
     needs: detect-pm
     if: inputs.run-typecheck
-    permissions:
-      contents: read
     steps:
       - name: Checkout
         uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
@@ -450,8 +443,6 @@ jobs:
     runs-on: ubuntu-latest
     needs: detect-pm
     if: inputs.run-lint
-    permissions:
-      contents: read
     steps:
       - name: Checkout
         uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
@@ -499,8 +490,6 @@ jobs:
     runs-on: ubuntu-latest
     needs: detect-pm
     if: inputs.run-asvs
-    permissions:
-      contents: read
     steps:
       - name: Checkout
         uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
@@ -555,7 +544,6 @@ jobs:
     runs-on: ubuntu-latest
     needs: [dependency-audit, trivy, secret-scan, semgrep]
     if: always()
-    permissions: {}
     steps:
       - name: Generate Summary
         env:
