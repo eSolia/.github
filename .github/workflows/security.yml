@@ -70,6 +70,7 @@ on:
         description: 'Optional Semgrep App token for enhanced rules'
         required: false
 
+
 jobs:
   # ==========================================================================
   # Detect Package Manager (if auto)
@@ -77,12 +78,15 @@ jobs:
   detect-pm:
     name: Detect Package Manager
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     outputs:
       package-manager: ${{ steps.detect.outputs.pm }}
     steps:
       - name: Checkout
         uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
         with:
+          persist-credentials: false
           sparse-checkout: |
             package-lock.json
             pnpm-lock.yaml
@@ -91,10 +95,12 @@ jobs:
 
       - name: Detect package manager
         id: detect
+        env:
+          INPUT_PM: ${{ inputs.package-manager }}
         run: |
-          if [ "${{ inputs.package-manager }}" != "auto" ]; then
-            echo "pm=${{ inputs.package-manager }}" >> $GITHUB_OUTPUT
-            echo "Using specified package manager: ${{ inputs.package-manager }}"
+          if [ "$INPUT_PM" != "auto" ]; then
+            echo "pm=$INPUT_PM" >> $GITHUB_OUTPUT
+            echo "Using specified package manager: $INPUT_PM"
           elif [ -f "pnpm-lock.yaml" ]; then
             echo "pm=pnpm" >> $GITHUB_OUTPUT
             echo "Detected pnpm"
@@ -116,9 +122,13 @@ jobs:
     name: Dependency Audit
     runs-on: ubuntu-latest
     needs: detect-pm
+    permissions:
+      contents: read
     steps:
       - name: Checkout
         uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+        with:
+          persist-credentials: false
 
       - name: Setup pnpm
         if: needs.detect-pm.outputs.package-manager == 'pnpm'
@@ -131,8 +141,9 @@ jobs:
           cache: ${{ needs.detect-pm.outputs.package-manager }}
 
       - name: Install dependencies
+        env:
+          PM: ${{ needs.detect-pm.outputs.package-manager }}
         run: |
-          PM="${{ needs.detect-pm.outputs.package-manager }}"
           case $PM in
             pnpm) pnpm install --frozen-lockfile || pnpm install ;;
             yarn) yarn install --frozen-lockfile || yarn install ;;
@@ -142,8 +153,9 @@ jobs:
 
       - name: Run audit
         id: audit
+        env:
+          PM: ${{ needs.detect-pm.outputs.package-manager }}
         run: |
-          PM="${{ needs.detect-pm.outputs.package-manager }}"
           mkdir -p reports
 
           case $PM in
@@ -180,9 +192,13 @@ jobs:
   trivy:
     name: Trivy Security Scan
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - name: Checkout
         uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+        with:
+          persist-credentials: false
 
       - name: Install Trivy
         run: |
@@ -245,10 +261,13 @@ jobs:
   secret-scan:
     name: Secret Scanning
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - name: Checkout
         uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
         with:
+          persist-credentials: false
           fetch-depth: 0  # Full history for scanning
 
       - name: Install Gitleaks
@@ -295,26 +314,30 @@ jobs:
   semgrep:
     name: Semgrep SAST
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write  # Required for SARIF upload
     container:
       image: semgrep/semgrep
     steps:
       - name: Checkout
         uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+        with:
+          persist-credentials: false
 
       - name: Run Semgrep
         env:
           SEMGREP_APP_TOKEN: ${{ secrets.SEMGREP_APP_TOKEN }}
+          SEMGREP_CONFIG: ${{ inputs.semgrep-config }}
+          SCAN_PATHS: ${{ inputs.source-paths }}
         run: |
           mkdir -p reports
 
           # Build config string
           CONFIG_ARGS=""
-          for config in ${{ inputs.semgrep-config }}; do
+          for config in $SEMGREP_CONFIG; do
             CONFIG_ARGS="$CONFIG_ARGS --config $config"
           done
-
-          # Determine paths to scan
-          SCAN_PATHS="${{ inputs.source-paths }}"
 
           # Run semgrep
           semgrep scan \
@@ -341,7 +364,7 @@ jobs:
           retention-days: 30
 
       - name: Upload to GitHub Security
-        uses: github/codeql-action/upload-sarif@v4
+        uses: github/codeql-action/upload-sarif@9792ccaef0455e446c567163589397e8c3ac2e0d # v3
         if: inputs.upload-sarif
         with:
           sarif_file: reports/semgrep.sarif
@@ -367,9 +390,13 @@ jobs:
     runs-on: ubuntu-latest
     needs: detect-pm
     if: inputs.run-typecheck
+    permissions:
+      contents: read
     steps:
       - name: Checkout
         uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+        with:
+          persist-credentials: false
 
       - name: Setup pnpm
         if: needs.detect-pm.outputs.package-manager == 'pnpm'
@@ -382,8 +409,9 @@ jobs:
           cache: ${{ needs.detect-pm.outputs.package-manager }}
 
       - name: Install dependencies
+        env:
+          PM: ${{ needs.detect-pm.outputs.package-manager }}
         run: |
-          PM="${{ needs.detect-pm.outputs.package-manager }}"
           case $PM in
             pnpm) pnpm install --frozen-lockfile || pnpm install ;;
             yarn) yarn install --frozen-lockfile || yarn install ;;
@@ -392,8 +420,9 @@ jobs:
           esac
 
       - name: Run type check
+        env:
+          PM: ${{ needs.detect-pm.outputs.package-manager }}
         run: |
-          PM="${{ needs.detect-pm.outputs.package-manager }}"
           # Try common type check commands
           if [ -f "turbo.json" ]; then
             # Monorepo with turbo
@@ -421,9 +450,13 @@ jobs:
     runs-on: ubuntu-latest
     needs: detect-pm
     if: inputs.run-lint
+    permissions:
+      contents: read
     steps:
       - name: Checkout
         uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+        with:
+          persist-credentials: false
 
       - name: Setup pnpm
         if: needs.detect-pm.outputs.package-manager == 'pnpm'
@@ -436,8 +469,9 @@ jobs:
           cache: ${{ needs.detect-pm.outputs.package-manager }}
 
       - name: Install dependencies
+        env:
+          PM: ${{ needs.detect-pm.outputs.package-manager }}
         run: |
-          PM="${{ needs.detect-pm.outputs.package-manager }}"
           case $PM in
             pnpm) pnpm install --frozen-lockfile || pnpm install ;;
             yarn) yarn install --frozen-lockfile || yarn install ;;
@@ -446,8 +480,9 @@ jobs:
           esac
 
       - name: Run lint
+        env:
+          PM: ${{ needs.detect-pm.outputs.package-manager }}
         run: |
-          PM="${{ needs.detect-pm.outputs.package-manager }}"
           case $PM in
             pnpm) pnpm run lint ;;
             yarn) yarn lint ;;
@@ -464,9 +499,13 @@ jobs:
     runs-on: ubuntu-latest
     needs: detect-pm
     if: inputs.run-asvs
+    permissions:
+      contents: read
     steps:
       - name: Checkout
         uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+        with:
+          persist-credentials: false
 
       - name: Setup pnpm
         if: needs.detect-pm.outputs.package-manager == 'pnpm'
@@ -479,8 +518,9 @@ jobs:
           cache: ${{ needs.detect-pm.outputs.package-manager }}
 
       - name: Install dependencies
+        env:
+          PM: ${{ needs.detect-pm.outputs.package-manager }}
         run: |
-          PM="${{ needs.detect-pm.outputs.package-manager }}"
           case $PM in
             pnpm) pnpm install --frozen-lockfile || pnpm install ;;
             yarn) yarn install --frozen-lockfile || yarn install ;;
@@ -515,17 +555,23 @@ jobs:
     runs-on: ubuntu-latest
     needs: [dependency-audit, trivy, secret-scan, semgrep]
     if: always()
+    permissions: {}
     steps:
       - name: Generate Summary
+        env:
+          AUDIT_RESULT: ${{ needs.dependency-audit.result }}
+          TRIVY_RESULT: ${{ needs.trivy.result }}
+          SECRET_RESULT: ${{ needs.secret-scan.result }}
+          SEMGREP_RESULT: ${{ needs.semgrep.result }}
         run: |
           echo "## Security Scan Summary" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "| Check | Status |" >> $GITHUB_STEP_SUMMARY
           echo "|-------|--------|" >> $GITHUB_STEP_SUMMARY
-          echo "| Dependency Audit | ${{ needs.dependency-audit.result }} |" >> $GITHUB_STEP_SUMMARY
-          echo "| Trivy (vulns/secrets/licenses) | ${{ needs.trivy.result }} |" >> $GITHUB_STEP_SUMMARY
-          echo "| Gitleaks Secrets | ${{ needs.secret-scan.result }} |" >> $GITHUB_STEP_SUMMARY
-          echo "| Semgrep SAST | ${{ needs.semgrep.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Dependency Audit | $AUDIT_RESULT |" >> $GITHUB_STEP_SUMMARY
+          echo "| Trivy (vulns/secrets/licenses) | $TRIVY_RESULT |" >> $GITHUB_STEP_SUMMARY
+          echo "| Gitleaks Secrets | $SECRET_RESULT |" >> $GITHUB_STEP_SUMMARY
+          echo "| Semgrep SAST | $SEMGREP_RESULT |" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "See individual job artifacts for detailed reports." >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
