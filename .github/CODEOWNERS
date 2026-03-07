@@ -1,0 +1,8 @@
+# Require review for workflow and CI changes
+.github/                @eSolia/security-reviewers
+
+# Require review for dependency changes
+package.json            @eSolia/security-reviewers
+package-lock.json       @eSolia/security-reviewers
+pnpm-lock.yaml          @eSolia/security-reviewers
+renovate.json           @eSolia/security-reviewers
