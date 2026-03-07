@@ -35,6 +35,16 @@ on:
         required: false
         type: string
         default: 'src/'
+      working-directory:
+        description: 'Working directory for install/lint/typecheck (monorepo subdir)'
+        required: false
+        type: string
+        default: '.'
+      lockfile-path:
+        description: 'Path to lockfile for Node.js cache (e.g., "packages/app/pnpm-lock.yaml")'
+        required: false
+        type: string
+        default: ''
       run-typecheck:
         description: 'Run TypeScript type checking'
         required: false
@@ -141,10 +151,12 @@ jobs:
         with:
           node-version: ${{ inputs.node-version }}
           cache: ${{ needs.detect-pm.outputs.package-manager }}
+          cache-dependency-path: ${{ inputs.lockfile-path || null }}
 
       - name: Install dependencies
         env:
           PM: ${{ needs.detect-pm.outputs.package-manager }}
+        working-directory: ${{ inputs.working-directory }}
         run: |
           case $PM in
             pnpm) pnpm install --frozen-lockfile || pnpm install ;;
@@ -157,6 +169,7 @@ jobs:
         id: audit
         env:
           PM: ${{ needs.detect-pm.outputs.package-manager }}
+        working-directory: ${{ inputs.working-directory }}
         run: |
           mkdir -p reports
 
@@ -400,10 +413,12 @@ jobs:
         with:
           node-version: ${{ inputs.node-version }}
           cache: ${{ needs.detect-pm.outputs.package-manager }}
+          cache-dependency-path: ${{ inputs.lockfile-path || null }}
 
       - name: Install dependencies
         env:
           PM: ${{ needs.detect-pm.outputs.package-manager }}
+        working-directory: ${{ inputs.working-directory }}
         run: |
           case $PM in
             pnpm) pnpm install --frozen-lockfile || pnpm install ;;
@@ -415,6 +430,7 @@ jobs:
       - name: Run type check
         env:
           PM: ${{ needs.detect-pm.outputs.package-manager }}
+        working-directory: ${{ inputs.working-directory }}
         run: |
           # Try common type check commands
           if [ -f "turbo.json" ]; then
@@ -458,10 +474,12 @@ jobs:
         with:
           node-version: ${{ inputs.node-version }}
           cache: ${{ needs.detect-pm.outputs.package-manager }}
+          cache-dependency-path: ${{ inputs.lockfile-path || null }}
 
       - name: Install dependencies
         env:
           PM: ${{ needs.detect-pm.outputs.package-manager }}
+        working-directory: ${{ inputs.working-directory }}
         run: |
           case $PM in
             pnpm) pnpm install --frozen-lockfile || pnpm install ;;
@@ -473,6 +491,7 @@ jobs:
       - name: Run lint
         env:
           PM: ${{ needs.detect-pm.outputs.package-manager }}
+        working-directory: ${{ inputs.working-directory }}
         run: |
           case $PM in
             pnpm) pnpm run lint ;;
@@ -505,10 +524,12 @@ jobs:
         with:
           node-version: ${{ inputs.node-version }}
           cache: ${{ needs.detect-pm.outputs.package-manager }}
+          cache-dependency-path: ${{ inputs.lockfile-path || null }}
 
       - name: Install dependencies
         env:
           PM: ${{ needs.detect-pm.outputs.package-manager }}
+        working-directory: ${{ inputs.working-directory }}
         run: |
           case $PM in
             pnpm) pnpm install --frozen-lockfile || pnpm install ;;
