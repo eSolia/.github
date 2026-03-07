@@ -70,8 +70,6 @@ on:
         description: 'Optional Semgrep App token for enhanced rules'
         required: false
 
-# Workflow-level: deny all permissions by default, override per job
-permissions: {}
 
 jobs:
   # ==========================================================================
