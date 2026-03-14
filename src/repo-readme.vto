@@ -69,23 +69,61 @@ We build primarily on **Cloudflare's platform** (Workers, Pages, D1, R2, Queues)
 
 ## Security Practices
 
-We incorporate **ISO 27001:2022** good practices into our development work, backed by automated security scanning in CI/CD.
+We incorporate **ISO 27001:2022** good practices into our development work, backed by automated security scanning in CI/CD. In March 2026, we completed a comprehensive hardening initiative across all repositories.
+
+### CI/CD Hardening
+
+All GitHub Actions workflows across eSolia repositories follow a hardened security posture:
+
+```mermaid
+%%{init: {'flowchart': {'nodeSpacing': 20, 'rankSpacing': 30, 'padding': 4}}}%%
+flowchart LR
+  A["SHA Pinning<br/><i>40-char hashes</i>"] --> B["Node 24<br/><i>latest runtimes</i>"]
+  B --> C["Least Privilege<br/><i>read-only default</i>"]
+  C --> D["Credential Isolation<br/><i>persist-credentials: false</i>"]
+  D --> E["CODEOWNERS<br/><i>security team review</i>"]
+```
+
+| Measure | Detail |
+|---------|--------|
+| **SHA pinning** | All third-party actions pinned to full commit hashes — no mutable tags |
+| **Node 24 runtimes** | `actions/checkout@v6`, `actions/setup-node@v6`, `codeql-action@v4` |
+| **Least-privilege permissions** | Workflow-level `contents: read`; write access only per-job where needed |
+| **Credential isolation** | `persist-credentials: false` on all checkout steps |
+| **Injection prevention** | No `${{ }}` expressions in `run:` blocks — values flow through `env:` |
+| **CODEOWNERS** | `.github/`, `package.json`, lockfiles require `@eSolia/security-reviewers` approval |
 
 ### Centralized Security Scanning
 
-We maintain a **reusable security workflow** ([`security.yml`](.github/workflows/security.yml)) that runs comprehensive OWASP-aligned checks across all our repositories:
+We maintain a **reusable security workflow** ([`security.yml`](.github/workflows/security.yml)) that runs OWASP-aligned checks across all repositories on every PR, push to main, and weekly:
 
-| Scanner | Coverage |
-|---------|----------|
-| **Semgrep SAST** | OWASP Top 10, TypeScript/JavaScript patterns, secrets detection |
-| **Trivy** | Dependency vulnerabilities, embedded secrets, license compliance |
-| **Gitleaks** | Git history secret scanning |
-| **Dependency Audit** | npm/pnpm/yarn vulnerability database |
-| **ASVS Compliance** | OWASP Application Security Verification Standard checks |
-| **TypeScript** | Type safety verification |
-| **ESLint** | Code quality and security linting |
+```mermaid
+%%{init: {'flowchart': {'nodeSpacing': 25, 'rankSpacing': 35, 'padding': 6, 'curve': 'basis'}}}%%
+flowchart LR
+  subgraph trigger["Triggers"]
+    direction LR
+    PR["PR"] & Push["Push"] & Cron["Weekly"]
+  end
+
+  subgraph scanners["Security Scanners"]
+    direction TB
+    Dep["Dependency Audit<br/><i>npm / pnpm / yarn / bun</i>"]
+    Trivy["Trivy<br/><i>vulns + secrets + licenses</i>"]
+    Gitleaks["Gitleaks<br/><i>full git history</i>"]
+    Semgrep["Semgrep SAST<br/><i>OWASP Top 10</i>"]
+    TSC["TypeScript<br/><i>type safety</i>"]
+    Lint["ESLint<br/><i>code quality</i>"]
+  end
+
+  subgraph out["Output"]
+    Summary["GitHub Summary<br/>+ Artifacts"]
+  end
+
+  trigger --> scanners --> out
+```
 
 Any repository can adopt this workflow with minimal configuration:
+
 ```yaml
 jobs:
   security:
