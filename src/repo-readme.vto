@@ -90,7 +90,7 @@ flowchart LR
 | **Node 24 runtimes** | `actions/checkout@v6`, `actions/setup-node@v6`, `codeql-action@v4` |
 | **Least-privilege permissions** | Workflow-level `contents: read`; write access only per-job where needed |
 | **Credential isolation** | `persist-credentials: false` on all checkout steps |
-| **Injection prevention** | No `${{ }}` expressions in `run:` blocks — values flow through `env:` |
+| **Injection prevention** | No dynamic context expressions in `run:` blocks — values flow through `env:` |
 | **CODEOWNERS** | `.github/`, `package.json`, lockfiles require `@eSolia/security-reviewers` approval |
 
 ### Centralized Security Scanning
@@ -102,7 +102,9 @@ We maintain a **reusable security workflow** ([`security.yml`](.github/workflows
 flowchart LR
   subgraph trigger["Triggers"]
     direction LR
-    PR["PR"] & Push["Push"] & Cron["Weekly"]
+    PR["PR"]
+    Push["Push"]
+    Cron["Weekly"]
   end
 
   subgraph scanners["Security Scanners"]
@@ -119,7 +121,10 @@ flowchart LR
     Summary["GitHub Summary<br/>+ Artifacts"]
   end
 
-  trigger --> scanners --> out
+  PR --> scanners
+  Push --> scanners
+  Cron --> scanners
+  scanners --> out
 ```
 
 Any repository can adopt this workflow with minimal configuration:
