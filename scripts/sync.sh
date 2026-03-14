@@ -1,14 +1,15 @@
 #!/bin/bash
-# sync.sh - Fetch centralized scripts from esolia.github
+# sync.sh - Fetch centralized scripts, commands, and rules from esolia.github
 #
 # Usage:
-#   curl -sSfL https://raw.githubusercontent.com/esolia/esolia.github/main/scripts/sync.sh | bash
+#   curl -sSfL https://raw.githubusercontent.com/eSolia/.github/main/scripts/sync.sh | bash
 #   ./scripts/shared/sync.sh                  # Re-sync (after initial fetch)
 #   ./scripts/shared/sync.sh --check          # Check if scripts are up-to-date
 #   ./scripts/shared/sync.sh --ref v1.0.0     # Pin to a specific tag/SHA
+#   ./scripts/shared/sync.sh --scripts-only   # Only sync scripts (skip commands/rules)
 #
-# Downloads centralized bump-version.sh, update-wrangler.sh, and lib/common.sh
-# into scripts/shared/ and creates thin wrappers at scripts/ level.
+# Downloads centralized scripts into scripts/shared/, shared Claude commands
+# into .claude/commands/, and shared rules into .claude/rules/.
 
 set -e
 
@@ -21,13 +22,26 @@ REPO_NAME=".github"
 DEFAULT_REF="main"
 REF="$DEFAULT_REF"
 CHECK_ONLY=false
+SCRIPTS_ONLY=false
 
-# Files to sync (source path in esolia.github -> local path under scripts/shared/)
-SYNC_FILES=(
+# Scripts to sync (source path in esolia.github -> local path under scripts/shared/)
+SYNC_SCRIPTS=(
   "scripts/lib/common.sh:lib/common.sh"
   "scripts/bump-version.sh:bump-version.sh"
   "scripts/update-wrangler.sh:update-wrangler.sh"
+  "scripts/audit-backpressure.sh:audit-backpressure.sh"
   "scripts/sync.sh:sync.sh"
+)
+
+# Shared commands to sync (source -> .claude/commands/)
+SYNC_COMMANDS=(
+  ".claude/shared-commands/backpressure-review.md:backpressure-review.md"
+  ".claude/shared-commands/seo-setup.md:seo-setup.md"
+)
+
+# Shared rules to sync (source -> .claude/rules/)
+SYNC_RULES=(
+  ".claude/shared-rules/backpressure-verify.md:backpressure-verify.md"
 )
 
 # Colors (inline — can't source common.sh before it's downloaded)
@@ -51,15 +65,17 @@ print_info()    { echo -e "${CYAN}  ℹ${NC} $1"; }
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
-    --ref)    REF="$2"; shift 2 ;;
-    --check)  CHECK_ONLY=true; shift ;;
+    --ref)           REF="$2"; shift 2 ;;
+    --check)         CHECK_ONLY=true; shift ;;
+    --scripts-only)  SCRIPTS_ONLY=true; shift ;;
     --help|-h)
-      echo "Usage: $0 [--ref <tag-or-sha>] [--check]"
+      echo "Usage: $0 [--ref <tag-or-sha>] [--check] [--scripts-only]"
       echo ""
       echo "Options:"
-      echo "  --ref <ref>   Git ref to fetch from (default: main)"
-      echo "  --check       Check if local scripts match remote (exit 1 if stale)"
-      echo "  --help        Show this help"
+      echo "  --ref <ref>      Git ref to fetch from (default: main)"
+      echo "  --check          Check if local scripts match remote (exit 1 if stale)"
+      echo "  --scripts-only   Only sync scripts (skip commands and rules)"
+      echo "  --help           Show this help"
       exit 0
       ;;
     *)
@@ -118,35 +134,66 @@ fi
 
 echo ""
 echo -e "${BOLD}╔══════════════════════════════════════════════════════════════╗${NC}"
-echo -e "${BOLD}║  Sync Centralized Scripts                                   ║${NC}"
+echo -e "${BOLD}║  Sync from eSolia/.github                                  ║${NC}"
 echo -e "${BOLD}╚══════════════════════════════════════════════════════════════╝${NC}"
 echo ""
 print_info "Source: $REPO_OWNER/$REPO_NAME@$REF"
-print_info "Target: $SHARED_DIR"
+print_info "Target: $PROJECT_ROOT"
 echo ""
 
-# Create directories
-mkdir -p "$SHARED_DIR/lib"
-
-# Download files
 BASE_URL="https://raw.githubusercontent.com/$REPO_OWNER/$REPO_NAME/$REF"
 
-print_step "Downloading scripts"
-for entry in "${SYNC_FILES[@]}"; do
-  src="${entry%%:*}"
-  dest="${entry##*:}"
-  url="$BASE_URL/$src"
-  target="$SHARED_DIR/$dest"
+# Helper: download a list of files
+download_files() {
+  local -n file_list=$1
+  local target_dir="$2"
+  local label="$3"
 
-  if curl -sSfL "$url" -o "$target" 2>/dev/null; then
-    chmod +x "$target"
-    print_success "$dest"
-  else
-    print_error "Failed to download $src"
-    exit 1
-  fi
-done
+  for entry in "${file_list[@]}"; do
+    src="${entry%%:*}"
+    dest="${entry##*:}"
+    url="$BASE_URL/$src"
+    target="$target_dir/$dest"
+
+    # Ensure parent directory exists
+    mkdir -p "$(dirname "$target")"
+
+    if curl -sSfL "$url" -o "$target" 2>/dev/null; then
+      # Make .sh files executable
+      [[ "$target" == *.sh ]] && chmod +x "$target"
+      print_success "$dest"
+    else
+      print_error "Failed to download $src"
+      exit 1
+    fi
+  done
+}
+
+# ── 1. Sync scripts ──
+mkdir -p "$SHARED_DIR/lib"
+print_step "Downloading scripts"
+download_files SYNC_SCRIPTS "$SHARED_DIR" "scripts"
 echo ""
+
+# ── 2. Sync commands and rules (unless --scripts-only) ──
+if [ "$SCRIPTS_ONLY" = false ]; then
+  COMMANDS_DIR="$PROJECT_ROOT/.claude/commands"
+  RULES_DIR="$PROJECT_ROOT/.claude/rules"
+
+  if [ ${#SYNC_COMMANDS[@]} -gt 0 ]; then
+    mkdir -p "$COMMANDS_DIR"
+    print_step "Syncing shared commands to .claude/commands/"
+    download_files SYNC_COMMANDS "$COMMANDS_DIR" "commands"
+    echo ""
+  fi
+
+  if [ ${#SYNC_RULES[@]} -gt 0 ]; then
+    mkdir -p "$RULES_DIR"
+    print_step "Syncing shared rules to .claude/rules/"
+    download_files SYNC_RULES "$RULES_DIR" "rules"
+    echo ""
+  fi
+fi
 
 # ════════════════════════════════════════════════════════════════════════════
 # Write .scriptversion
@@ -202,6 +249,7 @@ WRAPPER
 print_step "Setting up wrappers"
 create_wrapper "bump-version.sh"
 create_wrapper "update-wrangler.sh"
+create_wrapper "audit-backpressure.sh"
 echo ""
 
 # ════════════════════════════════════════════════════════════════════════════
@@ -232,10 +280,22 @@ echo ""
 echo "  Synced from: $REPO_OWNER/$REPO_NAME@$REF"
 echo "  Commit: ${REMOTE_COMMIT:0:12}"
 echo ""
-echo "  Available commands:"
+echo "  Scripts:"
 echo "    ./scripts/bump-version.sh <version>   # Bump version + QC"
 echo "    ./scripts/bump-version.sh --qc-only   # QC checks only"
 echo "    ./scripts/update-wrangler.sh           # Update wrangler"
-echo "    ./scripts/shared/sync.sh               # Re-sync scripts"
+echo "    ./scripts/audit-backpressure.sh        # Backpressure audit"
+if [ "$SCRIPTS_ONLY" = false ]; then
+  echo ""
+  echo "  Commands (in .claude/commands/):"
+  echo "    /backpressure-review                  # SvelteKit quality review"
+  echo "    /seo-setup                            # SEO checklist + setup"
+  echo ""
+  echo "  Rules (in .claude/rules/):"
+  echo "    backpressure-verify                   # Auto-verify after code changes"
+fi
+echo ""
+echo "  Maintenance:"
+echo "    ./scripts/shared/sync.sh               # Re-sync everything"
 echo "    ./scripts/shared/sync.sh --check       # Check for updates"
 echo ""
