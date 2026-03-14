@@ -156,6 +156,7 @@ jobs:
       - name: Install dependencies
         env:
           PM: ${{ needs.detect-pm.outputs.package-manager }}
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         working-directory: ${{ inputs.working-directory }}
         run: |
           case $PM in
@@ -418,6 +419,7 @@ jobs:
       - name: Install dependencies
         env:
           PM: ${{ needs.detect-pm.outputs.package-manager }}
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         working-directory: ${{ inputs.working-directory }}
         run: |
           case $PM in
@@ -479,6 +481,7 @@ jobs:
       - name: Install dependencies
         env:
           PM: ${{ needs.detect-pm.outputs.package-manager }}
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         working-directory: ${{ inputs.working-directory }}
         run: |
           case $PM in
@@ -529,6 +532,7 @@ jobs:
       - name: Install dependencies
         env:
           PM: ${{ needs.detect-pm.outputs.package-manager }}
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         working-directory: ${{ inputs.working-directory }}
         run: |
           case $PM in
