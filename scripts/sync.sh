@@ -145,11 +145,12 @@ BASE_URL="https://raw.githubusercontent.com/$REPO_OWNER/$REPO_NAME/$REF"
 
 # Helper: download a list of files
 download_files() {
-  local -n file_list=$1
+  local list_name=$1
   local target_dir="$2"
   local label="$3"
 
-  for entry in "${file_list[@]}"; do
+  eval "local entries=(\"\${${list_name}[@]}\")"
+  for entry in "${entries[@]}"; do
     src="${entry%%:*}"
     dest="${entry##*:}"
     url="$BASE_URL/$src"
