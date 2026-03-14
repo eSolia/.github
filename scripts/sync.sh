@@ -31,17 +31,31 @@ SYNC_SCRIPTS=(
   "scripts/update-wrangler.sh:update-wrangler.sh"
   "scripts/audit-backpressure.sh:audit-backpressure.sh"
   "scripts/sync.sh:sync.sh"
+  "scripts/sync.ts:sync.ts"
 )
 
 # Shared commands to sync (source -> .claude/commands/)
 SYNC_COMMANDS=(
   ".claude/shared-commands/backpressure-review.md:backpressure-review.md"
   ".claude/shared-commands/seo-setup.md:seo-setup.md"
+  ".claude/shared-commands/checkpoint.md:checkpoint.md"
+  ".claude/shared-commands/commit-style.md:commit-style.md"
+  ".claude/shared-commands/dev/d1-health.md:dev/d1-health.md"
+  ".claude/shared-commands/dev/preflight.md:dev/preflight.md"
+  ".claude/shared-commands/dev/svelte-review.md:dev/svelte-review.md"
+  ".claude/shared-commands/security/audit-github-actions.md:security/audit-github-actions.md"
+  ".claude/shared-commands/security/harden-github-org.md:security/harden-github-org.md"
+  ".claude/shared-commands/standards/check.md:standards/check.md"
+  ".claude/shared-commands/standards/list.md:standards/list.md"
+  ".claude/shared-commands/standards/search.md:standards/search.md"
+  ".claude/shared-commands/standards/writing.md:standards/writing.md"
 )
 
 # Shared rules to sync (source -> .claude/rules/)
 SYNC_RULES=(
   ".claude/shared-rules/backpressure-verify.md:backpressure-verify.md"
+  ".claude/shared-rules/d1-maintenance.md:d1-maintenance.md"
+  ".claude/shared-rules/mermaid-diagrams.md:mermaid-diagrams.md"
 )
 
 # Colors (inline — can't source common.sh before it's downloaded)
@@ -291,12 +305,26 @@ if [ "$SCRIPTS_ONLY" = false ]; then
   echo "  Commands (in .claude/commands/):"
   echo "    /backpressure-review                  # SvelteKit quality review"
   echo "    /seo-setup                            # SEO checklist + setup"
+  echo "    /checkpoint                           # Save session checkpoint"
+  echo "    /commit-style                         # Conventional commit reference"
+  echo "    /dev:d1-health                        # D1 database health audit"
+  echo "    /dev:preflight                        # Show preflight checks"
+  echo "    /dev:svelte-review                    # Svelte 5 best practices review"
+  echo "    /security:audit-github-actions        # GitHub Actions security audit"
+  echo "    /security:harden-github-org           # GitHub org hardening"
+  echo "    /standards:check                      # Review code against standards"
+  echo "    /standards:list                       # List all eSolia standards"
+  echo "    /standards:search                     # Search standards by keyword"
+  echo "    /standards:writing                    # Review content against writing guides"
   echo ""
   echo "  Rules (in .claude/rules/):"
   echo "    backpressure-verify                   # Auto-verify after code changes"
+  echo "    d1-maintenance                        # D1 database best practices"
+  echo "    mermaid-diagrams                      # Compact diagram styling"
 fi
 echo ""
 echo "  Maintenance:"
-echo "    ./scripts/shared/sync.sh               # Re-sync everything"
+echo "    ./scripts/shared/sync.sh               # Re-sync (bash)"
+echo "    npx tsx scripts/shared/sync.ts         # Re-sync (cross-platform)"
 echo "    ./scripts/shared/sync.sh --check       # Check for updates"
 echo ""
