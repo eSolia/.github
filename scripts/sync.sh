@@ -16,8 +16,8 @@ set -e
 # Configuration
 # ════════════════════════════════════════════════════════════════════════════
 
-REPO_OWNER="esolia"
-REPO_NAME="esolia.github"
+REPO_OWNER="eSolia"
+REPO_NAME=".github"
 DEFAULT_REF="main"
 REF="$DEFAULT_REF"
 CHECK_ONLY=false
