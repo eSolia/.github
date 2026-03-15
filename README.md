@@ -107,6 +107,7 @@ Every eSolia repository can pull centralized scripts, Claude Code slash commands
 | `audit-backpressure.sh` | SvelteKit quality audit across repos |
 | `sync.sh` | Re-sync everything (bash) |
 | `sync.ts` | Re-sync everything (cross-platform TypeScript) |
+| `submit-bing.mts` | Bing Webmaster URL submission (any site) |
 
 **Claude Code Commands** (to `.claude/commands/`):
 
@@ -286,6 +287,7 @@ scripts/
   audit-backpressure.sh     # SvelteKit quality audit
   sync.sh                   # Sync script (bash)
   sync.ts                   # Sync script (TypeScript, cross-platform)
+  submit-bing.mts           # Bing Webmaster URL submission
 src/
   _data.ts                  # Data fetching (blog feeds, holidays)
   repo-readme.vto           # Vento template for profile README

@@ -32,6 +32,7 @@ SYNC_SCRIPTS=(
   "scripts/audit-backpressure.sh:audit-backpressure.sh"
   "scripts/sync.sh:sync.sh"
   "scripts/sync.ts:sync.ts"
+  "scripts/submit-bing.mts:submit-bing.mts"
 )
 
 # Shared commands to sync (source -> .claude/commands/)
@@ -300,6 +301,7 @@ echo "    ./scripts/bump-version.sh <version>   # Bump version + QC"
 echo "    ./scripts/bump-version.sh --qc-only   # QC checks only"
 echo "    ./scripts/update-wrangler.sh           # Update wrangler"
 echo "    ./scripts/audit-backpressure.sh        # Backpressure audit"
+echo "    npx tsx scripts/shared/submit-bing.mts  # Bing URL submission"
 if [ "$SCRIPTS_ONLY" = false ]; then
   echo ""
   echo "  Commands (in .claude/commands/):"

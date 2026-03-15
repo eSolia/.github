@@ -37,6 +37,7 @@ const SYNC_SCRIPTS: SyncEntry[] = [
   { src: "scripts/audit-backpressure.sh", dest: "audit-backpressure.sh" },
   { src: "scripts/sync.sh", dest: "sync.sh" },
   { src: "scripts/sync.ts", dest: "sync.ts" },
+  { src: "scripts/submit-bing.mts", dest: "submit-bing.mts" },
 ];
 
 const SYNC_COMMANDS: SyncEntry[] = [
@@ -346,6 +347,7 @@ async function main() {
   console.log("    ./scripts/bump-version.sh --qc-only   # QC checks only");
   console.log("    ./scripts/update-wrangler.sh           # Update wrangler");
   console.log("    ./scripts/audit-backpressure.sh        # Backpressure audit");
+  console.log("    npx tsx scripts/shared/submit-bing.mts  # Bing URL submission");
   if (!scriptsOnly) {
     console.log();
     console.log("  Commands (in .claude/commands/):");
