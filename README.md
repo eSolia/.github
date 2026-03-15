@@ -108,6 +108,7 @@ Every eSolia repository can pull centralized scripts, Claude Code slash commands
 | `sync.sh` | Re-sync everything (bash) |
 | `sync.ts` | Re-sync everything (cross-platform TypeScript) |
 | `submit-bing.mts` | Bing Webmaster URL submission (any site) |
+| `sync-all.sh` | Sync all consumer repos at once (run from esolia.github) |
 
 **Claude Code Commands** (to `.claude/commands/`):
 
@@ -204,6 +205,18 @@ npx tsx scripts/shared/sync.ts          # cross-platform
 
 The wrapper pattern means your repo only commits the 4-line wrapper, not the full script. Updates flow through `sync.sh`/`sync.ts`.
 
+### Syncing All Repos at Once
+
+From the esolia.github directory, sync every consumer repo in one command:
+
+```bash
+./scripts/sync-all.sh                  # Sync all 9 repos
+./scripts/sync-all.sh --check          # Check staleness only
+./scripts/sync-all.sh pulse nexus      # Sync specific repos
+```
+
+Or use the Claude Code command `/sync-all` when working in this repo.
+
 ## Windows Setup
 
 The TypeScript sync script (`sync.ts`) works natively on Windows. You need Node.js and `tsx`.
@@ -288,6 +301,7 @@ scripts/
   sync.sh                   # Sync script (bash)
   sync.ts                   # Sync script (TypeScript, cross-platform)
   submit-bing.mts           # Bing Webmaster URL submission
+  sync-all.sh               # Sync all consumer repos at once
 src/
   _data.ts                  # Data fetching (blog feeds, holidays)
   repo-readme.vto           # Vento template for profile README
