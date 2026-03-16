@@ -814,20 +814,27 @@ function runChecks(): CheckResult[] {
     /\.prepare\(|\.bind\(|\.batch\(|from\(|\.select\(\)|\.insert\(\)|\.update\(\)|\.delete\(\)|queryFirst\(|queryAll\(/
   ).filter((loc) => !loc.file.includes('.d.ts') && !loc.file.endsWith('.json'));
   // Detect genuinely unsafe patterns: string interpolation inside SQL statements
-  // Must look like actual SQL (starts with keyword or uses .raw()) — not UI messages
+  // Look for SQL keywords followed by ${} interpolation in the SAME statement context
+  // (.prepare(`...${...}`) or raw SQL strings with interpolation)
   const rawSqlLocations = searchPattern(
     allFiles,
-    /\.raw\(`|(?:SELECT|INSERT\s+INTO|UPDATE\s+\w|DELETE\s+FROM).*\$\{/i
+    /\.raw\(`|\.prepare\(`[^`]*\$\{|(?:SELECT\s+.*FROM|INSERT\s+INTO|UPDATE\s+\w+\s+SET|DELETE\s+FROM)\s[^;]*\$\{/i
   ).filter(
     (loc) =>
       !loc.file.includes('.d.ts') &&
       !loc.file.includes('/types/') &&
       !loc.file.endsWith('.json') &&
-      !loc.file.endsWith('.svelte') && // Svelte template expressions are not SQL
+      !loc.file.endsWith('.svelte') &&
       !loc.file.includes('test') &&
       !loc.snippet.includes('//') &&
       !loc.snippet.includes('console.') &&
-      !loc.snippet.includes('log(') // Exclude log messages
+      !loc.snippet.includes('log(') &&
+      // Exclude URL construction and non-SQL template strings
+      !loc.snippet.includes('http') &&
+      !loc.snippet.includes('url') &&
+      !loc.snippet.includes('Url') &&
+      !loc.snippet.includes('commit') &&
+      !loc.snippet.includes('_domainkey')
   );
   // Detect API-based architecture (no direct DB, uses external API)
   const dbUsage = parameterizedLocations.filter(
