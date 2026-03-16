@@ -79,6 +79,9 @@ on:
       SEMGREP_APP_TOKEN:
         description: 'Optional Semgrep App token for enhanced rules'
         required: false
+      GH_PACKAGES_TOKEN:
+        description: 'PAT with read:packages scope for cross-org GitHub Packages access (falls back to GITHUB_TOKEN)'
+        required: false
 
 
 # NOTE: Per-job permissions blocks are intentionally omitted.
@@ -156,7 +159,7 @@ jobs:
       - name: Install dependencies
         env:
           PM: ${{ needs.detect-pm.outputs.package-manager }}
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.GH_PACKAGES_TOKEN || secrets.GITHUB_TOKEN }}
         working-directory: ${{ inputs.working-directory }}
         run: |
           case $PM in
@@ -419,7 +422,7 @@ jobs:
       - name: Install dependencies
         env:
           PM: ${{ needs.detect-pm.outputs.package-manager }}
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.GH_PACKAGES_TOKEN || secrets.GITHUB_TOKEN }}
         working-directory: ${{ inputs.working-directory }}
         run: |
           case $PM in
@@ -481,7 +484,7 @@ jobs:
       - name: Install dependencies
         env:
           PM: ${{ needs.detect-pm.outputs.package-manager }}
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.GH_PACKAGES_TOKEN || secrets.GITHUB_TOKEN }}
         working-directory: ${{ inputs.working-directory }}
         run: |
           case $PM in
@@ -532,7 +535,7 @@ jobs:
       - name: Install dependencies
         env:
           PM: ${{ needs.detect-pm.outputs.package-manager }}
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.GH_PACKAGES_TOKEN || secrets.GITHUB_TOKEN }}
         working-directory: ${{ inputs.working-directory }}
         run: |
           case $PM in
