@@ -545,13 +545,21 @@ jobs:
             *) npm ci || npm install ;;
           esac
 
+      - name: Fetch shared scripts
+        run: |
+          if [ -f "scripts/shared/sync.sh" ]; then
+            bash scripts/shared/sync.sh --scripts-only
+          else
+            curl -sSfL https://raw.githubusercontent.com/eSolia/.github/main/scripts/sync.sh | bash -s -- --scripts-only
+          fi
+
       - name: Run ASVS check
         run: |
-          if [ -f "scripts/asvs-check.ts" ]; then
+          if [ -f "scripts/asvs-config.json" ] && [ -f "scripts/shared/asvs-check.ts" ]; then
             mkdir -p reports
-            npx tsx scripts/asvs-check.ts --format json --output reports/asvs.json
+            npx tsx scripts/shared/asvs-check.ts --format json --output reports/asvs.json
           else
-            echo "::notice::No scripts/asvs-check.ts found, skipping ASVS check"
+            echo "::notice::No asvs-config.json or shared/asvs-check.ts found, skipping ASVS check"
           fi
         continue-on-error: true
 
