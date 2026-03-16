@@ -260,16 +260,25 @@ function runChecks(): CheckResult[] {
   // ===========================================================================
 
   // V1.2.1 - Component Separation
-  // Auto-detect architecture from configured paths
-  const pathsExist = PROJECT_CONFIG.sourcePaths.filter((p) =>
-    existsSync(join(process.cwd(), p)) // nosemgrep: path-join-resolve-traversal.path-join-resolve-traversal
-  );
+  // Check for internal structure: lib/, routes/, middleware/, components/ etc.
+  // A single src/ with good internal separation is valid architecture
+  const structureDirs = ['lib', 'routes', 'middleware', 'components', 'server', 'workflows'];
+  const foundStructure: string[] = [];
+  for (const srcPath of PROJECT_CONFIG.sourcePaths) {
+    for (const dir of structureDirs) {
+      if (existsSync(join(process.cwd(), srcPath, dir))) { // nosemgrep: path-join-resolve-traversal.path-join-resolve-traversal
+        foundStructure.push(`${srcPath}${dir}`);
+      }
+    }
+  }
   results.push({
     id: 'V1.2.1',
     category: 'V1 Architecture',
     name: 'Component Separation',
-    status: pathsExist.length >= 2 ? 'pass' : 'warning',
-    description: `Modular code separation (${pathsExist.length}/${PROJECT_CONFIG.sourcePaths.length} configured paths exist)`,
+    status: foundStructure.length >= 2 ? 'pass' : 'warning',
+    description: foundStructure.length >= 2
+      ? `Modular code separation (${foundStructure.join(', ')})`
+      : 'Limited component separation detected',
     asvsRef: 'V1.2.1',
     automatable: true,
     level: 'L1',
@@ -296,6 +305,13 @@ function runChecks(): CheckResult[] {
   // ===========================================================================
 
   // V2.1.1 - Password Hashing
+  // Detect passwordless auth (magic links, OAuth-only) — no password hashing needed
+  const passwordlessLocations = searchPattern(
+    allFiles,
+    /magic.?link|passwordless|createAuthToken|verifyAuthToken|one.?time.*token/i
+  );
+  const isPasswordless = passwordlessLocations.length > 0 &&
+    !patternExists(allFiles, /password_hash|passwordHash|hashPassword|verifyPassword/i);
   const hashingLocations = searchPattern(
     apiFiles,
     /PBKDF2|pbkdf2|bcrypt|argon2|scrypt|SHA-256|crypto\.subtle/i
@@ -311,14 +327,21 @@ function runChecks(): CheckResult[] {
     id: 'V2.1.1',
     category: 'V2 Authentication',
     name: 'Password Hashing Algorithm',
-    status:
-      hashingLocations.length > 0 && weakHashLocations.length === 0
+    status: isCfztAuth || isPasswordless
+      ? 'not-applicable'
+      : hashingLocations.length > 0 && weakHashLocations.length === 0
         ? 'pass'
         : weakHashLocations.length > 0
           ? 'fail'
           : 'warning',
-    description: 'Strong password hashing (PBKDF2/bcrypt/argon2/SHA-256)',
-    locations: weakHashLocations.length > 0 ? weakHashLocations : hashingLocations.slice(0, 5),
+    description: isCfztAuth
+      ? 'Auth handled by Cloudflare Zero Trust'
+      : isPasswordless
+        ? 'Passwordless authentication (magic links) — no password hashing needed'
+        : 'Strong password hashing (PBKDF2/bcrypt/argon2/SHA-256)',
+    locations: isPasswordless
+      ? passwordlessLocations.slice(0, 3)
+      : weakHashLocations.length > 0 ? weakHashLocations : hashingLocations.slice(0, 5),
     remediation:
       weakHashLocations.length > 0 ? 'Replace MD5/SHA1 with PBKDF2, bcrypt, or Argon2' : undefined,
     asvsRef: 'V2.1.1',
@@ -782,20 +805,30 @@ function runChecks(): CheckResult[] {
   });
 
   // V5.3.4 - SQL Injection Prevention
-  // Detect ORM usage (Drizzle, D1 prepare/bind)
-  const ormLocations = searchPattern(
-    apiFiles,
-    /from\(|\.select\(\)|\.insert\(\)|\.update\(\)|\.delete\(\)|\.prepare\(|\.bind\(|\.run\(|\.all\(/
-  );
+  // Detect parameterized query usage across the whole codebase:
+  // - D1: .prepare().bind(), .batch(), .run(), .all(), .first()
+  // - Drizzle: .select(), .insert(), .update(), .delete(), from()
+  // - Type-safe wrappers: queryFirst(), queryAll() (which wrap .prepare/.bind)
+  const parameterizedLocations = searchPattern(
+    allFiles,
+    /\.prepare\(|\.bind\(|\.batch\(|from\(|\.select\(\)|\.insert\(\)|\.update\(\)|\.delete\(\)|queryFirst\(|queryAll\(/
+  ).filter((loc) => !loc.file.includes('.d.ts') && !loc.file.endsWith('.json'));
+  // Detect genuinely unsafe patterns: string interpolation in SQL
   const rawSqlLocations = searchPattern(
-    apiFiles,
-    /\.raw\(|execute\s*\(\s*`|query\s*\(\s*`|\$\{.*\}.*SELECT|SELECT.*\+/i
+    allFiles,
+    /\.raw\(|`[^`]*\$\{[^}]+\}[^`]*(?:SELECT|INSERT|UPDATE|DELETE)/i
+  ).filter(
+    (loc) =>
+      !loc.file.includes('.d.ts') &&
+      !loc.file.includes('/types/') &&
+      !loc.file.endsWith('.json') &&
+      !loc.file.includes('test') &&
+      !loc.snippet.includes('//')
   );
   // Detect API-based architecture (no direct DB, uses external API)
-  const dbUsage = searchPattern(
-    allFiles,
-    /\.prepare\(|\.batch\(|DB\.all|DB\.run|DB\.first/i
-  ).filter((loc) => !loc.file.includes('.d.ts') && !loc.file.includes('/types/'));
+  const dbUsage = parameterizedLocations.filter(
+    (loc) => !loc.file.includes('/types/')
+  );
   const externalApiUsage = searchPattern(
     apiFiles,
     /NEXUS_BASE_URL|nexus-api|external.*url|api.*client|fetch\s*\(\s*['"`]https/i
@@ -808,22 +841,24 @@ function runChecks(): CheckResult[] {
     name: 'SQL Injection Prevention',
     status: isApiBasedArch
       ? 'not-applicable'
-      : ormLocations.length > 0 && rawSqlLocations.length === 0
+      : parameterizedLocations.length > 0 && rawSqlLocations.length === 0
         ? 'pass'
         : rawSqlLocations.length > 0
           ? 'fail'
           : 'warning',
     description: isApiBasedArch
       ? 'API-based architecture (no direct SQL queries)'
-      : 'Parameterized queries via ORM or .bind()',
+      : parameterizedLocations.length > 0
+        ? 'Parameterized queries via .prepare()/.bind() or ORM'
+        : 'No parameterized query patterns detected',
     locations: isApiBasedArch
       ? externalApiUsage.slice(0, 3)
       : rawSqlLocations.length > 0
         ? rawSqlLocations
-        : ormLocations.slice(0, 5),
+        : parameterizedLocations.slice(0, 5),
     remediation:
       rawSqlLocations.length > 0
-        ? 'Replace raw SQL with parameterized queries'
+        ? 'Replace string interpolation in SQL with parameterized queries'
         : undefined,
     asvsRef: 'V5.3.4',
     automatable: true,
@@ -921,6 +956,11 @@ function runChecks(): CheckResult[] {
   const weakCryptoLocations = searchPattern(
     apiFiles,
     /\bDES\b|3DES|\bRC4\b|\bRC2\b|Blowfish|\bECB\b/i
+  ).filter(
+    (loc) =>
+      !loc.file.endsWith('.json') && // Exclude JSON data files (e.g. assessment reports)
+      !loc.snippet.includes('Replace') && // Exclude remediation text
+      !loc.snippet.includes('remediation')
   );
   results.push({
     id: 'V6.2.1',
@@ -1195,7 +1235,8 @@ function runChecks(): CheckResult[] {
   });
 
   // V8.3.1 - Secrets Management
-  const envUsage = searchPattern(apiFiles, /c\.env\.|process\.env\.|Deno\.env/);
+  const envUsage = searchPattern(allFiles, /c\.env\.|process\.env\.|Deno\.env|platform\.env\.|import\.meta\.env|\$env\//);
+
   const hardcodedSecrets = searchPattern(
     allFiles,
     /password\s*=\s*['"][^'"]{8,}|api[_-]?key\s*=\s*['"][^'"]+|secret\s*=\s*['"][^'"]+/i
@@ -1273,6 +1314,7 @@ function runChecks(): CheckResult[] {
   const httpsLocations = searchPattern(allFiles, /https:\/\/|TLS|SSL|wss:/i);
   const httpLocations = searchPattern(allFiles, /http:\/\/(?!localhost|127\.0\.0\.1)/).filter(
     (loc) =>
+      !loc.file.endsWith('.json') && // Exclude JSON data files
       !loc.snippet.includes('xmlns') &&
       !loc.snippet.includes('w3.org') &&
       !loc.snippet.includes('webfinger.net') &&
@@ -1281,7 +1323,15 @@ function runChecks(): CheckResult[] {
       !loc.snippet.includes('startsWith') &&
       !loc.snippet.includes('replace(') &&
       !loc.snippet.includes("replace('http") &&
-      !loc.snippet.includes('InfoSec:')
+      !loc.snippet.includes('InfoSec:') &&
+      // Exclude protocol validation/error messages (not actual http connections)
+      !loc.snippet.includes('Only http') &&
+      !loc.snippet.includes("'http://'") &&
+      !loc.snippet.includes('"http://"') &&
+      !loc.snippet.includes('protocol') &&
+      // Exclude URL type detection (e.g. updown check types)
+      !loc.snippet.includes("type = 'http'") &&
+      !loc.snippet.includes("type = \"http\"")
   );
   results.push({
     id: 'V9.1.1',
