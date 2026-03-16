@@ -813,17 +813,21 @@ function runChecks(): CheckResult[] {
     allFiles,
     /\.prepare\(|\.bind\(|\.batch\(|from\(|\.select\(\)|\.insert\(\)|\.update\(\)|\.delete\(\)|queryFirst\(|queryAll\(/
   ).filter((loc) => !loc.file.includes('.d.ts') && !loc.file.endsWith('.json'));
-  // Detect genuinely unsafe patterns: string interpolation in SQL
+  // Detect genuinely unsafe patterns: string interpolation inside SQL statements
+  // Must look like actual SQL (starts with keyword or uses .raw()) — not UI messages
   const rawSqlLocations = searchPattern(
     allFiles,
-    /\.raw\(|`[^`]*\$\{[^}]+\}[^`]*(?:SELECT|INSERT|UPDATE|DELETE)/i
+    /\.raw\(`|(?:SELECT|INSERT\s+INTO|UPDATE\s+\w|DELETE\s+FROM).*\$\{/i
   ).filter(
     (loc) =>
       !loc.file.includes('.d.ts') &&
       !loc.file.includes('/types/') &&
       !loc.file.endsWith('.json') &&
+      !loc.file.endsWith('.svelte') && // Svelte template expressions are not SQL
       !loc.file.includes('test') &&
-      !loc.snippet.includes('//')
+      !loc.snippet.includes('//') &&
+      !loc.snippet.includes('console.') &&
+      !loc.snippet.includes('log(') // Exclude log messages
   );
   // Detect API-based architecture (no direct DB, uses external API)
   const dbUsage = parameterizedLocations.filter(
@@ -955,7 +959,7 @@ function runChecks(): CheckResult[] {
   const strongCryptoLocations = searchPattern(apiFiles, /AES-256|AES-GCM|ChaCha20|crypto\.subtle/i);
   const weakCryptoLocations = searchPattern(
     apiFiles,
-    /\bDES\b|3DES|\bRC4\b|\bRC2\b|Blowfish|\bECB\b/i
+    /\bDES\b|\b3DES\b|\bRC4\b|\bRC2\b|\bBlowfish\b|\bECB\b/i
   ).filter(
     (loc) =>
       !loc.file.endsWith('.json') && // Exclude JSON data files (e.g. assessment reports)
