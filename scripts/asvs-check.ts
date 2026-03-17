@@ -356,9 +356,13 @@ function runChecks(): CheckResult[] {
     id: 'V2.1.5',
     category: 'V2 Authentication',
     name: 'Password Salting',
-    status: saltLocations.length > 0 ? 'pass' : 'warning',
-    description: 'Unique salt per password using CSPRNG',
-    locations: saltLocations.slice(0, 3),
+    status: isCfztAuth || isPasswordless
+      ? 'not-applicable'
+      : saltLocations.length > 0 ? 'pass' : 'warning',
+    description: isCfztAuth || isPasswordless
+      ? 'Auth handled externally — no in-app password salting'
+      : 'Unique salt per password using CSPRNG',
+    locations: isCfztAuth || isPasswordless ? [] : saltLocations.slice(0, 3),
     asvsRef: 'V2.1.5',
     automatable: true,
     level: 'L1',
@@ -400,13 +404,16 @@ function runChecks(): CheckResult[] {
     id: 'V2.2.1',
     category: 'V2 Authentication',
     name: 'Token Entropy',
-    status:
-      tokenGenLocations.length > 0 && weakTokenLocations.length === 0
+    status: isCfztAuth && tokenGenLocations.length === 0 && weakTokenLocations.length === 0
+      ? 'not-applicable'
+      : tokenGenLocations.length > 0 && weakTokenLocations.length === 0
         ? 'pass'
         : weakTokenLocations.length > 0
           ? 'fail'
           : 'warning',
-    description: 'Cryptographically secure random token generation',
+    description: isCfztAuth && tokenGenLocations.length === 0
+      ? 'Auth handled by Cloudflare Zero Trust — no in-app token generation'
+      : 'Cryptographically secure random token generation',
     locations: weakTokenLocations.length > 0 ? weakTokenLocations : tokenGenLocations.slice(0, 5),
     remediation:
       weakTokenLocations.length > 0
@@ -501,9 +508,13 @@ function runChecks(): CheckResult[] {
     id: 'V3.2.1',
     category: 'V3 Session Management',
     name: 'Session Token Generation',
-    status: sessionTokenLocations.length > 0 ? 'pass' : 'warning',
-    description: 'Session IDs generated with sufficient entropy',
-    locations: sessionTokenLocations.slice(0, 3),
+    status: isCfztAuth && sessionTokenLocations.length === 0
+      ? 'not-applicable'
+      : sessionTokenLocations.length > 0 ? 'pass' : 'warning',
+    description: isCfztAuth && sessionTokenLocations.length === 0
+      ? 'Session management handled by Cloudflare Zero Trust'
+      : 'Session IDs generated with sufficient entropy',
+    locations: isCfztAuth && sessionTokenLocations.length === 0 ? [] : sessionTokenLocations.slice(0, 3),
     asvsRef: 'V3.2.1',
     automatable: true,
     level: 'L1',
@@ -653,9 +664,13 @@ function runChecks(): CheckResult[] {
     id: 'V4.1.1',
     category: 'V4 Access Control',
     name: 'Role-Based Access Control',
-    status: rbacLocations.length > 0 ? 'pass' : 'warning',
-    description: 'Role-based authorization checks implemented',
-    locations: rbacLocations.slice(0, 5),
+    status: isCfztAuth && rbacLocations.length === 0
+      ? 'not-applicable'
+      : rbacLocations.length > 0 ? 'pass' : 'warning',
+    description: isCfztAuth && rbacLocations.length === 0
+      ? 'Access control handled by Cloudflare Zero Trust policies'
+      : 'Role-based authorization checks implemented',
+    locations: isCfztAuth && rbacLocations.length === 0 ? [] : rbacLocations.slice(0, 5),
     asvsRef: 'V4.1.1',
     automatable: true,
     level: 'L1',
@@ -693,9 +708,13 @@ function runChecks(): CheckResult[] {
     id: 'V4.2.1',
     category: 'V4 Access Control',
     name: 'Server-Side Authorization',
-    status: authCheckLocations.length > 0 ? 'pass' : 'warning',
-    description: 'Authorization enforced server-side, not just client-side',
-    locations: authCheckLocations.slice(0, 5),
+    status: isCfztAuth && authCheckLocations.length === 0
+      ? 'not-applicable'
+      : authCheckLocations.length > 0 ? 'pass' : 'warning',
+    description: isCfztAuth && authCheckLocations.length === 0
+      ? 'Authorization handled by Cloudflare Zero Trust'
+      : 'Authorization enforced server-side, not just client-side',
+    locations: isCfztAuth && authCheckLocations.length === 0 ? [] : authCheckLocations.slice(0, 5),
     asvsRef: 'V4.2.1',
     automatable: true,
     level: 'L1',
