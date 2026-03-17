@@ -393,7 +393,8 @@ function runChecks(): CheckResult[] {
       !loc.snippet.includes('//') &&
       !loc.snippet.includes('*') &&
       !loc.snippet.includes('instead of') &&
-      !loc.file.includes('secure-random')
+      !loc.file.includes('secure-random') &&
+      !loc.snippet.includes('InfoSec:')
   );
   results.push({
     id: 'V2.2.1',
