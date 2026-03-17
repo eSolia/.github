@@ -835,7 +835,9 @@ function runChecks(): CheckResult[] {
       !loc.snippet.includes('InfoSec:') &&
       // Exclude safe placeholder patterns: .map(() => '?').join
       !loc.snippet.includes("'?'") &&
-      !loc.snippet.includes('"?"')
+      !loc.snippet.includes('"?"') &&
+      // Exclude generated placeholder patterns (VALUES(${placeholders}) where placeholders = '?,?,?')
+      !loc.snippet.includes('placeholder')
   );
   // Detect API-based architecture (no direct DB, uses external API)
   const dbUsage = parameterizedLocations.filter(
