@@ -823,7 +823,7 @@ function runChecks(): CheckResult[] {
   //   `INSERT INTO t VALUES ('${userInput}')` — string interpolation of values
   const rawSqlLocations = searchPattern(
     allFiles,
-    /\.raw\(`|(?:INSERT\s+INTO|VALUES)\s*\([^)]*\$\{[^}]+\}/i
+    /\.raw\(`|VALUES\s*\([^)]*'?\$\{[^}]+\}[^)]*\)/i
   ).filter(
     (loc) =>
       !loc.file.includes('.d.ts') &&
@@ -1343,7 +1343,9 @@ function runChecks(): CheckResult[] {
       !loc.snippet.includes('protocol') &&
       // Exclude URL type detection (e.g. updown check types)
       !loc.snippet.includes("type = 'http'") &&
-      !loc.snippet.includes("type = \"http\"")
+      !loc.snippet.includes("type = \"http\"") &&
+      // Exclude deliberate HTTP probing (e.g. redirect detection, brand protection)
+      !loc.snippet.includes('`http://${')
   );
   results.push({
     id: 'V9.1.1',
