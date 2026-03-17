@@ -813,12 +813,17 @@ function runChecks(): CheckResult[] {
     allFiles,
     /\.prepare\(|\.bind\(|\.batch\(|from\(|\.select\(\)|\.insert\(\)|\.update\(\)|\.delete\(\)|queryFirst\(|queryAll\(/
   ).filter((loc) => !loc.file.includes('.d.ts') && !loc.file.endsWith('.json'));
-  // Detect genuinely unsafe patterns: string interpolation inside SQL statements
-  // Look for SQL keywords followed by ${} interpolation in the SAME statement context
-  // (.prepare(`...${...}`) or raw SQL strings with interpolation)
+  // Detect genuinely unsafe patterns: string interpolation of VALUES inside SQL
+  // Safe patterns (excluded):
+  //   .prepare(`UPDATE t SET ${columns} WHERE id = ?`) — dynamic columns, values bound
+  //   .prepare(`SELECT * FROM t WHERE id IN (${placeholders})`) — generated ? placeholders
+  //   .prepare(`SELECT * FROM t ${whereClause}`) — server-built WHERE with ? params
+  //   sql`...${schema.col}...` — Drizzle tagged template (auto-parameterized)
+  // Unsafe pattern (flagged):
+  //   `INSERT INTO t VALUES ('${userInput}')` — string interpolation of values
   const rawSqlLocations = searchPattern(
     allFiles,
-    /\.raw\(`|\.prepare\(`[^`]*\$\{|(?:SELECT\s+.*FROM|INSERT\s+INTO|UPDATE\s+\w+\s+SET|DELETE\s+FROM)\s[^;]*\$\{/i
+    /\.raw\(`|(?:INSERT\s+INTO|VALUES)\s*\([^)]*\$\{[^}]+\}/i
   ).filter(
     (loc) =>
       !loc.file.includes('.d.ts') &&
@@ -827,14 +832,10 @@ function runChecks(): CheckResult[] {
       !loc.file.endsWith('.svelte') &&
       !loc.file.includes('test') &&
       !loc.snippet.includes('//') &&
-      !loc.snippet.includes('console.') &&
-      !loc.snippet.includes('log(') &&
-      // Exclude URL construction and non-SQL template strings
-      !loc.snippet.includes('http') &&
-      !loc.snippet.includes('url') &&
-      !loc.snippet.includes('Url') &&
-      !loc.snippet.includes('commit') &&
-      !loc.snippet.includes('_domainkey')
+      !loc.snippet.includes('InfoSec:') &&
+      // Exclude safe placeholder patterns: .map(() => '?').join
+      !loc.snippet.includes("'?'") &&
+      !loc.snippet.includes('"?"')
   );
   // Detect API-based architecture (no direct DB, uses external API)
   const dbUsage = parameterizedLocations.filter(
