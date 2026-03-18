@@ -40,6 +40,7 @@ SYNC_SCRIPTS=(
 SYNC_COMMANDS=(
   ".claude/shared-commands/backpressure-review.md:backpressure-review.md"
   ".claude/shared-commands/seo-setup.md:seo-setup.md"
+  ".claude/shared-commands/seo-report.md:seo-report.md"
   ".claude/shared-commands/checkpoint.md:checkpoint.md"
   ".claude/shared-commands/commit-style.md:commit-style.md"
   ".claude/shared-commands/dev/d1-health.md:dev/d1-health.md"

@@ -43,6 +43,7 @@ const SYNC_SCRIPTS: SyncEntry[] = [
 const SYNC_COMMANDS: SyncEntry[] = [
   { src: ".claude/shared-commands/backpressure-review.md", dest: "backpressure-review.md" },
   { src: ".claude/shared-commands/seo-setup.md", dest: "seo-setup.md" },
+  { src: ".claude/shared-commands/seo-report.md", dest: "seo-report.md" },
   { src: ".claude/shared-commands/checkpoint.md", dest: "checkpoint.md" },
   { src: ".claude/shared-commands/commit-style.md", dest: "commit-style.md" },
   { src: ".claude/shared-commands/dev/d1-health.md", dest: "dev/d1-health.md" },
@@ -353,6 +354,7 @@ async function main() {
     console.log("  Commands (in .claude/commands/):");
     console.log("    /backpressure-review                  # SvelteKit quality review");
     console.log("    /seo-setup                            # SEO checklist + setup");
+    console.log("    /seo-report                           # SEO dashboard report + fixes");
     console.log("    /checkpoint                           # Save session checkpoint");
     console.log("    /commit-style                         # Conventional commit reference");
     console.log("    /dev:d1-health                        # D1 database health audit");
