@@ -61,7 +61,7 @@ fi
 
 echo ""
 echo -e "${BOLD}Syncing ${#REPOS[@]} repos from esolia.github${NC}"
-echo -e "  Source: ${BLUE}$ESOLIA_GITHUB_ROOT/scripts/sync.sh${NC}"
+echo -e "  Source: ${BLUE}$ESOLIA_GITHUB_ROOT/scripts/sync.ts${NC}"
 echo -e "  Repos:  ${BLUE}$PARENT_DIR${NC}"
 echo ""
 
@@ -78,7 +78,7 @@ for repo in "${REPOS[@]}"; do
     continue
   fi
 
-  if cd "$REPO_DIR" && bash "$ESOLIA_GITHUB_ROOT/scripts/sync.sh" $CHECK_FLAG > /dev/null 2>&1; then
+  if cd "$REPO_DIR" && npx tsx "$ESOLIA_GITHUB_ROOT/scripts/sync.ts" $CHECK_FLAG > /dev/null 2>&1; then
     if [[ -n "$CHECK_FLAG" ]]; then
       echo -e "${GREEN}  ✓ $repo${NC} — up-to-date"
     else

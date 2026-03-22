@@ -44,6 +44,7 @@ const SYNC_SCRIPTS: SyncEntry[] = [
   { src: "scripts/audit-backpressure.sh", dest: "audit-backpressure.sh" },
   { src: "scripts/sync.sh", dest: "sync.sh" },
   { src: "scripts/sync.ts", dest: "sync.ts" },
+  { src: "scripts/asvs-check.ts", dest: "asvs-check.ts" },
   { src: "scripts/submit-bing.mts", dest: "submit-bing.mts" },
   { src: "scripts/cross-post-devto.mts", dest: "cross-post-devto.mts" },
   { src: "scripts/cross-post-qiita.mts", dest: "cross-post-qiita.mts" },
@@ -488,11 +489,15 @@ async function main() {
   }
   console.log();
   console.log("  Maintenance:");
-  console.log("    ./scripts/shared/sync.sh               # Re-sync (bash)");
   console.log(
-    "    npx tsx scripts/shared/sync.ts         # Re-sync (cross-platform)",
+    "    npx tsx scripts/shared/sync.ts         # Re-sync (primary)",
   );
-  console.log("    ./scripts/shared/sync.sh --check       # Check for updates");
+  console.log(
+    "    ./scripts/shared/sync.sh               # Re-sync (bash wrapper)",
+  );
+  console.log(
+    "    npx tsx scripts/shared/sync.ts --check # Check for updates",
+  );
   console.log();
 }
 
