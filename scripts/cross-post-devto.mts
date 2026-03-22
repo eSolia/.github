@@ -1,0 +1,552 @@
+#!/usr/bin/env npx tsx
+/**
+ * Cross-post cogley.jp articles to Dev.to
+ *
+ * Fetches the cogley.jp JSON feed, filters for articles, cleans content,
+ * and posts to Dev.to with canonical_url pointing back to the original.
+ * Each article includes an attribution footer linking to eSolia.
+ *
+ * Usage:
+ *   npx tsx scripts/cross-post-devto.mts                    # dry-run all articles
+ *   npx tsx scripts/cross-post-devto.mts --publish          # post as published (not draft)
+ *   npx tsx scripts/cross-post-devto.mts --slug cloudflare-pages-to-workers-migration
+ *   npx tsx scripts/cross-post-devto.mts --stream tech      # only articles from "tech" stream
+ *   npx tsx scripts/cross-post-devto.mts --force            # re-post even if hash matches
+ *   npx tsx scripts/cross-post-devto.mts --update           # update existing articles on Dev.to
+ *   npx tsx scripts/cross-post-devto.mts --post             # actually call the API (opposite of dry-run)
+ *
+ * Environment:
+ *   DEVTO_API_KEY   Dev.to API key (required for non-dry-run)
+ *   FEED_URL        Override feed URL (default: https://api.cogley.jp/feed.json)
+ */
+
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { createHash } from "node:crypto";
+import { dirname, join } from "node:path";
+
+// ════════════════════════════════════════════════════════════════════════════
+// Colors
+// ════════════════════════════════════════════════════════════════════════════
+
+const GREEN = "\x1b[0;32m";
+const RED = "\x1b[0;31m";
+const YELLOW = "\x1b[1;33m";
+const BLUE = "\x1b[0;34m";
+const BOLD = "\x1b[1m";
+const DIM = "\x1b[2m";
+const NC = "\x1b[0m";
+
+// ════════════════════════════════════════════════════════════════════════════
+// Types
+// ════════════════════════════════════════════════════════════════════════════
+
+interface FeedItem {
+  id: string;
+  url: string;
+  title: string;
+  content_html: string;
+  content_text: string;
+  summary: string;
+  date_published: string;
+  date_modified: string;
+  tags: string[];
+  _pub: {
+    stream: string;
+    mood: string;
+    type: string;
+  };
+}
+
+interface JsonFeed {
+  version: string;
+  title: string;
+  home_page_url: string;
+  feed_url: string;
+  items: FeedItem[];
+}
+
+interface DevtoArticlePayload {
+  title: string;
+  body_markdown: string;
+  canonical_url: string;
+  tags: string[];
+  description: string;
+  published: boolean;
+}
+
+interface ManifestEntry {
+  devtoId: number;
+  contentHash: string;
+  postedAt: string;
+  updatedAt: string | null;
+  canonical: string;
+}
+
+interface Manifest {
+  version: number;
+  articles: Record<string, ManifestEntry>;
+}
+
+// ════════════════════════════════════════════════════════════════════════════
+// Configuration
+// ════════════════════════════════════════════════════════════════════════════
+
+const FEED_URL = process.env.FEED_URL ?? "https://api.cogley.jp/feed.json";
+const DEVTO_API_BASE = "https://dev.to/api/articles";
+const RATE_LIMIT_DELAY_MS = 3000;
+const MAX_DEVTO_TAGS = 4;
+const MAX_DESCRIPTION_LENGTH = 150;
+
+const SCRIPT_DIR = dirname(new URL(import.meta.url).pathname);
+const DATA_DIR = join(SCRIPT_DIR, "data");
+const MANIFEST_PATH = join(DATA_DIR, "devto-manifest.json");
+
+// ════════════════════════════════════════════════════════════════════════════
+// Attribution footer — backlinks to cogley.jp and esolia.co.jp
+// ════════════════════════════════════════════════════════════════════════════
+
+function buildFooter(canonicalUrl: string): string {
+  return [
+    "",
+    "---",
+    "",
+    `*Originally published at [cogley.jp](${canonicalUrl})*`,
+    "",
+    "*Rick Cogley is CEO of [eSolia Inc.](https://esolia.co.jp/en/), providing bilingual IT outsourcing and infrastructure services in Tokyo, Japan.*",
+  ].join("\n");
+}
+
+// ════════════════════════════════════════════════════════════════════════════
+// CLI argument parsing
+// ════════════════════════════════════════════════════════════════════════════
+
+interface CliArgs {
+  dryRun: boolean;
+  publish: boolean;
+  slug: string | null;
+  stream: string | null;
+  force: boolean;
+  update: boolean;
+}
+
+function parseArgs(): CliArgs {
+  const args = process.argv.slice(2);
+  const opts: CliArgs = {
+    dryRun: true,
+    publish: false,
+    slug: null,
+    stream: null,
+    force: false,
+    update: false,
+  };
+
+  for (let i = 0; i < args.length; i++) {
+    switch (args[i]) {
+      case "--post":
+        opts.dryRun = false;
+        break;
+      case "--publish":
+        opts.publish = true;
+        break;
+      case "--slug":
+        opts.slug = args[++i] ?? null;
+        break;
+      case "--stream":
+        opts.stream = args[++i] ?? null;
+        break;
+      case "--force":
+        opts.force = true;
+        break;
+      case "--update":
+        opts.update = true;
+        opts.dryRun = false;
+        break;
+      case "--dry-run":
+        opts.dryRun = true;
+        break;
+      case "--help":
+      case "-h":
+        console.log(`
+${BOLD}cross-post-devto${NC} — Cross-post cogley.jp articles to Dev.to
+
+${BOLD}Usage:${NC}
+  npx tsx scripts/cross-post-devto.mts [options]
+
+${BOLD}Options:${NC}
+  --dry-run      Show what would be posted (default)
+  --post         Actually call the Dev.to API
+  --publish      Post as published (default: draft)
+  --slug <slug>  Only process one article by slug
+  --stream <s>   Filter by _pub.stream (e.g., "tech")
+  --force        Re-post even if content hash matches
+  --update       Update existing articles on Dev.to
+  --help, -h     Show this help
+
+${BOLD}Environment:${NC}
+  DEVTO_API_KEY  Dev.to API key (required for --post/--update)
+  FEED_URL       Override feed URL
+`);
+        process.exit(0);
+        break;
+      default:
+        console.error(`${RED}Unknown argument: ${args[i]}${NC}`);
+        process.exit(1);
+    }
+  }
+
+  return opts;
+}
+
+// ════════════════════════════════════════════════════════════════════════════
+// Content cleaning
+// ════════════════════════════════════════════════════════════════════════════
+
+function cleanContent(text: string): string {
+  let cleaned = text;
+
+  // Phosphor icons → Unicode equivalents
+  cleaned = cleaned.replace(/<i class="ph-duotone ph-check-circle[^"]*"><\/i>/g, "✓");
+  cleaned = cleaned.replace(/<i class="ph-duotone ph-check[^"]*"><\/i>/g, "✓");
+  cleaned = cleaned.replace(/<i class="ph-duotone ph-x-circle[^"]*"><\/i>/g, "✗");
+  cleaned = cleaned.replace(/<i class="ph-duotone ph-x[^"]*"><\/i>/g, "✗");
+  cleaned = cleaned.replace(/<i class="ph-duotone ph-arrow-right[^"]*"><\/i>/g, "→");
+  cleaned = cleaned.replace(/<i class="ph-duotone ph-warning[^"]*"><\/i>/g, "⚠");
+  cleaned = cleaned.replace(/<i class="ph-duotone ph-info[^"]*"><\/i>/g, "ℹ");
+  // Strip any remaining Phosphor icon tags
+  cleaned = cleaned.replace(/<i class="ph-[^"]*"><\/i>/g, "");
+
+  // <br> → newline
+  cleaned = cleaned.replace(/<br\s*\/?>/g, "\n");
+
+  // Strip stray wrapper HTML tags (but preserve content)
+  cleaned = cleaned.replace(/<\/?(div|span|section|string|all)[^>]*>/g, "");
+
+  // Collapse 3+ consecutive blank lines to 2
+  cleaned = cleaned.replace(/\n{3,}/g, "\n\n");
+
+  return cleaned.trim();
+}
+
+// ════════════════════════════════════════════════════════════════════════════
+// Tag mapping
+// ════════════════════════════════════════════════════════════════════════════
+
+/** Dev.to tags: lowercase, alphanumeric + hyphens only */
+function normalizeTag(tag: string): string {
+  return tag.toLowerCase().replace(/[^a-z0-9-]/g, "");
+}
+
+/**
+ * Build Dev.to tags from feed item tags + content-aware expansion.
+ * Dev.to allows max 4 tags.
+ */
+function buildTags(item: FeedItem): string[] {
+  const tags = new Set<string>();
+
+  // Start with feed item tags
+  for (const t of item.tags) {
+    const normalized = normalizeTag(t);
+    if (normalized) tags.add(normalized);
+  }
+
+  // Content-aware expansion: scan title + summary for tech keywords
+  const text = `${item.title} ${item.summary}`.toLowerCase();
+  const KEYWORD_TO_TAG: Record<string, string> = {
+    svelte: "svelte",
+    sveltekit: "svelte",
+    vite: "vite",
+    typescript: "typescript",
+    javascript: "javascript",
+    cloudflare: "cloudflare",
+    "workers": "cloudflare",
+    docker: "docker",
+    linux: "linux",
+    python: "python",
+    rust: "rust",
+    go: "go",
+    japan: "japan",
+    webdev: "webdev",
+    devops: "devops",
+    security: "security",
+    seo: "seo",
+  };
+
+  for (const [keyword, tag] of Object.entries(KEYWORD_TO_TAG)) {
+    if (text.includes(keyword)) tags.add(tag);
+  }
+
+  // Cap at MAX_DEVTO_TAGS, preferring feed tags first
+  return [...tags].slice(0, MAX_DEVTO_TAGS);
+}
+
+// ════════════════════════════════════════════════════════════════════════════
+// Slug extraction
+// ════════════════════════════════════════════════════════════════════════════
+
+function extractSlug(url: string): string {
+  // https://cogley.jp/articles/cloudflare-pages-to-workers-migration → cloudflare-pages-to-workers-migration
+  const match = url.match(/\/articles\/([^/?#]+)/);
+  return match ? match[1] : url;
+}
+
+// ════════════════════════════════════════════════════════════════════════════
+// Content hashing
+// ════════════════════════════════════════════════════════════════════════════
+
+function computeHash(title: string, content: string): string {
+  return createHash("sha256").update(`${title}\n${content}`).digest("hex").slice(0, 16);
+}
+
+// ════════════════════════════════════════════════════════════════════════════
+// Manifest management
+// ════════════════════════════════════════════════════════════════════════════
+
+function loadManifest(): Manifest {
+  if (!existsSync(MANIFEST_PATH)) {
+    return { version: 1, articles: {} };
+  }
+  const raw = readFileSync(MANIFEST_PATH, "utf-8");
+  return JSON.parse(raw) as Manifest;
+}
+
+function saveManifest(manifest: Manifest): void {
+  if (!existsSync(DATA_DIR)) {
+    mkdirSync(DATA_DIR, { recursive: true });
+  }
+  writeFileSync(MANIFEST_PATH, JSON.stringify(manifest, null, 2) + "\n", "utf-8");
+}
+
+// ════════════════════════════════════════════════════════════════════════════
+// Dev.to API client
+// ════════════════════════════════════════════════════════════════════════════
+
+interface DevtoResponse {
+  id: number;
+  url: string;
+  slug: string;
+  title: string;
+  published_at: string | null;
+}
+
+async function createDevtoArticle(apiKey: string, payload: DevtoArticlePayload): Promise<DevtoResponse> {
+  const res = await fetch(DEVTO_API_BASE, {
+    method: "POST",
+    headers: {
+      "api-key": apiKey,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ article: payload }),
+  });
+
+  if (!res.ok) {
+    const body = await res.text();
+    throw new Error(`Dev.to API POST ${res.status}: ${body}`);
+  }
+
+  return (await res.json()) as DevtoResponse;
+}
+
+async function updateDevtoArticle(apiKey: string, id: number, payload: DevtoArticlePayload): Promise<DevtoResponse> {
+  const res = await fetch(`${DEVTO_API_BASE}/${id}`, {
+    method: "PUT",
+    headers: {
+      "api-key": apiKey,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ article: payload }),
+  });
+
+  if (!res.ok) {
+    const body = await res.text();
+    throw new Error(`Dev.to API PUT ${res.status}: ${body}`);
+  }
+
+  return (await res.json()) as DevtoResponse;
+}
+
+function sleep(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+// ════════════════════════════════════════════════════════════════════════════
+// Main
+// ════════════════════════════════════════════════════════════════════════════
+
+async function main(): Promise<void> {
+  const opts = parseArgs();
+  const apiKey = process.env.DEVTO_API_KEY ?? "";
+
+  console.log(`\n${BOLD}cross-post-devto${NC} — cogley.jp → Dev.to\n`);
+
+  if (!opts.dryRun && !apiKey) {
+    console.error(`${RED}Error: DEVTO_API_KEY environment variable is required for --post/--update${NC}`);
+    console.error(`Set it via direnv or: export DEVTO_API_KEY=your_key_here`);
+    process.exit(1);
+  }
+
+  if (opts.dryRun) {
+    console.log(`${YELLOW}Dry-run mode${NC} — no API calls will be made. Use --post to submit.\n`);
+  }
+
+  // Fetch feed
+  console.log(`${DIM}Fetching ${FEED_URL}...${NC}`);
+  const feedRes = await fetch(FEED_URL);
+  if (!feedRes.ok) {
+    console.error(`${RED}Failed to fetch feed: ${feedRes.status} ${feedRes.statusText}${NC}`);
+    process.exit(1);
+  }
+  const feed = (await feedRes.json()) as JsonFeed;
+
+  // Filter to articles
+  let articles = feed.items.filter((item) => item._pub?.type === "article");
+  console.log(`${DIM}Found ${articles.length} article(s) in feed (${feed.items.length} total items)${NC}\n`);
+
+  if (articles.length === 0) {
+    console.log(`${YELLOW}No articles found in feed.${NC}`);
+    return;
+  }
+
+  // Apply filters
+  if (opts.slug) {
+    articles = articles.filter((item) => extractSlug(item.url) === opts.slug);
+    if (articles.length === 0) {
+      console.error(`${RED}No article found with slug: ${opts.slug}${NC}`);
+      process.exit(1);
+    }
+  }
+  if (opts.stream) {
+    articles = articles.filter((item) => item._pub?.stream === opts.stream);
+    if (articles.length === 0) {
+      console.error(`${RED}No articles found in stream: ${opts.stream}${NC}`);
+      process.exit(1);
+    }
+  }
+
+  // Load manifest
+  const manifest = loadManifest();
+
+  let created = 0;
+  let updated = 0;
+  let skipped = 0;
+  let errors = 0;
+
+  for (let i = 0; i < articles.length; i++) {
+    const item = articles[i];
+    const slug = extractSlug(item.url);
+    const hash = computeHash(item.title, item.content_text);
+    const existing = manifest.articles[slug];
+
+    console.log(`${BOLD}[${i + 1}/${articles.length}]${NC} ${item.title}`);
+    console.log(`  ${DIM}slug: ${slug} | hash: ${hash}${NC}`);
+
+    // Skip if already posted and hash unchanged (unless --force)
+    if (existing && existing.contentHash === hash && !opts.force) {
+      if (opts.update) {
+        console.log(`  ${DIM}Content unchanged, skipping update${NC}`);
+      } else {
+        console.log(`  ${DIM}Already posted (devtoId: ${existing.devtoId}), skipping${NC}`);
+      }
+      skipped++;
+      console.log("");
+      continue;
+    }
+
+    // Build payload
+    const cleanedContent = cleanContent(item.content_text);
+    const bodyWithFooter = cleanedContent + buildFooter(item.url);
+    const tags = buildTags(item);
+    const description = item.summary.length > MAX_DESCRIPTION_LENGTH
+      ? item.summary.slice(0, MAX_DESCRIPTION_LENGTH - 1) + "…"
+      : item.summary;
+
+    const payload: DevtoArticlePayload = {
+      title: item.title,
+      body_markdown: bodyWithFooter,
+      canonical_url: item.url,
+      tags,
+      description,
+      published: opts.publish,
+    };
+
+    console.log(`  ${BLUE}tags:${NC} ${tags.join(", ")}`);
+    console.log(`  ${BLUE}canonical:${NC} ${item.url}`);
+    console.log(`  ${BLUE}description:${NC} ${description}`);
+    console.log(`  ${BLUE}published:${NC} ${opts.publish}`);
+    console.log(`  ${BLUE}body length:${NC} ${bodyWithFooter.length} chars`);
+
+    if (opts.dryRun) {
+      // Show first 300 chars of cleaned content
+      const preview = cleanedContent.slice(0, 300);
+      console.log(`  ${DIM}--- preview ---${NC}`);
+      console.log(`  ${DIM}${preview.replace(/\n/g, "\n  ")}${NC}`);
+      console.log(`  ${DIM}--- end preview ---${NC}`);
+      console.log(`  ${YELLOW}[dry-run] Would ${existing ? "update" : "create"} on Dev.to${NC}`);
+      created++;
+      console.log("");
+      continue;
+    }
+
+    // Actually post/update
+    try {
+      if (existing && opts.update) {
+        // Update existing
+        console.log(`  ${DIM}Updating Dev.to article ${existing.devtoId}...${NC}`);
+        const result = await updateDevtoArticle(apiKey, existing.devtoId, payload);
+        manifest.articles[slug] = {
+          ...existing,
+          contentHash: hash,
+          updatedAt: new Date().toISOString(),
+        };
+        console.log(`  ${GREEN}✓ Updated:${NC} ${result.url}`);
+        updated++;
+      } else {
+        // Create new
+        console.log(`  ${DIM}Creating on Dev.to...${NC}`);
+        const result = await createDevtoArticle(apiKey, payload);
+        manifest.articles[slug] = {
+          devtoId: result.id,
+          contentHash: hash,
+          postedAt: new Date().toISOString(),
+          updatedAt: null,
+          canonical: item.url,
+        };
+        console.log(`  ${GREEN}✓ Created:${NC} ${result.url}`);
+        created++;
+      }
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : String(err);
+      console.error(`  ${RED}✗ Error: ${msg}${NC}`);
+      errors++;
+    }
+
+    console.log("");
+
+    // Rate limit between API calls
+    if (!opts.dryRun && i < articles.length - 1) {
+      await sleep(RATE_LIMIT_DELAY_MS);
+    }
+  }
+
+  // Save manifest (even on dry-run we don't save)
+  if (!opts.dryRun) {
+    saveManifest(manifest);
+    console.log(`${DIM}Manifest saved to ${MANIFEST_PATH}${NC}\n`);
+  }
+
+  // Summary
+  console.log(`${BOLD}Summary:${NC}`);
+  if (opts.dryRun) {
+    console.log(`  ${YELLOW}${created} would be posted${NC}  ${DIM}${skipped} skipped${NC}`);
+    console.log(`\n  Run with ${BOLD}--post${NC} to submit to Dev.to.`);
+  } else {
+    console.log(`  ${GREEN}${created} created${NC}  ${BLUE}${updated} updated${NC}  ${DIM}${skipped} skipped${NC}  ${errors > 0 ? RED : DIM}${errors} errors${NC}`);
+  }
+  console.log("");
+
+  if (errors > 0) process.exit(1);
+}
+
+main().catch((err) => {
+  console.error(`${RED}Fatal: ${err instanceof Error ? err.message : String(err)}${NC}`);
+  process.exit(1);
+});
