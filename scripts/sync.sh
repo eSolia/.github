@@ -34,6 +34,7 @@ SYNC_SCRIPTS=(
   "scripts/sync.sh:sync.sh"
   "scripts/sync.ts:sync.ts"
   "scripts/submit-bing.mts:submit-bing.mts"
+  "scripts/cross-post-devto.mts:cross-post-devto.mts"
 )
 
 # Shared commands to sync (source -> .claude/commands/)
