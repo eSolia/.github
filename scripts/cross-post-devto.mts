@@ -494,8 +494,8 @@ async function main(): Promise<void> {
 
     // Actually post/update
     try {
-      if (existing && opts.update) {
-        // Update existing
+      if (existing?.devtoId) {
+        // Update existing (--force or --update with known devtoId)
         console.log(`  ${DIM}Updating Dev.to article ${existing.devtoId}...${NC}`);
         const result = await updateDevtoArticle(apiKey, existing.devtoId, payload);
         manifest.articles[slug] = {
