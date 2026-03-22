@@ -93,7 +93,7 @@ interface Manifest {
 // ════════════════════════════════════════════════════════════════════════════
 
 const FEED_URL = process.env.FEED_URL ?? "https://api.cogley.jp/feed.json";
-const OG_IMAGE_BASE = "https://api.cogley.jp/api/og/article";
+const COVER_IMAGE_BASE = "https://api.cogley.jp/api/og/cover";
 const DEVTO_API_BASE = "https://dev.to/api/articles";
 const RATE_LIMIT_DELAY_MS = 3000;
 const MAX_DEVTO_TAGS = 4;
@@ -461,7 +461,7 @@ async function main(): Promise<void> {
       ? item.summary.slice(0, MAX_DESCRIPTION_LENGTH - 1) + "…"
       : item.summary;
 
-    const coverImage = `${OG_IMAGE_BASE}/${item.id}.png`;
+    const coverImage = `${COVER_IMAGE_BASE}/${item.id}.png`;
 
     const payload: DevtoArticlePayload = {
       title: item.title,
