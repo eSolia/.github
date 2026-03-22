@@ -13,7 +13,14 @@
 // Downloads centralized scripts into scripts/shared/, shared Claude commands
 // into .claude/commands/, and shared rules into .claude/rules/.
 
-import { existsSync, mkdirSync, writeFileSync, readFileSync, chmodSync, statSync } from "node:fs";
+import {
+  chmodSync,
+  existsSync,
+  mkdirSync,
+  readFileSync,
+  statSync,
+  writeFileSync,
+} from "node:fs";
 import { dirname, join } from "node:path";
 import { execSync } from "node:child_process";
 
@@ -38,32 +45,68 @@ const SYNC_SCRIPTS: SyncEntry[] = [
   { src: "scripts/sync.sh", dest: "sync.sh" },
   { src: "scripts/sync.ts", dest: "sync.ts" },
   { src: "scripts/submit-bing.mts", dest: "submit-bing.mts" },
+  { src: "scripts/cross-post-devto.mts", dest: "cross-post-devto.mts" },
+  { src: "scripts/cross-post-qiita.mts", dest: "cross-post-qiita.mts" },
 ];
 
 const SYNC_COMMANDS: SyncEntry[] = [
-  { src: ".claude/shared-commands/backpressure-review.md", dest: "backpressure-review.md" },
+  {
+    src: ".claude/shared-commands/backpressure-review.md",
+    dest: "backpressure-review.md",
+  },
   { src: ".claude/shared-commands/seo-setup.md", dest: "seo-setup.md" },
   { src: ".claude/shared-commands/seo-report.md", dest: "seo-report.md" },
   { src: ".claude/shared-commands/checkpoint.md", dest: "checkpoint.md" },
   { src: ".claude/shared-commands/commit-style.md", dest: "commit-style.md" },
   { src: ".claude/shared-commands/dev/d1-health.md", dest: "dev/d1-health.md" },
   { src: ".claude/shared-commands/dev/preflight.md", dest: "dev/preflight.md" },
-  { src: ".claude/shared-commands/dev/svelte-review.md", dest: "dev/svelte-review.md" },
-  { src: ".claude/shared-commands/security/audit-github-actions.md", dest: "security/audit-github-actions.md" },
-  { src: ".claude/shared-commands/security/harden-github-org.md", dest: "security/harden-github-org.md" },
-  { src: ".claude/shared-commands/standards/check.md", dest: "standards/check.md" },
-  { src: ".claude/shared-commands/standards/list.md", dest: "standards/list.md" },
-  { src: ".claude/shared-commands/standards/search.md", dest: "standards/search.md" },
-  { src: ".claude/shared-commands/standards/writing.md", dest: "standards/writing.md" },
+  {
+    src: ".claude/shared-commands/dev/svelte-review.md",
+    dest: "dev/svelte-review.md",
+  },
+  {
+    src: ".claude/shared-commands/security/audit-github-actions.md",
+    dest: "security/audit-github-actions.md",
+  },
+  {
+    src: ".claude/shared-commands/security/harden-github-org.md",
+    dest: "security/harden-github-org.md",
+  },
+  {
+    src: ".claude/shared-commands/standards/check.md",
+    dest: "standards/check.md",
+  },
+  {
+    src: ".claude/shared-commands/standards/list.md",
+    dest: "standards/list.md",
+  },
+  {
+    src: ".claude/shared-commands/standards/search.md",
+    dest: "standards/search.md",
+  },
+  {
+    src: ".claude/shared-commands/standards/writing.md",
+    dest: "standards/writing.md",
+  },
 ];
 
 const SYNC_RULES: SyncEntry[] = [
-  { src: ".claude/shared-rules/backpressure-verify.md", dest: "backpressure-verify.md" },
+  {
+    src: ".claude/shared-rules/backpressure-verify.md",
+    dest: "backpressure-verify.md",
+  },
   { src: ".claude/shared-rules/d1-maintenance.md", dest: "d1-maintenance.md" },
-  { src: ".claude/shared-rules/mermaid-diagrams.md", dest: "mermaid-diagrams.md" },
+  {
+    src: ".claude/shared-rules/mermaid-diagrams.md",
+    dest: "mermaid-diagrams.md",
+  },
 ];
 
-const WRAPPER_SCRIPTS = ["bump-version.sh", "update-wrangler.sh", "audit-backpressure.sh"];
+const WRAPPER_SCRIPTS = [
+  "bump-version.sh",
+  "update-wrangler.sh",
+  "audit-backpressure.sh",
+];
 
 // ════════════════════════════════════════════════════════════════════════════
 // Output helpers
@@ -108,12 +151,18 @@ for (let i = 0; i < args.length; i++) {
       break;
     case "--help":
     case "-h":
-      console.log("Usage: sync.ts [--ref <tag-or-sha>] [--check] [--scripts-only]");
+      console.log(
+        "Usage: sync.ts [--ref <tag-or-sha>] [--check] [--scripts-only]",
+      );
       console.log("");
       console.log("Options:");
       console.log("  --ref <ref>      Git ref to fetch from (default: main)");
-      console.log("  --check          Check if local scripts match remote (exit 1 if stale)");
-      console.log("  --scripts-only   Only sync scripts (skip commands and rules)");
+      console.log(
+        "  --check          Check if local scripts match remote (exit 1 if stale)",
+      );
+      console.log(
+        "  --scripts-only   Only sync scripts (skip commands and rules)",
+      );
       console.log("  --help           Show this help");
       process.exit(0);
     default:
@@ -128,7 +177,8 @@ for (let i = 0; i < args.length; i++) {
 
 function findProjectRoot(): string {
   try {
-    return execSync("git rev-parse --show-toplevel", { encoding: "utf-8" }).trim();
+    return execSync("git rev-parse --show-toplevel", { encoding: "utf-8" })
+      .trim();
   } catch {
     return process.cwd();
   }
@@ -146,7 +196,7 @@ function getRemoteCommit(gitRef: string): string {
   try {
     const output = execSync(
       `git ls-remote "https://github.com/${REPO_OWNER}/${REPO_NAME}.git" "${gitRef}"`,
-      { encoding: "utf-8" }
+      { encoding: "utf-8" },
     );
     const match = output.match(/^([0-9a-f]+)/);
     return match ? match[1] : "unknown";
@@ -172,8 +222,12 @@ async function downloadFile(url: string, targetPath: string): Promise<boolean> {
   }
 }
 
-async function downloadFiles(entries: SyncEntry[], targetDir: string): Promise<void> {
-  const baseUrl = `https://raw.githubusercontent.com/${REPO_OWNER}/${REPO_NAME}/${ref}`;
+async function downloadFiles(
+  entries: SyncEntry[],
+  targetDir: string,
+): Promise<void> {
+  const baseUrl =
+    `https://raw.githubusercontent.com/${REPO_OWNER}/${REPO_NAME}/${ref}`;
   for (const entry of entries) {
     const url = `${baseUrl}/${entry.src}`;
     const target = join(targetDir, entry.dest);
@@ -205,7 +259,8 @@ function createWrapper(name: string, scriptsDir: string): void {
   if (isWindows) {
     // Create a .cmd wrapper for Windows
     const cmdPath = wrapperPath.replace(/\.sh$/, ".cmd");
-    const cmdContent = `@echo off\r\nREM Wrapper — delegates to centralized script from esolia.github\r\nREM To update: npx tsx scripts/shared/sync.ts\r\nset "SCRIPT_DIR=%~dp0"\r\nbash "%SCRIPT_DIR%shared\\${name}" %*\r\n`;
+    const cmdContent =
+      `@echo off\r\nREM Wrapper — delegates to centralized script from esolia.github\r\nREM To update: npx tsx scripts/shared/sync.ts\r\nset "SCRIPT_DIR=%~dp0"\r\nbash "%SCRIPT_DIR%shared\\${name}" %*\r\n`;
     writeFileSync(cmdPath, cmdContent);
     success(`Created wrapper: scripts/${name.replace(/\.sh$/, ".cmd")}`);
   }
@@ -230,7 +285,8 @@ function addToGitignore(): void {
     const content = readFileSync(gitignorePath, "utf-8");
     if (!content.includes("scripts/shared/")) {
       step("Adding scripts/shared/ to .gitignore");
-      const addition = "\n# Centralized scripts fetched from esolia.github\nscripts/shared/\n";
+      const addition =
+        "\n# Centralized scripts fetched from esolia.github\nscripts/shared/\n";
       writeFileSync(gitignorePath, content + addition);
       success("Updated .gitignore");
       console.log();
@@ -254,7 +310,8 @@ if (checkOnly) {
   const versionContent = readFileSync(SCRIPTVERSION_FILE, "utf-8");
   const localCommit = versionContent.match(/^commit=(.+)$/m)?.[1] ?? "unknown";
   const localRef = versionContent.match(/^ref=(.+)$/m)?.[1] ?? DEFAULT_REF;
-  const localFetched = versionContent.match(/^fetched=(.+)$/m)?.[1] ?? "unknown";
+  const localFetched = versionContent.match(/^fetched=(.+)$/m)?.[1] ??
+    "unknown";
 
   info(`Local: commit=${localCommit} ref=${localRef} fetched=${localFetched}`);
 
@@ -281,9 +338,21 @@ if (checkOnly) {
 
 async function main() {
   console.log();
-  console.log(color.bold("╔══════════════════════════════════════════════════════════════╗"));
-  console.log(color.bold("║  Sync from eSolia/.github                                  ║"));
-  console.log(color.bold("╚══════════════════════════════════════════════════════════════╝"));
+  console.log(
+    color.bold(
+      "╔══════════════════════════════════════════════════════════════╗",
+    ),
+  );
+  console.log(
+    color.bold(
+      "║  Sync from eSolia/.github                                  ║",
+    ),
+  );
+  console.log(
+    color.bold(
+      "╚══════════════════════════════════════════════════════════════╝",
+    ),
+  );
   console.log();
   info(`Source: ${REPO_OWNER}/${REPO_NAME}@${ref}`);
   info(`Target: ${PROJECT_ROOT}`);
@@ -320,7 +389,7 @@ async function main() {
   const fetchTime = new Date().toISOString().replace(/\.\d{3}Z$/, "Z");
   writeFileSync(
     SCRIPTVERSION_FILE,
-    `commit=${remoteCommit}\nfetched=${fetchTime}\nref=${ref}\n`
+    `commit=${remoteCommit}\nfetched=${fetchTime}\nref=${ref}\n`,
   );
   success(`Wrote .scriptversion (commit=${remoteCommit.slice(0, 12)})`);
   console.log();
@@ -338,7 +407,11 @@ async function main() {
   addToGitignore();
 
   // 6. Summary
-  console.log(color.bold("── Sync Complete ──────────────────────────────────────────────"));
+  console.log(
+    color.bold(
+      "── Sync Complete ──────────────────────────────────────────────",
+    ),
+  );
   console.log();
   console.log(`  Synced from: ${REPO_OWNER}/${REPO_NAME}@${ref}`);
   console.log(`  Commit: ${remoteCommit.slice(0, 12)}`);
@@ -347,35 +420,78 @@ async function main() {
   console.log("    ./scripts/bump-version.sh <version>   # Bump version + QC");
   console.log("    ./scripts/bump-version.sh --qc-only   # QC checks only");
   console.log("    ./scripts/update-wrangler.sh           # Update wrangler");
-  console.log("    ./scripts/audit-backpressure.sh        # Backpressure audit");
-  console.log("    npx tsx scripts/shared/submit-bing.mts  # Bing URL submission");
+  console.log(
+    "    ./scripts/audit-backpressure.sh        # Backpressure audit",
+  );
+  console.log(
+    "    npx tsx scripts/shared/submit-bing.mts  # Bing URL submission",
+  );
+  console.log(
+    "    npx tsx scripts/shared/cross-post-qiita.mts # Cross-post to Qiita",
+  );
   if (!scriptsOnly) {
     console.log();
     console.log("  Commands (in .claude/commands/):");
-    console.log("    /backpressure-review                  # SvelteKit quality review");
-    console.log("    /seo-setup                            # SEO checklist + setup");
-    console.log("    /seo-report                           # SEO dashboard report + fixes");
-    console.log("    /checkpoint                           # Save session checkpoint");
-    console.log("    /commit-style                         # Conventional commit reference");
-    console.log("    /dev:d1-health                        # D1 database health audit");
-    console.log("    /dev:preflight                        # Show preflight checks");
-    console.log("    /dev:svelte-review                    # Svelte 5 best practices review");
-    console.log("    /security:audit-github-actions        # GitHub Actions security audit");
-    console.log("    /security:harden-github-org           # GitHub org hardening");
-    console.log("    /standards:check                      # Review code against standards");
-    console.log("    /standards:list                       # List all eSolia standards");
-    console.log("    /standards:search                     # Search standards by keyword");
-    console.log("    /standards:writing                    # Review content against writing guides");
+    console.log(
+      "    /backpressure-review                  # SvelteKit quality review",
+    );
+    console.log(
+      "    /seo-setup                            # SEO checklist + setup",
+    );
+    console.log(
+      "    /seo-report                           # SEO dashboard report + fixes",
+    );
+    console.log(
+      "    /checkpoint                           # Save session checkpoint",
+    );
+    console.log(
+      "    /commit-style                         # Conventional commit reference",
+    );
+    console.log(
+      "    /dev:d1-health                        # D1 database health audit",
+    );
+    console.log(
+      "    /dev:preflight                        # Show preflight checks",
+    );
+    console.log(
+      "    /dev:svelte-review                    # Svelte 5 best practices review",
+    );
+    console.log(
+      "    /security:audit-github-actions        # GitHub Actions security audit",
+    );
+    console.log(
+      "    /security:harden-github-org           # GitHub org hardening",
+    );
+    console.log(
+      "    /standards:check                      # Review code against standards",
+    );
+    console.log(
+      "    /standards:list                       # List all eSolia standards",
+    );
+    console.log(
+      "    /standards:search                     # Search standards by keyword",
+    );
+    console.log(
+      "    /standards:writing                    # Review content against writing guides",
+    );
     console.log();
     console.log("  Rules (in .claude/rules/):");
-    console.log("    backpressure-verify                   # Auto-verify after code changes");
-    console.log("    d1-maintenance                        # D1 database best practices");
-    console.log("    mermaid-diagrams                      # Compact diagram styling");
+    console.log(
+      "    backpressure-verify                   # Auto-verify after code changes",
+    );
+    console.log(
+      "    d1-maintenance                        # D1 database best practices",
+    );
+    console.log(
+      "    mermaid-diagrams                      # Compact diagram styling",
+    );
   }
   console.log();
   console.log("  Maintenance:");
   console.log("    ./scripts/shared/sync.sh               # Re-sync (bash)");
-  console.log("    npx tsx scripts/shared/sync.ts         # Re-sync (cross-platform)");
+  console.log(
+    "    npx tsx scripts/shared/sync.ts         # Re-sync (cross-platform)",
+  );
   console.log("    ./scripts/shared/sync.sh --check       # Check for updates");
   console.log();
 }
