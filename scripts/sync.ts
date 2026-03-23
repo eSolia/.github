@@ -38,6 +38,7 @@ interface SyncEntry {
 }
 
 const SYNC_SCRIPTS: SyncEntry[] = [
+  { src: "scripts/CLAUDE.md", dest: "CLAUDE.md" },
   { src: "scripts/lib/common.sh", dest: "lib/common.sh" },
   { src: "scripts/bump-version.sh", dest: "bump-version.sh" },
   { src: "scripts/update-wrangler.sh", dest: "update-wrangler.sh" },
@@ -51,6 +52,7 @@ const SYNC_SCRIPTS: SyncEntry[] = [
 ];
 
 const SYNC_COMMANDS: SyncEntry[] = [
+  { src: ".claude/shared-commands/CLAUDE.md", dest: "CLAUDE.md" },
   {
     src: ".claude/shared-commands/backpressure-review.md",
     dest: "backpressure-review.md",
@@ -92,6 +94,7 @@ const SYNC_COMMANDS: SyncEntry[] = [
 ];
 
 const SYNC_RULES: SyncEntry[] = [
+  { src: ".claude/shared-rules/CLAUDE.md", dest: "CLAUDE.md" },
   {
     src: ".claude/shared-rules/backpressure-verify.md",
     dest: "backpressure-verify.md",
