@@ -1,6 +1,6 @@
 [![Proven.lol Lightweight Proof](https://img.shields.io/badge/Proven.lol-Lightweight_Proof-green?style=flat-square&logo=cachet)](https://proven.lol/fbd788)
 
-**Last Updated:** March 23rd, 2026 at 6:19:02 AM GMT+9 &nbsp; **Today is:** Monday, March 23, 2026
+**Last Updated:** March 23rd, 2026 at 10:20:05 AM GMT+9 &nbsp; **Today is:** Monday, March 23, 2026
 
 
 ## Welcome 👋
@@ -153,22 +153,22 @@ jobs:
 
 
 
+- [Introducing Acrobat Standard features for use in administrative departments](https://blog.esolia.pro/en/posts/20260323-acrobat-standard-en/) — _From differences with Acrobat Reader to useful features and comparison with Acrobat Pro..._
+
 - [How Should You Manage Your Passwords?](https://blog.esolia.pro/en/posts/20260302-manage-your-passwords-en/) — _We’ll look at how to manage passwords safely, and how to create stronger, harder-to-guess passwords ..._
 
 - [What to Do When Your Monitor Won’t Display: Troubleshooting Tips from IT Support](https://blog.esolia.pro/en/posts/20260216-monitor-won’t-display-en/) — _Having trouble with your monitor not displaying? This guide walks you through real-world IT support ..._
-
-- [Small Digital Detox Habits](https://blog.esolia.pro/en/posts/20260122-digital-detox-habits-en/) — _Introducing simple and sustainable digital detox tips practiced by an IT professional—find your perf..._
 
 
 ### 日本語
 
 
 
+- [管理部門で活用するAcrobat Standardの機能をご紹介](https://blog.esolia.pro/posts/20260323-acrobat-standardの機能-ja/)
+
 - [パスワードはどう管理する？初心者向けパスワード管理法](https://blog.esolia.pro/posts/20260302-パスワードはどう管理する-ja/)
 
 - [モニターが映らないときの対処法：情シスがよくやるチェックリストを公開](https://blog.esolia.pro/posts/20220216-モニターが映らない-ja/)
-
-- [IT担当者が続ける小さなデジタルデトックス習慣](https://blog.esolia.pro/posts/20260122-デジタルデトックス-ja/)
 
 
 ## Build Stats
@@ -176,7 +176,7 @@ jobs:
 | Item | Value |
 | --- | --- |
 | Repo Total Files | 1 |
-| Repo Size in KB | 723 |
+| Repo Size in KB | 726 |
 | Lume Version | v2.4.2 |
 | Deno Version | 2.7.7 |
 | V8 Version | 14.6.202.9-rusty |
