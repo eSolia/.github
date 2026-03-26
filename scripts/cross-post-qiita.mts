@@ -109,8 +109,9 @@ const MANIFEST_PATH = join(DATA_DIR, "qiita-manifest.json");
 // Attribution — differs by source
 // ════════════════════════════════════════════════════════════════════════════
 
-function buildCanonicalNote(canonicalUrl: string): string {
-  return `> この記事は [${canonicalUrl}](${canonicalUrl}) に掲載された記事です。\n\n`;
+function buildCanonicalNote(source: "esolia" | "cogley", canonicalUrl: string): string {
+  const siteName = source === "esolia" ? "eSolia.co.jp" : "cogley.jp";
+  return `> 本記事は[${siteName}の完全版](${canonicalUrl})の要約版です。詳細は完全版をご覧ください。\n\n`;
 }
 
 function buildFooter(source: "esolia" | "cogley", canonicalUrl?: string): string {
@@ -128,9 +129,9 @@ function buildFooter(source: "esolia" | "cogley", canonicalUrl?: string): string
   }
 
   if (source === "esolia") {
-    lines.push("*Rick Cogley（コグレー・リック）は[株式会社イソリア](https://esolia.co.jp)のCEO兼創業者。東京を拠点に日英バイリンガルITアウトソーシングとインフラサービスを提供しています。*");
+    lines.push("*[Rick Cogley（コグレー・リック）](https://esolia.co.jp/about/team/)は[株式会社イソリア](https://esolia.co.jp)のCEO兼創業者。東京を拠点に日英バイリンガルITアウトソーシングとインフラサービスを提供しています。*");
   } else {
-    lines.push("*Rick Cogley（コグレー・リック）は[株式会社イソリア](https://esolia.co.jp)のCEO兼創業者。東京で日英バイリンガルITアウトソーシングとインフラサービスを提供中。*");
+    lines.push("*[Rick Cogley（コグレー・リック）](https://esolia.co.jp/about/team/)は[株式会社イソリア](https://esolia.co.jp)のCEO兼創業者。東京で日英バイリンガルITアウトソーシングとインフラサービスを提供中。*");
   }
 
   return lines.join("\n");
@@ -518,7 +519,7 @@ async function main(): Promise<void> {
 
     let fullBody = "";
     if (frontmatter.canonical_url) {
-      fullBody += buildCanonicalNote(frontmatter.canonical_url);
+      fullBody += buildCanonicalNote(source, frontmatter.canonical_url);
     }
     fullBody += safeBody;
     fullBody += buildFooter(source, frontmatter.canonical_url);

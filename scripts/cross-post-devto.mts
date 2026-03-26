@@ -114,7 +114,7 @@ function buildFooter(canonicalUrl: string): string {
     "",
     `*Originally published at [cogley.jp](${canonicalUrl})*`,
     "",
-    "*Rick Cogley is CEO of [eSolia Inc.](https://esolia.co.jp/en/), providing bilingual IT outsourcing and infrastructure services in Tokyo, Japan.*",
+    "*[Rick Cogley](https://esolia.co.jp/en/about/team/) is CEO of [eSolia Inc.](https://esolia.co.jp/en/), providing bilingual IT outsourcing and infrastructure services in Tokyo, Japan.*",
   ].join("\n");
 }
 
