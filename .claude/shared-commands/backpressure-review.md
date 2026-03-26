@@ -5,8 +5,8 @@ Deep review of this project against the quality enforcement strategy. This comma
 ## Instructions
 
 Fetch the backpressure guide from the eSolia standards MCP:
+
 - Use `mcp__esolia-standards__get_standard` with slug `sveltekit-backpressure`
-- If the MCP is not available, check `docs/shared/guides/SVELTEKIT_BACKPRESSURE.md` locally
 
 Read it fully before starting.
 
@@ -43,7 +43,7 @@ Statements that can be mechanically enforced should migrate out of CLAUDE.md. On
 
 ### 4. Lint rule coverage
 
-Check the linting configuration against `docs/shared/guides/LINTING_STRATEGY.md`:
+Fetch the linting strategy from the eSolia standards MCP (`mcp__esolia-standards__get_standard` with slug `linting-strategy`) and check the linting configuration against it:
 
 **Oxlint layer (fast pass):**
 

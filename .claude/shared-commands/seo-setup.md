@@ -4,12 +4,11 @@ Apply the SEO checklist to this project. Works with SvelteKit, Hono, and generic
 
 ## Instructions
 
-Fetch the SEO checklist from the eSolia standards MCP before starting:
+Fetch the SEO checklist and assets from the eSolia standards MCP before starting:
 
 1. Use `mcp__esolia-standards__get_standard` with slug `sveltekit-seo-checklist` — the full checklist (framework-agnostic despite the name)
-2. Check locally for `docs/shared/guides/seo-check.test.ts` and `docs/shared/guides/seo-check.yml` — reusable test file and CI workflow
-
-If the MCP is not available, check `docs/shared/guides/SVELTEKIT_SEO_CHECKLIST.md` locally.
+2. Use `mcp__esolia-standards__get_standard` with slug `seo-check-test` — reusable test file
+3. Use `mcp__esolia-standards__get_standard` with slug `seo-check-workflow` — reusable CI workflow
 
 Arguments: $ARGUMENTS — Optional: "audit" (report only, no changes) or "ci" (only install the CI workflow).
 
@@ -69,7 +68,7 @@ If `$ARGUMENTS` is "audit", stop here and present findings.
 1. Create the test directory:
    - SvelteKit: `src/lib/seo/`
    - Hono/generic: `src/lib/seo/` or `tests/`
-2. Copy `docs/shared/guides/seo-check.test.ts` to the test directory
+2. Copy the `seo-check-test` content (fetched from MCP above) to the test directory
 3. Edit `SITE_CONFIG` for this project:
    - `framework`: `'sveltekit'`, `'hono'`, or `'generic'`
    - `sourceDir`: path to source files
@@ -96,7 +95,7 @@ Re-run until all tests pass.
 
 If `$ARGUMENTS` is "ci", start from this step.
 
-1. Copy `docs/shared/guides/seo-check.yml` to `.github/workflows/seo-check.yml`
+1. Copy the `seo-check-workflow` content (fetched from MCP above) to `.github/workflows/seo-check.yml`
 2. For SvelteKit: uncomment the `svelte-kit sync` step
 3. For non-SvelteKit: ensure the `svelte-kit sync` step stays commented out
 4. Adjust the test file path in the workflow if you placed it somewhere other than `src/lib/seo/`
