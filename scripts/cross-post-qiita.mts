@@ -518,7 +518,10 @@ async function main(): Promise<void> {
     const safeBody = body.endsWith("\n\n") ? body : body.endsWith("\n") ? body + "\n" : body + "\n\n";
 
     let fullBody = "";
-    if (frontmatter.canonical_url) {
+    // Skip auto-generated canonical note if the body already starts with a blockquote
+    // (author provided a custom 要約版 disclaimer in the markdown file)
+    const bodyStartsWithBlockquote = safeBody.trimStart().startsWith(">");
+    if (frontmatter.canonical_url && !bodyStartsWithBlockquote) {
       fullBody += buildCanonicalNote(source, frontmatter.canonical_url);
     }
     fullBody += safeBody;
