@@ -15,7 +15,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ESOLIA_GITHUB_ROOT="$(dirname "$SCRIPT_DIR")"
 
 # All consumer repos
-ALL_REPOS=(esolia-2025 jac-2026 nexus courier codex pulse periodic pub-cogley chocho)
+ALL_REPOS=(esolia-2025 jac-2026 nexus courier codex pulse periodic pub-cogley chocho mame)
 
 # Repos parent directory — default to sibling of esolia.github
 PARENT_DIR="${REPOS_DIR:-$(dirname "$ESOLIA_GITHUB_ROOT")}"

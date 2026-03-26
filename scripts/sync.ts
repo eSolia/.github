@@ -68,6 +68,10 @@ const SYNC_COMMANDS: SyncEntry[] = [
     dest: "dev/svelte-review.md",
   },
   {
+    src: ".claude/shared-commands/dev/svelte-patterns.md",
+    dest: "dev/svelte-patterns.md",
+  },
+  {
     src: ".claude/shared-commands/security/audit-github-actions.md",
     dest: "security/audit-github-actions.md",
   },

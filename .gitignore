@@ -2,3 +2,6 @@ _site
 _cache
 .DS_Store
 scripts/data/devto-manifest.json
+
+# Centralized scripts fetched from esolia.github
+scripts/shared/
