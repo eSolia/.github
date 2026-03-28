@@ -1,0 +1,362 @@
+# ============================================================================
+# Reusable Svelte 5 Lint Workflow — Two-Layer Architecture (oxlint + ESLint)
+# ============================================================================
+#
+# Location: YOUR_ORG/.github/.github/workflows/svelte-lint.yml
+#
+# Usage in any SvelteKit project:
+#
+#   jobs:
+#     lint:
+#       uses: YOUR_ORG/.github/.github/workflows/svelte-lint.yml@main
+#       with:
+#         node-version: '20'
+#         package-manager: 'pnpm'
+#         sveltekit-paths: 'apps/web,apps/admin'  # Optional, auto-detects if omitted
+#
+# InfoSec: All inputs are passed via env: to prevent command injection (CWE-78)
+# ============================================================================
+
+name: Svelte 5 Lint & Check
+
+on:
+  workflow_call:
+    inputs:
+      node-version:
+        description: 'Node.js version'
+        required: false
+        type: string
+        default: '20'
+
+      package-manager:
+        description: 'Package manager: npm, pnpm, yarn, or bun'
+        required: false
+        type: string
+        default: 'npm'
+
+      sveltekit-paths:
+        description: 'Comma-separated paths to SvelteKit projects. Auto-detects if omitted.'
+        required: false
+        type: string
+        default: ''
+
+      skip-svelte5-check:
+        description: 'Skip legacy Svelte 3/4 pattern detection'
+        required: false
+        type: boolean
+        default: false
+
+      fail-on-warnings:
+        description: 'Treat warnings as errors'
+        required: false
+        type: boolean
+        default: false
+
+      install-command:
+        description: 'Custom install command (overrides package-manager detection)'
+        required: false
+        type: string
+        default: ''
+
+jobs:
+  detect:
+    name: Detect SvelteKit Projects
+    runs-on: ubuntu-latest
+    outputs:
+      paths: ${{ steps.detect.outputs.paths }}
+      found: ${{ steps.detect.outputs.found }}
+      matrix: ${{ steps.detect.outputs.matrix }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Detect SvelteKit projects
+        id: detect
+        env:
+          INPUT_PATHS: ${{ inputs.sveltekit-paths }}
+        run: |
+          if [ -n "$INPUT_PATHS" ]; then
+            # Use explicitly provided paths
+            PATHS="$INPUT_PATHS"
+            echo "Using provided paths: $PATHS"
+          else
+            # Auto-detect by finding svelte.config.* files
+            echo "Auto-detecting SvelteKit projects..."
+
+            SVELTE_CONFIGS=$(find . -name "svelte.config.js" -o -name "svelte.config.ts" 2>/dev/null | grep -v node_modules || true)
+
+            if [ -z "$SVELTE_CONFIGS" ]; then
+              echo "found=false" >> $GITHUB_OUTPUT
+              echo "paths=" >> $GITHUB_OUTPUT
+              echo "matrix={\"path\":[]}" >> $GITHUB_OUTPUT
+              echo "::warning::No SvelteKit projects found (no svelte.config.* files)"
+              exit 0
+            fi
+
+            # Convert to directory paths
+            PATHS=""
+            for config in $SVELTE_CONFIGS; do
+              dir=$(dirname "$config")
+              # Normalize: remove leading ./
+              dir="${dir#./}"
+              [ -z "$dir" ] || [ "$dir" = "." ] && dir="."
+
+              if [ -z "$PATHS" ]; then
+                PATHS="$dir"
+              else
+                PATHS="$PATHS,$dir"
+              fi
+            done
+
+            echo "Detected SvelteKit projects: $PATHS"
+          fi
+
+          echo "found=true" >> $GITHUB_OUTPUT
+          echo "paths=$PATHS" >> $GITHUB_OUTPUT
+
+          # Create matrix JSON for parallel jobs
+          MATRIX_JSON=$(echo "$PATHS" | tr ',' '\n' | jq -R -s -c 'split("\n") | map(select(length > 0)) | {path: .}')
+          echo "matrix=$MATRIX_JSON" >> $GITHUB_OUTPUT
+          echo "Matrix: $MATRIX_JSON"
+
+  lint:
+    name: Lint (${{ matrix.path }})
+    needs: detect
+    if: needs.detect.outputs.found == 'true'
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJson(needs.detect.outputs.matrix) }}
+
+    defaults:
+      run:
+        working-directory: ${{ matrix.path }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # ════════════════════════════════════════════════════════════════
+      # Setup runtime
+      # ════════════════════════════════════════════════════════════════
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ inputs.node-version }}
+
+      - name: Setup pnpm
+        if: inputs.package-manager == 'pnpm'
+        uses: pnpm/action-setup@v2
+        with:
+          version: latest
+
+      - name: Setup Bun
+        if: inputs.package-manager == 'bun'
+        uses: oven-sh/setup-bun@v1
+
+      # ════════════════════════════════════════════════════════════════
+      # Cache & Install
+      # ════════════════════════════════════════════════════════════════
+
+      - name: Get cache directory
+        id: cache-dir
+        env:
+          PM: ${{ inputs.package-manager }}
+        run: |
+          case "$PM" in
+            pnpm) echo "dir=$(pnpm store path)" >> $GITHUB_OUTPUT ;;
+            yarn) echo "dir=$(yarn cache dir)" >> $GITHUB_OUTPUT ;;
+            bun) echo "dir=~/.bun/install/cache" >> $GITHUB_OUTPUT ;;
+            *) echo "dir=~/.npm" >> $GITHUB_OUTPUT ;;
+          esac
+
+      - name: Cache dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            ${{ steps.cache-dir.outputs.dir }}
+            **/node_modules
+          key: ${{ runner.os }}-${{ inputs.package-manager }}-${{ matrix.path }}-${{ hashFiles('**/package-lock.json', '**/pnpm-lock.yaml', '**/yarn.lock', '**/bun.lockb') }}
+          restore-keys: |
+            ${{ runner.os }}-${{ inputs.package-manager }}-${{ matrix.path }}-
+
+      - name: Install dependencies
+        env:
+          PM: ${{ inputs.package-manager }}
+          CUSTOM_INSTALL: ${{ inputs.install-command }}
+        run: |
+          if [ -n "$CUSTOM_INSTALL" ]; then
+            eval "$CUSTOM_INSTALL"
+          else
+            case "$PM" in
+              pnpm) pnpm install --frozen-lockfile ;;
+              yarn) yarn install --frozen-lockfile ;;
+              bun) bun install --frozen-lockfile ;;
+              *) npm ci ;;
+            esac
+          fi
+
+      # ════════════════════════════════════════════════════════════════
+      # Linting Steps
+      # ════════════════════════════════════════════════════════════════
+
+      - name: Check formatting (Prettier)
+        id: prettier
+        continue-on-error: ${{ !inputs.fail-on-warnings }}
+        env:
+          PM: ${{ inputs.package-manager }}
+        run: |
+          if [ "$PM" = "pnpm" ]; then
+            pnpm exec prettier --check . || exit 1
+          else
+            npx prettier --check . || exit 1
+          fi
+
+      - name: Run lint (oxlint + ESLint)
+        id: eslint
+        env:
+          PM: ${{ inputs.package-manager }}
+        run: |
+          # Check if lint script exists (should chain oxlint && eslint)
+          if grep -q '"lint"' package.json; then
+            case "$PM" in
+              pnpm) pnpm run lint ;;
+              yarn) yarn lint ;;
+              bun) bun run lint ;;
+              *) npm run lint ;;
+            esac
+          else
+            echo "::warning::No 'lint' script in package.json, running oxlint + eslint directly"
+            npx oxlint --config .oxlintrc.json 2>/dev/null || npx oxlint
+            npx eslint .
+          fi
+
+      - name: Check for legacy Svelte 3/4 patterns
+        id: svelte5
+        if: ${{ !inputs.skip-svelte5-check }}
+        run: |
+          echo "Checking for legacy Svelte 3/4 patterns..."
+          echo ""
+
+          ERRORS=0
+          SRC_DIR="src"
+          [ ! -d "$SRC_DIR" ] && SRC_DIR="."
+
+          # Function to check and report
+          check_pattern() {
+            local pattern="$1"
+            local message="$2"
+            local fix="$3"
+
+            results=$(grep -rn "$pattern" --include="*.svelte" "$SRC_DIR" 2>/dev/null | head -10 || true)
+
+            if [ -n "$results" ]; then
+              echo "::error::$message"
+              echo "  Fix: $fix"
+              echo "$results" | while read -r line; do
+                file=$(echo "$line" | cut -d: -f1)
+                lineno=$(echo "$line" | cut -d: -f2)
+                echo "::error file=$file,line=$lineno::$message"
+              done
+              echo ""
+              return 1
+            fi
+            return 0
+          }
+
+          check_pattern "export let " \
+            "Found 'export let' (legacy props)" \
+            "Use 'let { prop } = \$props()'" || ERRORS=$((ERRORS + 1))
+
+          check_pattern "^\s*\\\$:" \
+            "Found '\$:' reactive statement" \
+            "Use '\$derived()' or '\$effect()'" || ERRORS=$((ERRORS + 1))
+
+          check_pattern " on:[a-z].*=" \
+            "Found 'on:event' directive" \
+            "Use 'onevent={handler}' (e.g., onclick)" || ERRORS=$((ERRORS + 1))
+
+          check_pattern "<slot" \
+            "Found '<slot>' element" \
+            "Use '{@render children()}' with snippets" || ERRORS=$((ERRORS + 1))
+
+          check_pattern "createEventDispatcher" \
+            "Found 'createEventDispatcher'" \
+            "Use callback props instead" || ERRORS=$((ERRORS + 1))
+
+          if [ $ERRORS -gt 0 ]; then
+            echo ""
+            echo "::error::Found $ERRORS type(s) of legacy Svelte patterns"
+            echo "See migration guide: https://svelte.dev/docs/svelte/v5-migration-guide"
+            exit 1
+          else
+            echo "No legacy Svelte patterns found"
+          fi
+
+      - name: Run svelte-check
+        id: svelte-check
+        continue-on-error: ${{ !inputs.fail-on-warnings }}
+        env:
+          PM: ${{ inputs.package-manager }}
+          FAIL_WARNINGS: ${{ inputs.fail-on-warnings }}
+        run: |
+          ARGS="--tsconfig ./tsconfig.json"
+
+          if [ "$FAIL_WARNINGS" = "true" ]; then
+            ARGS="$ARGS --fail-on-warnings"
+          fi
+
+          case "$PM" in
+            pnpm) pnpm exec svelte-check $ARGS ;;
+            yarn) yarn svelte-check $ARGS ;;
+            bun) bunx svelte-check $ARGS ;;
+            *) npx svelte-check $ARGS ;;
+          esac
+
+      # ════════════════════════════════════════════════════════════════
+      # Summary
+      # ════════════════════════════════════════════════════════════════
+
+      - name: Generate summary
+        if: always()
+        env:
+          PROJECT_PATH: ${{ matrix.path }}
+          PRETTIER_RESULT: ${{ steps.prettier.outcome }}
+          ESLINT_RESULT: ${{ steps.eslint.outcome }}
+          SVELTE5_RESULT: ${{ steps.svelte5.outcome }}
+          SVELTECHECK_RESULT: ${{ steps.svelte-check.outcome }}
+          SKIP_SVELTE5: ${{ inputs.skip-svelte5-check }}
+        run: |
+          echo "## Lint Results: \`$PROJECT_PATH\`" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Check | Status |" >> $GITHUB_STEP_SUMMARY
+          echo "|-------|--------|" >> $GITHUB_STEP_SUMMARY
+
+          if [ "$PRETTIER_RESULT" = "success" ]; then
+            echo "| Prettier | Pass |" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "| Prettier | Issues found |" >> $GITHUB_STEP_SUMMARY
+          fi
+
+          if [ "$ESLINT_RESULT" = "success" ]; then
+            echo "| Lint (oxlint + ESLint) | Pass |" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "| Lint (oxlint + ESLint) | Failed |" >> $GITHUB_STEP_SUMMARY
+          fi
+
+          if [ "$SKIP_SVELTE5" = "true" ]; then
+            echo "| Svelte 5 Patterns | Skipped |" >> $GITHUB_STEP_SUMMARY
+          elif [ "$SVELTE5_RESULT" = "success" ]; then
+            echo "| Svelte 5 Patterns | Pass |" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "| Svelte 5 Patterns | Legacy patterns found |" >> $GITHUB_STEP_SUMMARY
+          fi
+
+          if [ "$SVELTECHECK_RESULT" = "success" ]; then
+            echo "| svelte-check | Pass |" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "| svelte-check | Issues found |" >> $GITHUB_STEP_SUMMARY
+          fi
