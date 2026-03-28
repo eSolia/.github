@@ -69,6 +69,7 @@ interface JsonFeed {
 }
 
 interface ArticleFrontmatter {
+  id: string;
   title: string;
   tags: string[];
   canonical_url?: string;
@@ -223,11 +224,15 @@ ${BOLD}Environment:${NC}
 
 ${BOLD}Frontmatter format (for --file/--dir):${NC}
   ---
+  id: 01KMRWJEM0G6DVNQT7QQ5EAHBC
   title: Article Title
   tags: [svelte, typescript, cloudflare]
-  canonical_url: https://example.com/articles/...
+  canonical_url: https://cogley.jp/articles/...
   description: Short description for Dev.to
   ---
+
+  The 'id' field is the cogley.jp article ULID (required).
+  It is used to fetch the OG cover image from api.cogley.jp.
 `);
         process.exit(0);
         break;
@@ -444,12 +449,16 @@ function parseFrontmatter(content: string): { frontmatter: ArticleFrontmatter; b
     }
   }
 
+  if (!fm.id || typeof fm.id !== "string") {
+    throw new Error("Frontmatter must include 'id' (the cogley.jp article ULID, e.g. 01KMRWJEM0G6DVNQT7QQ5EAHBC)");
+  }
   if (!fm.title || typeof fm.title !== "string") {
     throw new Error("Frontmatter must include 'title'");
   }
 
   return {
     frontmatter: {
+      id: fm.id as string,
       title: fm.title as string,
       tags: Array.isArray(fm.tags) ? fm.tags : [],
       canonical_url: (fm.canonical_url as string) || undefined,
@@ -554,6 +563,7 @@ async function main(): Promise<void> {
         description: desc.length > MAX_DESCRIPTION_LENGTH
           ? desc.slice(0, MAX_DESCRIPTION_LENGTH - 1) + "…"
           : desc,
+        coverImage: `${COVER_IMAGE_BASE}/${input.frontmatter.id}.png`,
       });
     }
   } else {
