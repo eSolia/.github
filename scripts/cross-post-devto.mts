@@ -7,7 +7,10 @@
  * Each article includes an attribution footer linking to eSolia.
  *
  * Usage:
- *   npx tsx scripts/cross-post-devto.mts                    # dry-run all articles
+ *   npx tsx scripts/cross-post-devto.mts                    # dry-run all articles from feed
+ *   npx tsx scripts/cross-post-devto.mts --file article.md  # dry-run one local markdown file
+ *   npx tsx scripts/cross-post-devto.mts --file article.md --post  # actually post a local file
+ *   npx tsx scripts/cross-post-devto.mts --dir ./posts      # dry-run all .md files in a directory
  *   npx tsx scripts/cross-post-devto.mts --publish          # post as published (not draft)
  *   npx tsx scripts/cross-post-devto.mts --slug cloudflare-pages-to-workers-migration
  *   npx tsx scripts/cross-post-devto.mts --stream tech      # only articles from "tech" stream
@@ -20,9 +23,9 @@
  *   FEED_URL        Override feed URL (default: https://api.cogley.jp/feed.json)
  */
 
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from "node:fs";
 import { createHash } from "node:crypto";
-import { dirname, join } from "node:path";
+import { basename, dirname, join, resolve } from "node:path";
 
 // ════════════════════════════════════════════════════════════════════════════
 // Colors
@@ -63,6 +66,19 @@ interface JsonFeed {
   home_page_url: string;
   feed_url: string;
   items: FeedItem[];
+}
+
+interface ArticleFrontmatter {
+  title: string;
+  tags: string[];
+  canonical_url?: string;
+  description?: string;
+}
+
+interface ArticleInput {
+  slug: string;
+  frontmatter: ArticleFrontmatter;
+  body: string;
 }
 
 interface DevtoArticlePayload {
@@ -125,6 +141,8 @@ function buildFooter(canonicalUrl: string): string {
 interface CliArgs {
   dryRun: boolean;
   publish: boolean;
+  file: string | null;
+  dir: string | null;
   slug: string | null;
   stream: string | null;
   force: boolean;
@@ -136,6 +154,8 @@ function parseArgs(): CliArgs {
   const opts: CliArgs = {
     dryRun: true,
     publish: false,
+    file: null,
+    dir: null,
     slug: null,
     stream: null,
     force: false,
@@ -149,6 +169,12 @@ function parseArgs(): CliArgs {
         break;
       case "--publish":
         opts.publish = true;
+        break;
+      case "--file":
+        opts.file = args[++i] ?? null;
+        break;
+      case "--dir":
+        opts.dir = args[++i] ?? null;
         break;
       case "--slug":
         opts.slug = args[++i] ?? null;
@@ -169,17 +195,24 @@ function parseArgs(): CliArgs {
       case "--help":
       case "-h":
         console.log(`
-${BOLD}cross-post-devto${NC} — Cross-post cogley.jp articles to Dev.to
+${BOLD}cross-post-devto${NC} — Cross-post articles to Dev.to
 
 ${BOLD}Usage:${NC}
   npx tsx scripts/cross-post-devto.mts [options]
+
+${BOLD}Input (pick one):${NC}
+  --file <path>  Post a single markdown file with YAML frontmatter
+  --dir <path>   Post all .md files in a directory
+  (no input)     Pull from cogley.jp JSON feed (default)
+
+${BOLD}Feed filters (only with feed mode):${NC}
+  --slug <slug>  Only process one article by slug
+  --stream <s>   Filter by _pub.stream (e.g., "tech")
 
 ${BOLD}Options:${NC}
   --dry-run      Show what would be posted (default)
   --post         Actually call the Dev.to API
   --publish      Post as published (default: draft)
-  --slug <slug>  Only process one article by slug
-  --stream <s>   Filter by _pub.stream (e.g., "tech")
   --force        Re-post even if content hash matches
   --update       Update existing articles on Dev.to
   --help, -h     Show this help
@@ -187,6 +220,14 @@ ${BOLD}Options:${NC}
 ${BOLD}Environment:${NC}
   DEVTO_API_KEY  Dev.to API key (required for --post/--update)
   FEED_URL       Override feed URL
+
+${BOLD}Frontmatter format (for --file/--dir):${NC}
+  ---
+  title: Article Title
+  tags: [svelte, typescript, cloudflare]
+  canonical_url: https://example.com/articles/...
+  description: Short description for Dev.to
+  ---
 `);
         process.exit(0);
         break;
@@ -371,6 +412,90 @@ function sleep(ms: number): Promise<void> {
 }
 
 // ════════════════════════════════════════════════════════════════════════════
+// YAML frontmatter parser (minimal, no dependency)
+// ════════════════════════════════════════════════════════════════════════════
+
+function parseFrontmatter(content: string): { frontmatter: ArticleFrontmatter; body: string } {
+  const match = content.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n([\s\S]*)$/);
+  if (!match) {
+    throw new Error("No YAML frontmatter found. File must start with --- and have closing ---");
+  }
+
+  const yamlBlock = match[1];
+  const body = match[2].trim();
+
+  // Simple YAML key: value parser
+  const fm: Record<string, string | string[]> = {};
+  for (const line of yamlBlock.split("\n")) {
+    const kvMatch = line.match(/^(\w+):\s*(.+)$/);
+    if (!kvMatch) continue;
+
+    const [, key, rawValue] = kvMatch;
+    const value = rawValue.trim();
+
+    // Handle array syntax: [tag1, tag2, tag3]
+    if (value.startsWith("[") && value.endsWith("]")) {
+      fm[key] = value
+        .slice(1, -1)
+        .split(",")
+        .map((t) => t.trim().replace(/^["']|["']$/g, ""));
+    } else {
+      fm[key] = value.replace(/^["']|["']$/g, "");
+    }
+  }
+
+  if (!fm.title || typeof fm.title !== "string") {
+    throw new Error("Frontmatter must include 'title'");
+  }
+
+  return {
+    frontmatter: {
+      title: fm.title as string,
+      tags: Array.isArray(fm.tags) ? fm.tags : [],
+      canonical_url: (fm.canonical_url as string) || undefined,
+      description: (fm.description as string) || undefined,
+    },
+    body,
+  };
+}
+
+// ════════════════════════════════════════════════════════════════════════════
+// Input loading (--file / --dir)
+// ════════════════════════════════════════════════════════════════════════════
+
+function loadFromFile(filePath: string): ArticleInput {
+  const absPath = resolve(filePath);
+  if (!existsSync(absPath)) {
+    throw new Error(`File not found: ${absPath}`);
+  }
+
+  const raw = readFileSync(absPath, "utf-8");
+  const { frontmatter, body } = parseFrontmatter(raw);
+  const slug = basename(absPath, ".md");
+
+  return { slug, frontmatter, body };
+}
+
+function loadFromDir(dirPath: string): ArticleInput[] {
+  const absDir = resolve(dirPath);
+  if (!existsSync(absDir)) {
+    throw new Error(`Directory not found: ${absDir}`);
+  }
+
+  const files = readdirSync(absDir).filter((f) => f.endsWith(".md")).sort();
+  if (files.length === 0) {
+    throw new Error(`No .md files found in ${absDir}`);
+  }
+
+  return files.map((f) => loadFromFile(join(absDir, f)));
+}
+
+/** Build Dev.to tags from frontmatter tags (for --file/--dir mode) */
+function buildTagsFromFrontmatter(tags: string[]): string[] {
+  return tags.map(normalizeTag).filter(Boolean).slice(0, MAX_DEVTO_TAGS);
+}
+
+// ════════════════════════════════════════════════════════════════════════════
 // Main
 // ════════════════════════════════════════════════════════════════════════════
 
@@ -390,39 +515,100 @@ async function main(): Promise<void> {
     console.log(`${YELLOW}Dry-run mode${NC} — no API calls will be made. Use --post to submit.\n`);
   }
 
-  // Fetch feed
-  console.log(`${DIM}Fetching ${FEED_URL}...${NC}`);
-  const feedRes = await fetch(FEED_URL);
-  if (!feedRes.ok) {
-    console.error(`${RED}Failed to fetch feed: ${feedRes.status} ${feedRes.statusText}${NC}`);
-    process.exit(1);
-  }
-  const feed = (await feedRes.json()) as JsonFeed;
+  // ── Determine input mode: file/dir or feed ──────────────────────────────
 
-  // Filter to articles
-  let articles = feed.items.filter((item) => item._pub?.type === "article");
-  console.log(`${DIM}Found ${articles.length} article(s) in feed (${feed.items.length} total items)${NC}\n`);
-
-  if (articles.length === 0) {
-    console.log(`${YELLOW}No articles found in feed.${NC}`);
-    return;
+  interface ProcessableArticle {
+    slug: string;
+    title: string;
+    bodyMarkdown: string;
+    canonicalUrl: string;
+    tags: string[];
+    description: string;
+    coverImage?: string;
   }
 
-  // Apply filters
-  if (opts.slug) {
-    articles = articles.filter((item) => extractSlug(item.url) === opts.slug);
-    if (articles.length === 0) {
-      console.error(`${RED}No article found with slug: ${opts.slug}${NC}`);
+  const processable: ProcessableArticle[] = [];
+
+  if (opts.file || opts.dir) {
+    // File/dir mode: load from local markdown with frontmatter
+    let inputs: ArticleInput[];
+    if (opts.file) {
+      inputs = [loadFromFile(opts.file)];
+    } else {
+      inputs = loadFromDir(opts.dir!);
+    }
+    console.log(`${DIM}Loaded ${inputs.length} article(s) from ${opts.file ? "file" : "directory"}${NC}\n`);
+
+    for (const input of inputs) {
+      const cleanedBody = cleanContent(input.body);
+      const canonical = input.frontmatter.canonical_url ?? "";
+      const footer = canonical ? buildFooter(canonical) : "";
+      const desc = input.frontmatter.description ?? "";
+
+      processable.push({
+        slug: input.slug,
+        title: input.frontmatter.title,
+        bodyMarkdown: cleanedBody + footer,
+        canonicalUrl: canonical,
+        tags: buildTagsFromFrontmatter(input.frontmatter.tags),
+        description: desc.length > MAX_DESCRIPTION_LENGTH
+          ? desc.slice(0, MAX_DESCRIPTION_LENGTH - 1) + "…"
+          : desc,
+      });
+    }
+  } else {
+    // Feed mode: fetch from JSON feed
+    console.log(`${DIM}Fetching ${FEED_URL}...${NC}`);
+    const feedRes = await fetch(FEED_URL);
+    if (!feedRes.ok) {
+      console.error(`${RED}Failed to fetch feed: ${feedRes.status} ${feedRes.statusText}${NC}`);
       process.exit(1);
     }
-  }
-  if (opts.stream) {
-    articles = articles.filter((item) => item._pub?.stream === opts.stream);
+    const feed = (await feedRes.json()) as JsonFeed;
+
+    let articles = feed.items.filter((item) => item._pub?.type === "article");
+    console.log(`${DIM}Found ${articles.length} article(s) in feed (${feed.items.length} total items)${NC}\n`);
+
     if (articles.length === 0) {
-      console.error(`${RED}No articles found in stream: ${opts.stream}${NC}`);
-      process.exit(1);
+      console.log(`${YELLOW}No articles found in feed.${NC}`);
+      return;
+    }
+
+    // Apply feed-specific filters
+    if (opts.slug) {
+      articles = articles.filter((item) => extractSlug(item.url) === opts.slug);
+      if (articles.length === 0) {
+        console.error(`${RED}No article found with slug: ${opts.slug}${NC}`);
+        process.exit(1);
+      }
+    }
+    if (opts.stream) {
+      articles = articles.filter((item) => item._pub?.stream === opts.stream);
+      if (articles.length === 0) {
+        console.error(`${RED}No articles found in stream: ${opts.stream}${NC}`);
+        process.exit(1);
+      }
+    }
+
+    for (const item of articles) {
+      const cleanedContent = cleanContent(item.content_text);
+      const description = item.summary.length > MAX_DESCRIPTION_LENGTH
+        ? item.summary.slice(0, MAX_DESCRIPTION_LENGTH - 1) + "…"
+        : item.summary;
+
+      processable.push({
+        slug: extractSlug(item.url),
+        title: item.title,
+        bodyMarkdown: cleanedContent + buildFooter(item.url),
+        canonicalUrl: item.url,
+        tags: buildTags(item),
+        description,
+        coverImage: `${COVER_IMAGE_BASE}/${item.id}.png`,
+      });
     }
   }
+
+  // ── Process articles ────────────────────────────────────────────────────
 
   // Load manifest
   const manifest = loadManifest();
@@ -432,14 +618,13 @@ async function main(): Promise<void> {
   let skipped = 0;
   let errors = 0;
 
-  for (let i = 0; i < articles.length; i++) {
-    const item = articles[i];
-    const slug = extractSlug(item.url);
-    const hash = computeHash(item.title, item.content_text);
-    const existing = manifest.articles[slug];
+  for (let i = 0; i < processable.length; i++) {
+    const art = processable[i];
+    const hash = computeHash(art.title, art.bodyMarkdown);
+    const existing = manifest.articles[art.slug];
 
-    console.log(`${BOLD}[${i + 1}/${articles.length}]${NC} ${item.title}`);
-    console.log(`  ${DIM}slug: ${slug} | hash: ${hash}${NC}`);
+    console.log(`${BOLD}[${i + 1}/${processable.length}]${NC} ${art.title}`);
+    console.log(`  ${DIM}slug: ${art.slug} | hash: ${hash}${NC}`);
 
     // Skip if already posted and hash unchanged (unless --force)
     if (existing && existing.contentHash === hash && !opts.force) {
@@ -454,35 +639,26 @@ async function main(): Promise<void> {
     }
 
     // Build payload
-    const cleanedContent = cleanContent(item.content_text);
-    const bodyWithFooter = cleanedContent + buildFooter(item.url);
-    const tags = buildTags(item);
-    const description = item.summary.length > MAX_DESCRIPTION_LENGTH
-      ? item.summary.slice(0, MAX_DESCRIPTION_LENGTH - 1) + "…"
-      : item.summary;
-
-    const coverImage = `${COVER_IMAGE_BASE}/${item.id}.png`;
-
     const payload: DevtoArticlePayload = {
-      title: item.title,
-      body_markdown: bodyWithFooter,
-      canonical_url: item.url,
-      tags,
-      description,
+      title: art.title,
+      body_markdown: art.bodyMarkdown,
+      canonical_url: art.canonicalUrl,
+      tags: art.tags,
+      description: art.description,
       published: opts.publish,
-      main_image: coverImage,
+      ...(art.coverImage ? { main_image: art.coverImage } : {}),
     };
 
-    console.log(`  ${BLUE}tags:${NC} ${tags.join(", ")}`);
-    console.log(`  ${BLUE}canonical:${NC} ${item.url}`);
-    console.log(`  ${BLUE}cover:${NC} ${coverImage}`);
-    console.log(`  ${BLUE}description:${NC} ${description}`);
+    console.log(`  ${BLUE}tags:${NC} ${art.tags.join(", ")}`);
+    if (art.canonicalUrl) console.log(`  ${BLUE}canonical:${NC} ${art.canonicalUrl}`);
+    if (art.coverImage) console.log(`  ${BLUE}cover:${NC} ${art.coverImage}`);
+    console.log(`  ${BLUE}description:${NC} ${art.description}`);
     console.log(`  ${BLUE}published:${NC} ${opts.publish}`);
-    console.log(`  ${BLUE}body length:${NC} ${bodyWithFooter.length} chars`);
+    console.log(`  ${BLUE}body length:${NC} ${art.bodyMarkdown.length} chars`);
 
     if (opts.dryRun) {
-      // Show first 300 chars of cleaned content
-      const preview = cleanedContent.slice(0, 300);
+      // Show first 300 chars of body
+      const preview = art.bodyMarkdown.slice(0, 300);
       console.log(`  ${DIM}--- preview ---${NC}`);
       console.log(`  ${DIM}${preview.replace(/\n/g, "\n  ")}${NC}`);
       console.log(`  ${DIM}--- end preview ---${NC}`);
@@ -498,7 +674,7 @@ async function main(): Promise<void> {
         // Update existing (--force or --update with known devtoId)
         console.log(`  ${DIM}Updating Dev.to article ${existing.devtoId}...${NC}`);
         const result = await updateDevtoArticle(apiKey, existing.devtoId, payload);
-        manifest.articles[slug] = {
+        manifest.articles[art.slug] = {
           ...existing,
           contentHash: hash,
           updatedAt: new Date().toISOString(),
@@ -509,12 +685,12 @@ async function main(): Promise<void> {
         // Create new
         console.log(`  ${DIM}Creating on Dev.to...${NC}`);
         const result = await createDevtoArticle(apiKey, payload);
-        manifest.articles[slug] = {
+        manifest.articles[art.slug] = {
           devtoId: result.id,
           contentHash: hash,
           postedAt: new Date().toISOString(),
           updatedAt: null,
-          canonical: item.url,
+          canonical: art.canonicalUrl,
         };
         console.log(`  ${GREEN}✓ Created:${NC} ${result.url}`);
         created++;
@@ -528,7 +704,7 @@ async function main(): Promise<void> {
     console.log("");
 
     // Rate limit between API calls
-    if (!opts.dryRun && i < articles.length - 1) {
+    if (!opts.dryRun && i < processable.length - 1) {
       await sleep(RATE_LIMIT_DELAY_MS);
     }
   }
