@@ -1,0 +1,7 @@
+# ast-grep configuration for eSolia SvelteKit/Cloudflare Workers projects
+# Install: npm i -D @ast-grep/cli
+# Usage:   npx sg scan --config scripts/shared/ast-grep-rules/sgconfig.yml
+# CI:      npx sg scan --config scripts/shared/ast-grep-rules/sgconfig.yml --format sarif
+
+ruleDirs:
+  - .

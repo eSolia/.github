@@ -43,6 +43,15 @@ const SYNC_SCRIPTS: SyncEntry[] = [
   { src: "scripts/bump-version.sh", dest: "bump-version.sh" },
   { src: "scripts/update-wrangler.sh", dest: "update-wrangler.sh" },
   { src: "scripts/audit-backpressure.sh", dest: "audit-backpressure.sh" },
+  { src: "scripts/audit-whatsnew.sh", dest: "audit-whatsnew.sh" },
+  { src: "scripts/ast-grep-rules/sgconfig.yml", dest: "ast-grep-rules/sgconfig.yml" },
+  { src: "scripts/ast-grep-rules/sql-injection-d1.yml", dest: "ast-grep-rules/sql-injection-d1.yml" },
+  { src: "scripts/ast-grep-rules/sql-injection-concat.yml", dest: "ast-grep-rules/sql-injection-concat.yml" },
+  { src: "scripts/ast-grep-rules/n-plus-one-query.yml", dest: "ast-grep-rules/n-plus-one-query.yml" },
+  { src: "scripts/ast-grep-rules/unchecked-db-result.yml", dest: "ast-grep-rules/unchecked-db-result.yml" },
+  { src: "scripts/ast-grep-rules/unbounded-query.yml", dest: "ast-grep-rules/unbounded-query.yml" },
+  { src: "scripts/ast-grep-rules/empty-error-handler.yml", dest: "ast-grep-rules/empty-error-handler.yml" },
+  { src: "scripts/ast-grep-rules/god-function.yml", dest: "ast-grep-rules/god-function.yml" },
   { src: "scripts/sync.sh", dest: "sync.sh" },
   { src: "scripts/sync.ts", dest: "sync.ts" },
   { src: "scripts/asvs-check.ts", dest: "asvs-check.ts" },
@@ -70,6 +79,10 @@ const SYNC_COMMANDS: SyncEntry[] = [
   {
     src: ".claude/shared-commands/dev/svelte-patterns.md",
     dest: "dev/svelte-patterns.md",
+  },
+  {
+    src: ".claude/shared-commands/dev/whatsnew-report.md",
+    dest: "dev/whatsnew-report.md",
   },
   {
     src: ".claude/shared-commands/security/audit-github-actions.md",
@@ -104,6 +117,7 @@ const SYNC_RULES: SyncEntry[] = [
     dest: "backpressure-verify.md",
   },
   { src: ".claude/shared-rules/d1-maintenance.md", dest: "d1-maintenance.md" },
+  { src: ".claude/shared-rules/whatsnew-check.md", dest: "whatsnew-check.md" },
   {
     src: ".claude/shared-rules/mermaid-diagrams.md",
     dest: "mermaid-diagrams.md",
@@ -114,6 +128,7 @@ const WRAPPER_SCRIPTS = [
   "bump-version.sh",
   "update-wrangler.sh",
   "audit-backpressure.sh",
+  "audit-whatsnew.sh",
 ];
 
 // ════════════════════════════════════════════════════════════════════════════
@@ -432,6 +447,9 @@ async function main() {
     "    ./scripts/audit-backpressure.sh        # Backpressure audit",
   );
   console.log(
+    "    ./scripts/audit-whatsnew.sh             # What's new audit",
+  );
+  console.log(
     "    npx tsx scripts/shared/submit-bing.mts  # Bing URL submission",
   );
   console.log(
@@ -463,6 +481,9 @@ async function main() {
     );
     console.log(
       "    /dev:svelte-review                    # Svelte 5 best practices review",
+  );
+  console.log(
+    "    /dev:whatsnew-report                   # SvelteKit + Cloudflare updates",
     );
     console.log(
       "    /security:audit-github-actions        # GitHub Actions security audit",
@@ -489,6 +510,9 @@ async function main() {
     );
     console.log(
       "    d1-maintenance                        # D1 database best practices",
+  );
+  console.log(
+    "    whatsnew-check                         # Platform update awareness",
     );
     console.log(
       "    mermaid-diagrams                      # Compact diagram styling",

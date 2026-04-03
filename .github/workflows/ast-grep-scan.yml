@@ -1,0 +1,172 @@
+# ============================================================================
+# Reusable ast-grep Structural Scan Workflow
+# ============================================================================
+#
+# Runs ast-grep rules against the codebase to catch structural antipatterns
+# that oxlint/ESLint cannot express: N+1 queries, SQL injection via template
+# literals, unchecked D1 mutations, unbounded queries, empty catch blocks.
+#
+# Usage in calling repo:
+#
+#   jobs:
+#     ast-grep:
+#       uses: eSolia/.github/.github/workflows/ast-grep-scan.yml@main
+#       with:
+#         source-paths: 'src/'
+#
+# Rules are synced from esolia.github into scripts/shared/ast-grep-rules/
+# via sync.ts. If the rules directory is missing, the workflow will sync it.
+#
+# InfoSec: All inputs are passed via env: to prevent command injection (CWE-78)
+# ============================================================================
+
+name: ast-grep Structural Scan
+
+on:
+  workflow_call:
+    inputs:
+      node-version:
+        description: 'Node.js version'
+        required: false
+        type: string
+        default: '22'
+      source-paths:
+        description: 'Space-separated paths to scan'
+        required: false
+        type: string
+        default: 'src/'
+      fail-on-error:
+        description: 'Fail the workflow if error-severity findings exist'
+        required: false
+        type: boolean
+        default: true
+      fail-on-warning:
+        description: 'Fail the workflow if warning-severity findings exist'
+        required: false
+        type: boolean
+        default: false
+      upload-sarif:
+        description: 'Upload SARIF to GitHub Code Scanning (requires code-scanning write permission)'
+        required: false
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+  security-events: write
+
+jobs:
+  scan:
+    name: ast-grep Scan
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: ${{ inputs.node-version }}
+
+      - name: Install ast-grep
+        run: npm install -g @ast-grep/cli
+
+      - name: Locate rules
+        id: rules
+        env:
+          INPUT_PATHS: ${{ inputs.source-paths }}
+        run: |
+          # Check for synced rules first, then fallback locations
+          if [ -d "scripts/shared/ast-grep-rules" ] && [ -f "scripts/shared/ast-grep-rules/sgconfig.yml" ]; then
+            echo "config=scripts/shared/ast-grep-rules/sgconfig.yml" >> "$GITHUB_OUTPUT"
+            echo "found=true" >> "$GITHUB_OUTPUT"
+          elif [ -d "ast-grep-rules" ] && [ -f "ast-grep-rules/sgconfig.yml" ]; then
+            echo "config=ast-grep-rules/sgconfig.yml" >> "$GITHUB_OUTPUT"
+            echo "found=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "::warning::No ast-grep rules found. Run sync.ts to fetch shared rules."
+            echo "found=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Run ast-grep scan
+        if: steps.rules.outputs.found == 'true'
+        id: scan
+        env:
+          CONFIG_PATH: ${{ steps.rules.outputs.config }}
+          FAIL_ON_ERROR: ${{ inputs.fail-on-error }}
+          FAIL_ON_WARNING: ${{ inputs.fail-on-warning }}
+        run: |
+          echo "## ast-grep Structural Scan" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+
+          # Run scan and capture output
+          set +e
+          sg scan --config "$CONFIG_PATH" --format json > /tmp/sg-results.json 2>&1
+          SCAN_EXIT=$?
+          set -e
+
+          # Parse results
+          ERROR_COUNT=$(jq '[.[] | select(.severity == "error")] | length' /tmp/sg-results.json 2>/dev/null || echo "0")
+          WARN_COUNT=$(jq '[.[] | select(.severity == "warning")] | length' /tmp/sg-results.json 2>/dev/null || echo "0")
+          INFO_COUNT=$(jq '[.[] | select(.severity == "hint" or .severity == "info")] | length' /tmp/sg-results.json 2>/dev/null || echo "0")
+          TOTAL=$((ERROR_COUNT + WARN_COUNT + INFO_COUNT))
+
+          echo "| Severity | Count |" >> "$GITHUB_STEP_SUMMARY"
+          echo "|----------|-------|" >> "$GITHUB_STEP_SUMMARY"
+          echo "| Error    | $ERROR_COUNT |" >> "$GITHUB_STEP_SUMMARY"
+          echo "| Warning  | $WARN_COUNT |" >> "$GITHUB_STEP_SUMMARY"
+          echo "| Info     | $INFO_COUNT |" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+
+          if [ "$TOTAL" -eq 0 ]; then
+            echo "✅ No structural issues found." >> "$GITHUB_STEP_SUMMARY"
+          else
+            # Show findings in summary
+            echo "### Findings" >> "$GITHUB_STEP_SUMMARY"
+            echo '```' >> "$GITHUB_STEP_SUMMARY"
+            sg scan --config "$CONFIG_PATH" 2>&1 | head -100 >> "$GITHUB_STEP_SUMMARY"
+            echo '```' >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+          # Determine exit code
+          if [ "$FAIL_ON_ERROR" = "true" ] && [ "$ERROR_COUNT" -gt 0 ]; then
+            echo "::error::Found $ERROR_COUNT error-severity structural issues"
+            echo "should_fail=true" >> "$GITHUB_OUTPUT"
+          elif [ "$FAIL_ON_WARNING" = "true" ] && [ "$WARN_COUNT" -gt 0 ]; then
+            echo "::error::Found $WARN_COUNT warning-severity structural issues"
+            echo "should_fail=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "should_fail=false" >> "$GITHUB_OUTPUT"
+          fi
+
+          echo "total=$TOTAL" >> "$GITHUB_OUTPUT"
+          echo "errors=$ERROR_COUNT" >> "$GITHUB_OUTPUT"
+          echo "warnings=$WARN_COUNT" >> "$GITHUB_OUTPUT"
+
+      - name: Generate SARIF
+        if: steps.rules.outputs.found == 'true' && inputs.upload-sarif
+        env:
+          CONFIG_PATH: ${{ steps.rules.outputs.config }}
+        run: |
+          sg scan --config "$CONFIG_PATH" --format sarif > /tmp/sg-sarif.json 2>/dev/null || true
+
+      - name: Upload SARIF
+        if: steps.rules.outputs.found == 'true' && inputs.upload-sarif
+        uses: github/codeql-action/upload-sarif@ff0a06e83cb2de871e5a09832bc6a81e7276941f # v3.28.18
+        with:
+          sarif_file: /tmp/sg-sarif.json
+          category: ast-grep
+        continue-on-error: true
+
+      - name: Upload results artifact
+        if: steps.rules.outputs.found == 'true' && steps.scan.outputs.total != '0'
+        uses: actions/upload-artifact@ea165f8d65b6db9b8a1f7e126e6c37a8cdc148fe # v4.6.2
+        with:
+          name: ast-grep-results
+          path: /tmp/sg-results.json
+          retention-days: 30
+
+      - name: Fail on findings
+        if: steps.scan.outputs.should_fail == 'true'
+        run: exit 1

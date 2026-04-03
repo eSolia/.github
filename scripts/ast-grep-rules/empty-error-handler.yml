@@ -1,0 +1,17 @@
+# Detect empty catch blocks that silently swallow errors
+# In Workers there is no long-lived process to crash — silent failures
+# mean data loss or broken state with no signal.
+id: empty-catch-block
+language: TypeScript
+severity: warning
+message: >-
+  Empty catch block silently swallows errors. At minimum, log the error
+  or re-throw. In Workers, silent failures are especially dangerous
+  because there is no process crash to surface the problem.
+rule:
+  kind: catch_clause
+  has:
+    kind: statement_block
+    not:
+      has:
+        kind: expression_statement

@@ -1,0 +1,9 @@
+# Detect SQL injection via string concatenation in prepare() calls
+id: sql-injection-concat
+language: TypeScript
+severity: error
+message: >-
+  SQL injection risk: string concatenation in db.prepare(). Use parameterized
+  queries with .bind() instead of concatenating values into SQL strings.
+rule:
+  pattern: $DB.prepare($LEFT + $RIGHT)
