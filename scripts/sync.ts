@@ -124,6 +124,13 @@ const SYNC_RULES: SyncEntry[] = [
   },
 ];
 
+const SYNC_WORKFLOWS: SyncEntry[] = [
+  {
+    src: ".github/shared-caller-workflows/ast-grep.yml",
+    dest: "ast-grep.yml",
+  },
+];
+
 const WRAPPER_SCRIPTS = [
   "bump-version.sh",
   "update-wrangler.sh",
@@ -405,6 +412,14 @@ async function main() {
       await downloadFiles(SYNC_RULES, rulesDir);
       console.log();
     }
+
+    if (SYNC_WORKFLOWS.length > 0) {
+      const workflowsDir = join(PROJECT_ROOT, ".github", "workflows");
+      mkdirSync(workflowsDir, { recursive: true });
+      step("Syncing shared workflows to .github/workflows/");
+      await downloadFiles(SYNC_WORKFLOWS, workflowsDir);
+      console.log();
+    }
   }
 
   // 3. Write .scriptversion
@@ -516,6 +531,11 @@ async function main() {
     );
     console.log(
       "    mermaid-diagrams                      # Compact diagram styling",
+    );
+    console.log();
+    console.log("  Workflows (in .github/workflows/):");
+    console.log(
+      "    ast-grep.yml                          # Structural scan (PR only)",
     );
   }
   console.log();

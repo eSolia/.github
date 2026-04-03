@@ -1,0 +1,19 @@
+# ============================================================================
+# ast-grep Structural Scan — Caller Workflow
+# Synced from eSolia/.github via sync.ts — do not edit directly
+# ============================================================================
+
+name: ast-grep
+
+on:
+  pull_request:
+    branches: [main, develop]
+    paths: ['src/**', '*.ts', '*.js', '*.svelte']
+
+jobs:
+  scan:
+    uses: eSolia/.github/.github/workflows/ast-grep-scan.yml@main
+    with:
+      source-paths: 'src/'
+      fail-on-error: true
+      fail-on-warning: false
