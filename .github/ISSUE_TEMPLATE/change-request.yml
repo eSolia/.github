@@ -1,0 +1,68 @@
+name: Change Request
+description: Request a code, content, or configuration change (ISO 27001 traceable)
+title: "[type]: short description"
+labels: ["change-request"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this template for all planned changes. The issue creates the audit trail required by ISO 27001 change management controls.
+  - type: dropdown
+    id: change-type
+    attributes:
+      label: Change Type
+      options:
+        - feat — New feature or capability
+        - fix — Bug fix or correction
+        - docs — Documentation only
+        - style — Formatting, writing standards, no behavior change
+        - refactor — Code restructure, no behavior change
+        - test — Adding or updating tests
+        - chore — Build, CI, dependency, or tooling change
+        - security — Security fix or hardening
+    validations:
+      required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: What needs to change and why.
+      placeholder: |
+        Describe the change, its motivation, and any relevant context.
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance-criteria
+    attributes:
+      label: Acceptance Criteria
+      description: How do we know this is done?
+      placeholder: |
+        - [ ] Criterion 1
+        - [ ] Criterion 2
+        - [ ] pnpm run verify passes
+    validations:
+      required: true
+  - type: dropdown
+    id: security-impact
+    attributes:
+      label: Security / Privacy Impact
+      description: Does this change affect security posture, data handling, or privacy?
+      options:
+        - None — no security/privacy impact
+        - Low — cosmetic or indirect (e.g., dependency bump, content change)
+        - Medium — touches auth, input handling, headers, or config
+        - High — new auth flow, data handling, API endpoint, or secret management
+    validations:
+      required: true
+  - type: textarea
+    id: security-notes
+    attributes:
+      label: Security / Privacy Notes
+      description: If impact is Low or above, describe what's affected and any mitigations.
+      placeholder: |
+        e.g., "Updates lodash to fix prototype pollution CVE-2026-XXXX. No application-level exposure but dependency was flagged by Dependabot."
+  - type: textarea
+    id: notes
+    attributes:
+      label: Additional Notes
+      description: Architecture decisions, constraints, references, related issues.
