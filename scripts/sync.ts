@@ -60,69 +60,12 @@ const SYNC_SCRIPTS: SyncEntry[] = [
   { src: "scripts/cross-post-qiita.mts", dest: "cross-post-qiita.mts" },
 ];
 
-const SYNC_COMMANDS: SyncEntry[] = [
-  { src: ".claude/shared-commands/CLAUDE.md", dest: "CLAUDE.md" },
-  {
-    src: ".claude/shared-commands/backpressure-review.md",
-    dest: "backpressure-review.md",
-  },
-  { src: ".claude/shared-commands/seo-setup.md", dest: "seo-setup.md" },
-  { src: ".claude/shared-commands/seo-report.md", dest: "seo-report.md" },
-  { src: ".claude/shared-commands/checkpoint.md", dest: "checkpoint.md" },
-  { src: ".claude/shared-commands/commit-style.md", dest: "commit-style.md" },
-  { src: ".claude/shared-commands/dev/d1-health.md", dest: "dev/d1-health.md" },
-  { src: ".claude/shared-commands/dev/preflight.md", dest: "dev/preflight.md" },
-  {
-    src: ".claude/shared-commands/dev/svelte-review.md",
-    dest: "dev/svelte-review.md",
-  },
-  {
-    src: ".claude/shared-commands/dev/svelte-patterns.md",
-    dest: "dev/svelte-patterns.md",
-  },
-  {
-    src: ".claude/shared-commands/dev/whatsnew-report.md",
-    dest: "dev/whatsnew-report.md",
-  },
-  {
-    src: ".claude/shared-commands/security/audit-github-actions.md",
-    dest: "security/audit-github-actions.md",
-  },
-  {
-    src: ".claude/shared-commands/security/harden-github-org.md",
-    dest: "security/harden-github-org.md",
-  },
-  {
-    src: ".claude/shared-commands/standards/check.md",
-    dest: "standards/check.md",
-  },
-  {
-    src: ".claude/shared-commands/standards/list.md",
-    dest: "standards/list.md",
-  },
-  {
-    src: ".claude/shared-commands/standards/search.md",
-    dest: "standards/search.md",
-  },
-  {
-    src: ".claude/shared-commands/standards/writing.md",
-    dest: "standards/writing.md",
-  },
-];
-
-const SYNC_RULES: SyncEntry[] = [
-  { src: ".claude/shared-rules/CLAUDE.md", dest: "CLAUDE.md" },
-  {
-    src: ".claude/shared-rules/backpressure-verify.md",
-    dest: "backpressure-verify.md",
-  },
-  { src: ".claude/shared-rules/d1-maintenance.md", dest: "d1-maintenance.md" },
-  { src: ".claude/shared-rules/whatsnew-check.md", dest: "whatsnew-check.md" },
-  {
-    src: ".claude/shared-rules/mermaid-diagrams.md",
-    dest: "mermaid-diagrams.md",
-  },
-];
+// Commands and rules are auto-discovered from the GitHub repo at sync time.
+// Add new files to .claude/shared-commands/ or .claude/shared-rules/ in
+// eSolia/.github and they will be picked up automatically — no need to
+// edit this script.
+const SHARED_COMMANDS_PATH = ".claude/shared-commands";
+const SHARED_RULES_PATH = ".claude/shared-rules";
 
 const SYNC_WORKFLOWS: SyncEntry[] = [
   {
@@ -221,6 +164,46 @@ const SCRIPTVERSION_FILE = join(SHARED_DIR, ".scriptversion");
 // ════════════════════════════════════════════════════════════════════════════
 // Helpers
 // ════════════════════════════════════════════════════════════════════════════
+
+interface GitHubContentEntry {
+  name: string;
+  path: string;
+  type: "file" | "dir";
+  download_url: string | null;
+}
+
+/**
+ * Auto-discover files in a remote directory via the GitHub Contents API.
+ * Recurses into subdirectories so nested structures (e.g. commands/dev/)
+ * are picked up automatically.
+ */
+async function discoverRemoteFiles(
+  remotePath: string,
+  gitRef: string,
+): Promise<SyncEntry[]> {
+  const url = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${remotePath}?ref=${gitRef}`;
+  const response = await fetch(url);
+  if (!response.ok) {
+    error(
+      `Failed to list ${remotePath}: ${response.status} ${response.statusText}`,
+    );
+    return [];
+  }
+  const items: GitHubContentEntry[] = await response.json();
+  const entries: SyncEntry[] = [];
+
+  for (const item of items) {
+    if (item.type === "dir") {
+      const subEntries = await discoverRemoteFiles(item.path, gitRef);
+      entries.push(...subEntries);
+    } else if (item.type === "file") {
+      const dest = item.path.replace(`${remotePath}/`, "");
+      entries.push({ src: item.path, dest });
+    }
+  }
+
+  return entries;
+}
 
 function getRemoteCommit(gitRef: string): string {
   try {
@@ -394,22 +377,37 @@ async function main() {
   await downloadFiles(SYNC_SCRIPTS, SHARED_DIR);
   console.log();
 
-  // 2. Sync commands and rules (unless --scripts-only)
+  // 2. Sync commands, rules, and workflows (unless --scripts-only)
+  let syncedCommands: SyncEntry[] = [];
+  let syncedRules: SyncEntry[] = [];
+
   if (!scriptsOnly) {
     const commandsDir = join(PROJECT_ROOT, ".claude", "commands");
     const rulesDir = join(PROJECT_ROOT, ".claude", "rules");
 
-    if (SYNC_COMMANDS.length > 0) {
+    // Auto-discover commands from the central repo
+    step("Discovering shared commands...");
+    syncedCommands = await discoverRemoteFiles(SHARED_COMMANDS_PATH, ref);
+    if (syncedCommands.length > 0) {
       mkdirSync(commandsDir, { recursive: true });
-      step("Syncing shared commands to .claude/commands/");
-      await downloadFiles(SYNC_COMMANDS, commandsDir);
+      step(`Syncing ${syncedCommands.length} commands to .claude/commands/`);
+      await downloadFiles(syncedCommands, commandsDir);
+      console.log();
+    } else {
+      warning("No shared commands found");
       console.log();
     }
 
-    if (SYNC_RULES.length > 0) {
+    // Auto-discover rules from the central repo
+    step("Discovering shared rules...");
+    syncedRules = await discoverRemoteFiles(SHARED_RULES_PATH, ref);
+    if (syncedRules.length > 0) {
       mkdirSync(rulesDir, { recursive: true });
-      step("Syncing shared rules to .claude/rules/");
-      await downloadFiles(SYNC_RULES, rulesDir);
+      step(`Syncing ${syncedRules.length} rules to .claude/rules/`);
+      await downloadFiles(syncedRules, rulesDir);
+      console.log();
+    } else {
+      warning("No shared rules found");
       console.log();
     }
 
@@ -471,72 +469,36 @@ async function main() {
     "    npx tsx scripts/shared/cross-post-qiita.mts # Cross-post to Qiita",
   );
   if (!scriptsOnly) {
-    console.log();
-    console.log("  Commands (in .claude/commands/):");
-    console.log(
-      "    /backpressure-review                  # SvelteKit quality review",
-    );
-    console.log(
-      "    /seo-setup                            # SEO checklist + setup",
-    );
-    console.log(
-      "    /seo-report                           # SEO dashboard report + fixes",
-    );
-    console.log(
-      "    /checkpoint                           # Save session checkpoint",
-    );
-    console.log(
-      "    /commit-style                         # Conventional commit reference",
-    );
-    console.log(
-      "    /dev:d1-health                        # D1 database health audit",
-    );
-    console.log(
-      "    /dev:preflight                        # Show preflight checks",
-    );
-    console.log(
-      "    /dev:svelte-review                    # Svelte 5 best practices review",
-  );
-  console.log(
-    "    /dev:whatsnew-report                   # SvelteKit + Cloudflare updates",
-    );
-    console.log(
-      "    /security:audit-github-actions        # GitHub Actions security audit",
-    );
-    console.log(
-      "    /security:harden-github-org           # GitHub org hardening",
-    );
-    console.log(
-      "    /standards:check                      # Review code against standards",
-    );
-    console.log(
-      "    /standards:list                       # List all eSolia standards",
-    );
-    console.log(
-      "    /standards:search                     # Search standards by keyword",
-    );
-    console.log(
-      "    /standards:writing                    # Review content against writing guides",
-    );
-    console.log();
-    console.log("  Rules (in .claude/rules/):");
-    console.log(
-      "    backpressure-verify                   # Auto-verify after code changes",
-    );
-    console.log(
-      "    d1-maintenance                        # D1 database best practices",
-  );
-  console.log(
-    "    whatsnew-check                         # Platform update awareness",
-    );
-    console.log(
-      "    mermaid-diagrams                      # Compact diagram styling",
-    );
-    console.log();
-    console.log("  Workflows (in .github/workflows/):");
-    console.log(
-      "    ast-grep.yml                          # Structural scan (PR only)",
-    );
+    if (syncedCommands.length > 0) {
+      console.log();
+      console.log(
+        `  Commands (${syncedCommands.length} synced to .claude/commands/):`,
+      );
+      for (const cmd of syncedCommands) {
+        if (cmd.dest === "CLAUDE.md") continue;
+        const name = cmd.dest.replace(/\.md$/, "").replace(/\//g, ":");
+        console.log(`    /${name}`);
+      }
+    }
+
+    if (syncedRules.length > 0) {
+      console.log();
+      console.log(
+        `  Rules (${syncedRules.length} synced to .claude/rules/):`,
+      );
+      for (const rule of syncedRules) {
+        if (rule.dest === "CLAUDE.md") continue;
+        console.log(`    ${rule.dest.replace(/\.md$/, "")}`);
+      }
+    }
+
+    if (SYNC_WORKFLOWS.length > 0) {
+      console.log();
+      console.log("  Workflows (in .github/workflows/):");
+      for (const wf of SYNC_WORKFLOWS) {
+        console.log(`    ${wf.dest}`);
+      }
+    }
   }
   console.log();
   console.log("  Maintenance:");
