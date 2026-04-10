@@ -17,8 +17,10 @@ import {
   chmodSync,
   existsSync,
   mkdirSync,
+  readdirSync,
   readFileSync,
   statSync,
+  unlinkSync,
   writeFileSync,
 } from "node:fs";
 import { dirname, join } from "node:path";
@@ -292,6 +294,43 @@ exec "$SCRIPT_DIR/shared/${name}" "$@"
   success(`Created wrapper: scripts/${name}`);
 }
 
+/**
+ * Remove local files that were previously synced but no longer exist in the
+ * remote source. Compares the files on disk against the list of files just
+ * discovered from the remote, and deletes any extras.
+ *
+ * Skips:
+ *  - CLAUDE.md (the directory's own readme, always synced separately)
+ *  - Files inside a "local/" subdirectory (repo-specific, never synced)
+ */
+function cleanupStaleFiles(
+  targetDir: string,
+  syncedEntries: SyncEntry[],
+  label: string,
+): void {
+  if (!existsSync(targetDir)) return;
+
+  const remoteDests = new Set(syncedEntries.map((e) => e.dest));
+
+  function walkDir(dir: string, prefix: string): void {
+    for (const entry of readdirSync(dir, { withFileTypes: true })) {
+      const relPath = prefix ? `${prefix}/${entry.name}` : entry.name;
+
+      // Never touch local/ subdirectories
+      if (entry.isDirectory() && entry.name === "local") continue;
+
+      if (entry.isDirectory()) {
+        walkDir(join(dir, entry.name), relPath);
+      } else if (!remoteDests.has(relPath)) {
+        unlinkSync(join(dir, entry.name));
+        warning(`Removed stale ${label}: ${relPath}`);
+      }
+    }
+  }
+
+  walkDir(targetDir, "");
+}
+
 function addToGitignore(): void {
   const gitignorePath = join(PROJECT_ROOT, ".gitignore");
   if (existsSync(gitignorePath)) {
@@ -418,6 +457,12 @@ async function main() {
       await downloadFiles(SYNC_WORKFLOWS, workflowsDir);
       console.log();
     }
+
+    // Remove files that no longer exist in the remote
+    step("Cleaning up stale synced files...");
+    cleanupStaleFiles(commandsDir, syncedCommands, "command");
+    cleanupStaleFiles(rulesDir, syncedRules, "rule");
+    console.log();
   }
 
   // 3. Write .scriptversion
