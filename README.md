@@ -110,31 +110,11 @@ Every eSolia repository can pull centralized scripts, Claude Code slash commands
 | `submit-bing.mts` | Bing Webmaster URL submission (any site) |
 | `sync-all.sh` | Sync all consumer repos at once (run from esolia.github) |
 
-**Claude Code Commands** (to `.claude/commands/`):
+**Claude Code Commands** (to `.claude/commands/`) — **auto-discovered**. Any `.md` file in `.claude/shared-commands/` (including subdirectories) is synced automatically. No need to edit `sync.ts`.
 
-| Command | Description |
-|---------|-------------|
-| `/backpressure-review` | Deep SvelteKit quality review |
-| `/seo-setup` | SEO checklist and setup |
-| `/checkpoint` | Save session checkpoint to `docs/checkpoints/` |
-| `/commit-style` | Conventional commit and InfoSec reference |
-| `/dev:d1-health` | Cloudflare D1 database health audit |
-| `/dev:preflight` | Show preflight checks for current project |
-| `/dev:svelte-review` | Review code against Svelte 5 best practices |
-| `/security:audit-github-actions` | GitHub Actions security audit |
-| `/security:harden-github-org` | GitHub org and repo hardening |
-| `/standards:check` | Review code against eSolia coding standards |
-| `/standards:list` | List all eSolia standards |
-| `/standards:search` | Search standards by keyword |
-| `/standards:writing` | Review content against eSolia writing guides |
+**Claude Code Rules** (to `.claude/rules/`) — **auto-discovered**. Any `.md` file in `.claude/shared-rules/` is synced automatically. No need to edit `sync.ts`.
 
-**Claude Code Rules** (to `.claude/rules/`):
-
-| Rule | Triggers On |
-|------|-------------|
-| `backpressure-verify` | SvelteKit code changes — auto-runs verify |
-| `d1-maintenance` | D1/wrangler/schema files — enforces indexing and query practices |
-| `mermaid-diagrams` | Markdown/mermaid files — enforces compact styling |
+Files removed from the central repo are automatically deleted from consumer repos on next sync. Repo-specific commands and rules in `local/` subdirectories are never touched.
 
 ### Sync Distribution Architecture
 
@@ -145,9 +125,9 @@ flowchart TD
 
   subgraph assets["What Gets Distributed"]
     direction LR
-    Scripts["Scripts<br/><i>5 shell + 1 TS</i>"]
-    Commands["Commands<br/><i>13 slash commands</i>"]
-    Rules["Rules<br/><i>3 auto-trigger rules</i>"]
+    Scripts["Scripts<br/><i>shell + TS</i>"]
+    Commands["Commands<br/><i>auto-discovered</i>"]
+    Rules["Rules<br/><i>auto-discovered</i>"]
   end
 
   subgraph repos["Consumer Repos (9)"]
@@ -198,10 +178,11 @@ npx tsx scripts/shared/sync.ts          # cross-platform
 
 1. Downloads scripts from this repo into `scripts/shared/` (gitignored)
 2. Creates thin wrapper scripts in `scripts/` that delegate to `scripts/shared/`
-3. Downloads Claude commands into `.claude/commands/`
-4. Downloads Claude rules into `.claude/rules/`
-5. Writes a `.scriptversion` file for staleness checking
-6. Adds `scripts/shared/` to `.gitignore` if not already there
+3. Auto-discovers and downloads Claude commands into `.claude/commands/`
+4. Auto-discovers and downloads Claude rules into `.claude/rules/`
+5. Removes stale commands/rules that no longer exist in the central repo
+6. Writes a `.scriptversion` file for staleness checking
+7. Adds `scripts/shared/` to `.gitignore` if not already there
 
 The wrapper pattern means your repo only commits the 4-line wrapper, not the full script. Updates flow through `sync.sh`/`sync.ts`.
 
