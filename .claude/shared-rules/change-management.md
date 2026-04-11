@@ -29,6 +29,7 @@ Fast-track changes still require:
 - A descriptive conventional commit message
 - The InfoSec/quality annotation line
 - Post-push CI verification
+- The `FAST_TRACK=1` env var to bypass the pre-commit hook: `FAST_TRACK=1 git commit -m "fix: ..."`
 
 ## Conventional Commits
 
