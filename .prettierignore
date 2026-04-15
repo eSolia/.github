@@ -1,0 +1,6 @@
+node_modules/
+dist/
+_site/
+.wrangler/
+*.min.js
+deno.lock

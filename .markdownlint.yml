@@ -1,0 +1,19 @@
+# Markdownlint config
+# CJK-aware punctuation support for bilingual content
+
+default: true
+
+MD013:
+  line_length: 200
+  heading_line_length: 120
+  code_block_line_length: 200
+
+MD033: false
+MD034: false
+MD036: false
+
+MD024:
+  siblings_only: true
+
+MD026:
+  punctuation: ".,;:!。，；：！"
