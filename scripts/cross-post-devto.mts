@@ -480,9 +480,22 @@ function loadFromFile(filePath: string): ArticleInput {
 
   const raw = readFileSync(absPath, "utf-8");
   const { frontmatter, body } = parseFrontmatter(raw);
-  const slug = basename(absPath, ".md");
+  const slug = deriveSlug(absPath);
 
   return { slug, frontmatter, body };
+}
+
+// Derive a manifest key from the file path. When the markdown file follows the
+// convention {article-slug}/devto.md, basename() alone gives "devto", which
+// collides across articles and causes silent overwrites in --update mode.
+// Fall back to the parent directory name for generic filenames; otherwise use
+// the filename as before (backwards-compatible for standalone .md files).
+function deriveSlug(absPath: string): string {
+  const base = basename(absPath, ".md");
+  if (base === "devto" || base === "qiita") {
+    return basename(dirname(absPath));
+  }
+  return base;
 }
 
 function loadFromDir(dirPath: string): ArticleInput[] {
