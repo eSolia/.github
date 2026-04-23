@@ -1,6 +1,6 @@
 [![Proven.lol Lightweight Proof](https://img.shields.io/badge/Proven.lol-Lightweight_Proof-green?style=flat-square&logo=cachet)](https://proven.lol/fbd788)
 
-**Last Updated:** April 23rd, 2026 at 1:47:03 AM GMT+9 &nbsp; **Today is:** Friday, April 24, 2026
+**Last Updated:** April 24th, 2026 at 4:34:50 AM GMT+9 &nbsp; **Today is:** Friday, April 24, 2026
 
 
 ## Welcome 👋
@@ -89,7 +89,7 @@ flowchart LR
 
 ### Centralized Security Scanning
 
-We maintain a **reusable security workflow** ([`security.yml`](.github/workflows/security.yml)) that runs OWASP-aligned checks across all repositories on every PR, push to main, and weekly:
+Every eSolia repository runs the same OWASP-aligned scanner set on every PR, every push to `main`, and on a weekly schedule. Shared pipeline, uniform coverage:
 
 ```mermaid
 %%{init: {'flowchart': {'nodeSpacing': 25, 'rankSpacing': 35, 'padding': 6, 'curve': 'basis'}}}%%
@@ -111,23 +111,19 @@ flowchart LR
     Lint["ESLint<br/><i>code quality</i>"]
   end
 
-  subgraph out["Output"]
-    Summary["GitHub Summary<br/>+ Artifacts"]
+  subgraph evidence["Signed Evidence"]
+    Syft["Syft SBOM"]
+    Cosign["Cosign keyless<br/>→ Rekor log"]
+    Policy["OPA policy<br/>decision"]
   end
 
   PR --> scanners
   Push --> scanners
   Cron --> scanners
-  scanners --> out
+  scanners --> evidence
 ```
 
-Any repository can adopt this workflow with minimal configuration:
-
-```yaml
-jobs:
-  security:
-    uses: eSolia/.github/.github/workflows/security.yml@main
-```
+Scan results feed a signed evidence bundle — SBOM, policy decision, and manifest are signed keyless via [Sigstore Cosign](https://docs.sigstore.dev/cosign/overview/) and recorded in the [Rekor transparency log](https://docs.sigstore.dev/rekor/overview/), giving each build a verifiable ISO 27001 change-management trail.
 
 <details>
 <summary><strong>ISO 27001:2022 Annex A Control 8.25 Compliance</strong></summary>
@@ -176,7 +172,7 @@ jobs:
 | Item | Value |
 | --- | --- |
 | Repo Total Files | 1 |
-| Repo Size in KB | 864 |
+| Repo Size in KB | 171 |
 | Lume Version | v2.4.2 |
 | Deno Version | 2.7.13 |
 | V8 Version | 14.7.173.20-rusty |
