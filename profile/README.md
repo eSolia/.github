@@ -1,7 +1,6 @@
 [![Proven.lol Lightweight Proof](https://img.shields.io/badge/Proven.lol-Lightweight_Proof-green?style=flat-square&logo=cachet)](https://proven.lol/fbd788)
 
-**Last Updated:** April 24th, 2026 at 4:38:44 AM GMT+9 &nbsp; **Today is:** Friday, April 24, 2026
-
+**Last Updated:** April 24th, 2026 at 5:01:21 AM GMT+9 &nbsp; **Today is:** Friday, April 24, 2026
 
 ## Welcome 👋
 
@@ -147,33 +146,23 @@ Scan results feed a signed evidence bundle — SBOM, policy decision, and manife
 
 ### English
 
-
-
 - [Let’s share your data using OneDrive!](https://blog.esolia.pro/en/posts/2026406-using-onedrive-en/) — _This article clearly explains how to securely and easily share files using Microsoft 365 OneDrive...._
-
 - [Introducing Acrobat Standard features for use in administrative departments](https://blog.esolia.pro/en/posts/20260323-acrobat-standard-en/) — _From differences with Acrobat Reader to useful features and comparison with Acrobat Pro..._
-
 - [How Should You Manage Your Passwords?](https://blog.esolia.pro/en/posts/20260302-manage-your-passwords-en/) — _We’ll look at how to manage passwords safely, and how to create stronger, harder-to-guess passwords ..._
-
 
 ### 日本語
 
-
-
 - [OneDriveでファイルを共有](https://blog.esolia.pro/posts/20260406-onedriveでファイルを共有-ja/)
-
 - [管理部門で活用するAcrobat Standardの機能をご紹介](https://blog.esolia.pro/posts/20260323-acrobat-standardの機能-ja/)
-
 - [パスワードはどう管理する？初心者向けパスワード管理法](https://blog.esolia.pro/posts/20260302-パスワードはどう管理する-ja/)
-
 
 ## Build Stats
 
 | Item | Value |
 | --- | --- |
-| Repo Total Files | 1 |
-| Repo Size in KB | 170 |
-| Lume Version | v2.4.2 |
+| Repo Total Files | 0 |
+| Repo Size in KB | 139 |
+| Lume Version | v3.2.4 |
 | Deno Version | 2.7.13 |
 | V8 Version | 14.7.173.20-rusty |
 | Typescript Version | 5.9.2 |
