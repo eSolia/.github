@@ -1,7 +1,7 @@
 [![Proven.lol Lightweight Proof](https://img.shields.io/badge/Proven.lol-Lightweight_Proof-green?style=flat-square&logo=cachet)](https://proven.lol/fbd788)
 
-**Last Updated:** May 2nd, 2026 at 1:46:25 AM GMT+9 &nbsp; **Today is:** Sunday, May 3, 2026
-**It's a holiday in Japan:** 憲法記念日
+**Last Updated:** May 3rd, 2026 at 1:44:56 AM GMT+9 &nbsp; **Today is:** Monday, May 4, 2026
+**It's a holiday in Japan:** みどりの日
 
 ## Welcome 👋
 
