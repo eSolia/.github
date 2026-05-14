@@ -1,6 +1,6 @@
 [![Proven.lol Lightweight Proof](https://img.shields.io/badge/Proven.lol-Lightweight_Proof-green?style=flat-square&logo=cachet)](https://proven.lol/fbd788)
 
-**Last Updated:** May 13th, 2026 at 2:14:18 AM GMT+9 &nbsp; **Today is:** Thursday, May 14, 2026
+**Last Updated:** May 14th, 2026 at 2:15:13 AM GMT+9 &nbsp; **Today is:** Friday, May 15, 2026
 
 ## Welcome 👋
 
@@ -146,22 +146,22 @@ Scan results feed a signed evidence bundle — SBOM, policy decision, and manife
 
 ### English
 
+- [Reflecting on the True Value of IT Professionals at the Heart of Tokyo Station](https://blog.esolia.pro/en/posts/20260514-it-professionals-en/) — _What is the true value of IT project managers? Using Tokyo Station as a metaphor, this article explo..._
 - [Let’s share your data using OneDrive!](https://blog.esolia.pro/en/posts/2026406-using-onedrive-en/) — _This article clearly explains how to securely and easily share files using Microsoft 365 OneDrive...._
 - [Introducing Acrobat Standard features for use in administrative departments](https://blog.esolia.pro/en/posts/20260323-acrobat-standard-en/) — _From differences with Acrobat Reader to useful features and comparison with Acrobat Pro..._
-- [How Should You Manage Your Passwords?](https://blog.esolia.pro/en/posts/20260302-manage-your-passwords-en/) — _We’ll look at how to manage passwords safely, and how to create stronger, harder-to-guess passwords ..._
 
 ### 日本語
 
+- [IT担当者の真価は“東京駅の真ん中”に 東京駅の真ん中で考える、IT担当者の本当の価値](https://blog.esolia.pro/posts/20260514-it担当者の真価-ja/)
 - [OneDriveでファイルを共有](https://blog.esolia.pro/posts/20260406-onedriveでファイルを共有-ja/)
 - [管理部門で活用するAcrobat Standardの機能をご紹介](https://blog.esolia.pro/posts/20260323-acrobat-standardの機能-ja/)
-- [パスワードはどう管理する？初心者向けパスワード管理法](https://blog.esolia.pro/posts/20260302-パスワードはどう管理する-ja/)
 
 ## Build Stats
 
 | Item | Value |
 | --- | --- |
 | Repo Total Files | 0 |
-| Repo Size in KB | 139 |
+| Repo Size in KB | 140 |
 | Lume Version | v3.2.4 |
 | Deno Version | 2.7.14 |
 | V8 Version | 14.7.173.20-rusty |
