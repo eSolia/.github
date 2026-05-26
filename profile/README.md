@@ -1,6 +1,6 @@
 [![Proven.lol Lightweight Proof](https://img.shields.io/badge/Proven.lol-Lightweight_Proof-green?style=flat-square&logo=cachet)](https://proven.lol/fbd788)
 
-**Last Updated:** May 25th, 2026 at 1:46:58 AM GMT+9 &nbsp; **Today is:** Tuesday, May 26, 2026
+**Last Updated:** May 26th, 2026 at 2:11:59 AM GMT+9 &nbsp; **Today is:** Wednesday, May 27, 2026
 
 ## Welcome 👋
 
@@ -146,15 +146,15 @@ Scan results feed a signed evidence bundle — SBOM, policy decision, and manife
 
 ### English
 
+- [Is it safety to remove USB device?](https://blog.esolia.pro/en/posts/20260526-remove-usb-device-en/) — _Is “Safely Remove Hardware and Eject Media” still necessary?  ..._
 - [Reflecting on the True Value of IT Professionals at the Heart of Tokyo Station](https://blog.esolia.pro/en/posts/20260514-it-professionals-en/) — _What is the true value of IT project managers? Using Tokyo Station as a metaphor, this article explo..._
 - [Let’s share your data using OneDrive!](https://blog.esolia.pro/en/posts/2026406-using-onedrive-en/) — _This article clearly explains how to securely and easily share files using Microsoft 365 OneDrive...._
-- [Introducing Acrobat Standard features for use in administrative departments](https://blog.esolia.pro/en/posts/20260323-acrobat-standard-en/) — _From differences with Acrobat Reader to useful features and comparison with Acrobat Pro..._
 
 ### 日本語
 
+- [USBメモリは抜いても大丈夫？](https://blog.esolia.pro/posts/20260526-usbメモリ-ja/)
 - [IT担当者の真価は“東京駅の真ん中”に 東京駅の真ん中で考える、IT担当者の本当の価値](https://blog.esolia.pro/posts/20260514-it担当者の真価-ja/)
 - [OneDriveでファイルを共有](https://blog.esolia.pro/posts/20260406-onedriveでファイルを共有-ja/)
-- [管理部門で活用するAcrobat Standardの機能をご紹介](https://blog.esolia.pro/posts/20260323-acrobat-standardの機能-ja/)
 
 ## Build Stats
 
