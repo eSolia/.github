@@ -1,6 +1,6 @@
 [![Proven.lol Lightweight Proof](https://img.shields.io/badge/Proven.lol-Lightweight_Proof-green?style=flat-square&logo=cachet)](https://proven.lol/fbd788)
 
-**Last Updated:** May 26th, 2026 at 2:11:59 AM GMT+9 &nbsp; **Today is:** Wednesday, May 27, 2026
+**Last Updated:** May 27th, 2026 at 2:35:37 AM GMT+9 &nbsp; **Today is:** Thursday, May 28, 2026
 
 ## Welcome 👋
 
@@ -163,7 +163,7 @@ Scan results feed a signed evidence bundle — SBOM, policy decision, and manife
 | Repo Total Files | 0 |
 | Repo Size in KB | 140 |
 | Lume Version | v3.2.4 |
-| Deno Version | 2.8.0 |
+| Deno Version | 2.8.1 |
 | V8 Version | 14.9.207.2-rusty |
 | Typescript Version | 6.0.3 |
 | Timezone | Asia/Tokyo |
