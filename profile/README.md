@@ -1,6 +1,6 @@
 [![Proven.lol Lightweight Proof](https://img.shields.io/badge/Proven.lol-Lightweight_Proof-green?style=flat-square&logo=cachet)](https://proven.lol/fbd788)
 
-**Last Updated:** May 27th, 2026 at 2:35:37 AM GMT+9 &nbsp; **Today is:** Thursday, May 28, 2026
+**Last Updated:** May 28th, 2026 at 2:34:52 AM GMT+9 &nbsp; **Today is:** Friday, May 29, 2026
 
 ## Welcome 👋
 
@@ -146,7 +146,7 @@ Scan results feed a signed evidence bundle — SBOM, policy decision, and manife
 
 ### English
 
-- [Is it safety to remove USB device?](https://blog.esolia.pro/en/posts/20260526-remove-usb-device-en/) — _Is “Safely Remove Hardware and Eject Media” still necessary?  ..._
+- [Is it safe to just yank your USB device?](https://blog.esolia.pro/en/posts/20260526-remove-usb-device-en/) — _Is “Safely Remove Hardware and Eject Media” still necessary?  ..._
 - [Reflecting on the True Value of IT Professionals at the Heart of Tokyo Station](https://blog.esolia.pro/en/posts/20260514-it-professionals-en/) — _What is the true value of IT project managers? Using Tokyo Station as a metaphor, this article explo..._
 - [Let’s share your data using OneDrive!](https://blog.esolia.pro/en/posts/2026406-using-onedrive-en/) — _This article clearly explains how to securely and easily share files using Microsoft 365 OneDrive...._
 
