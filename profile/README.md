@@ -1,6 +1,6 @@
 [![Proven.lol Lightweight Proof](https://img.shields.io/badge/Proven.lol-Lightweight_Proof-green?style=flat-square&logo=cachet)](https://proven.lol/fbd788)
 
-**Last Updated:** June 22nd, 2026 at 2:00:35 AM GMT+9 &nbsp; **Today is:** Tuesday, June 23, 2026
+**Last Updated:** June 23rd, 2026 at 3:00:38 AM GMT+9 &nbsp; **Today is:** Wednesday, June 24, 2026
 
 ## Welcome 👋
 
@@ -146,15 +146,15 @@ Scan results feed a signed evidence bundle — SBOM, policy decision, and manife
 
 ### English
 
+- [IT Terms You Think You Know: What Is a Server?](https://blog.esolia.pro/en/posts/20260623-what-is-a-server-en/) — _we’ll give a gentle and beginner-friendly explanation of the term “server,” which you might know the..._
 - [Is it safe to just yank your USB device?](https://blog.esolia.pro/en/posts/20260526-remove-usb-device-en/) — _Is “Safely Remove Hardware and Eject Media” still necessary?  ..._
 - [Reflecting on the True Value of IT Professionals at the Heart of Tokyo Station](https://blog.esolia.pro/en/posts/20260514-it-professionals-en/) — _What is the true value of IT project managers? Using Tokyo Station as a metaphor, this article explo..._
-- [Let’s share your data using OneDrive!](https://blog.esolia.pro/en/posts/2026406-using-onedrive-en/) — _This article clearly explains how to securely and easily share files using Microsoft 365 OneDrive...._
 
 ### 日本語
 
+- [わかるようでわからないIT用語：サーバーってなに？](https://blog.esolia.pro/posts/20260623-サーバーってなに-ja/)
 - [USBメモリは抜いても大丈夫？](https://blog.esolia.pro/posts/20260526-usbメモリ-ja/)
 - [IT担当者の真価は“東京駅の真ん中”に 東京駅の真ん中で考える、IT担当者の本当の価値](https://blog.esolia.pro/posts/20260514-it担当者の真価-ja/)
-- [OneDriveでファイルを共有](https://blog.esolia.pro/posts/20260406-onedriveでファイルを共有-ja/)
 
 ## Build Stats
 
