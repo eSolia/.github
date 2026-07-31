@@ -12,6 +12,13 @@ MD033: false
 MD034: false
 MD036: false
 
+# One H1 per major section, not one H1 per document.
+# eSolia documents nest H2/H3 under each H1 and return to H1 for the next
+# section; the title comes from the filename and CMS metadata rather than an
+# in-body heading. A single top-level H1 has caused Typst ingestion problems.
+# MD001 (heading-increment) stays enabled: skipping a level is still an error.
+MD025: false
+
 MD024:
   siblings_only: true
 
