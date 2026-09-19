@@ -1,6 +1,6 @@
 [![Proven.lol Lightweight Proof](https://img.shields.io/badge/Proven.lol-Lightweight_Proof-green?style=flat-square&logo=cachet)](https://proven.lol/fbd788)
 
-**Last Updated:** September 18th, 2026 at 1:35:46 AM GMT+9 &nbsp; **Today is:** Saturday, September 19, 2026
+**Last Updated:** September 19th, 2026 at 1:34:47 AM GMT+9 &nbsp; **Today is:** Sunday, September 20, 2026
 
 ## Welcome 👋
 
@@ -146,15 +146,15 @@ Scan results feed a signed evidence bundle — SBOM, policy decision, and manife
 
 ### English
 
-- [How to Automatically Power On a PC After a Power Outage：Dell BIOS Setting Guide](https://blog.esolia.pro/en/posts/20260630-automatically-power-on-a-pc-en/) — _Learn how to configure Dell Optiplex BIOS settings so that your PC automatically powers on after pow..._
-- [IT Terms You Think You Know: What Is a Server?](https://blog.esolia.pro/en/posts/20260623-what-is-a-server-en/) — _we’ll give a gentle and beginner-friendly explanation of the term “server,” which you might know the..._
-- [Is it safe to just yank your USB device?](https://blog.esolia.pro/en/posts/20260526-remove-usb-device-en/) — _Is “Safely Remove Hardware and Eject Media” still necessary?  ..._
+- [How to Automatically Power On a PC After a Power Outage：Dell BIOS Setting Guide](https://esolia.co.jp/blog/en/posts/20260630-automatically-power-on-a-pc-en/) — _Learn how to configure Dell Optiplex BIOS settings so that your PC automatically powers on after pow..._
+- [IT Terms You Think You Know: What Is a Server?](https://esolia.co.jp/blog/en/posts/20260623-what-is-a-server-en/) — _we’ll give a gentle and beginner-friendly explanation of the term “server,” which you might know the..._
+- [Is it safe to just yank your USB device?](https://esolia.co.jp/blog/en/posts/20260526-remove-usb-device-en/) — _Is “Safely Remove Hardware and Eject Media” still necessary?  ..._
 
 ### 日本語
 
-- [停電後にPCを自動起動させる方法:Dell BIOS設定解説](https://blog.esolia.pro/posts/20260630-停電後にpcを自動起動-ja/)
-- [わかるようでわからないIT用語：サーバーってなに？](https://blog.esolia.pro/posts/20260623-サーバーってなに-ja/)
-- [USBメモリは抜いても大丈夫？](https://blog.esolia.pro/posts/20260526-usbメモリ-ja/)
+- [停電後にPCを自動起動させる方法:Dell BIOS設定解説](https://esolia.co.jp/blog/posts/20260630-停電後にpcを自動起動-ja/)
+- [わかるようでわからないIT用語：サーバーってなに？](https://esolia.co.jp/blog/posts/20260623-サーバーってなに-ja/)
+- [USBメモリは抜いても大丈夫？](https://esolia.co.jp/blog/posts/20260526-usbメモリ-ja/)
 
 ## Build Stats
 
