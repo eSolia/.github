@@ -1,7 +1,7 @@
 [![Proven.lol Lightweight Proof](https://img.shields.io/badge/Proven.lol-Lightweight_Proof-green?style=flat-square&logo=cachet)](https://proven.lol/fbd788)
 
-**Last Updated:** September 21st, 2026 at 1:33:33 AM GMT+9 &nbsp; **Today is:** Tuesday, September 22, 2026
-**It's a holiday in Japan:** 国民の休日
+**Last Updated:** September 22nd, 2026 at 1:36:24 AM GMT+9 &nbsp; **Today is:** Wednesday, September 23, 2026
+**It's a holiday in Japan:** 秋分の日
 
 ## Welcome 👋
 
@@ -147,15 +147,15 @@ Scan results feed a signed evidence bundle — SBOM, policy decision, and manife
 
 ### English
 
+- [Keyboard Layout History and the Role of Function Keys](https://esolia.co.jp/blog/en/posts/20260922-keyboard-function-keys-en/) — _Explains the different types of keyboard layouts, the differences between Japanese and English keybo..._
 - [If Win + V Is Not Enough: Clipboard Managers for Windows](https://esolia.co.jp/blog/en/posts/20260920-clipboard-managers-windows-en/) — _Copy, paste, and lose it a moment later. A clipboard manager keeps a history so you can go back — he..._
 - [How to Automatically Power On a PC After a Power Outage：Dell BIOS Setting Guide](https://esolia.co.jp/blog/en/posts/20260630-automatically-power-on-a-pc-en/) — _Learn how to configure Dell Optiplex BIOS settings so that your PC automatically powers on after pow..._
-- [IT Terms You Think You Know: What Is a Server?](https://esolia.co.jp/blog/en/posts/20260623-what-is-a-server-en/) — _we’ll give a gentle and beginner-friendly explanation of the term “server,” which you might know the..._
 
 ### 日本語
 
+- [キーボードの歴史とファンクションキー](https://esolia.co.jp/blog/posts/20260922-キーボードの歴史とファンクションキー-ja/)
 - [Win + Vでは物足りないときのクリップボード管理ツール](https://esolia.co.jp/blog/posts/20260920-クリップボード管理ツール-ja/)
 - [停電後にPCを自動起動させる方法:Dell BIOS設定解説](https://esolia.co.jp/blog/posts/20260630-停電後にpcを自動起動-ja/)
-- [わかるようでわからないIT用語：サーバーってなに？](https://esolia.co.jp/blog/posts/20260623-サーバーってなに-ja/)
 
 ## Build Stats
 
