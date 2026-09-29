@@ -1,6 +1,6 @@
 [![Proven.lol Lightweight Proof](https://img.shields.io/badge/Proven.lol-Lightweight_Proof-green?style=flat-square&logo=cachet)](https://proven.lol/fbd788)
 
-**Last Updated:** September 28th, 2026 at 1:35:59 AM GMT+9 &nbsp; **Today is:** Tuesday, September 29, 2026
+**Last Updated:** September 29th, 2026 at 1:37:52 AM GMT+9 &nbsp; **Today is:** Wednesday, September 30, 2026
 
 ## Welcome 👋
 
@@ -146,15 +146,15 @@ Scan results feed a signed evidence bundle — SBOM, policy decision, and manife
 
 ### English
 
+- [Understanding the runas Command - Running Apps with Another Account Without Logging Off](https://esolia.co.jp/blog/en/posts/20260929-runas-command-en/) — _Learn how to use the Windows runas command to run apps or admin consoles with admin rights only when..._
 - [Keyboard Layout History and the Role of Function Keys](https://esolia.co.jp/blog/en/posts/20260922-keyboard-function-keys-en/) — _Explains the different types of keyboard layouts, the differences between Japanese and English keybo..._
 - [If Win + V Is Not Enough: Clipboard Managers for Windows](https://esolia.co.jp/blog/en/posts/20260920-clipboard-managers-windows-en/) — _Copy, paste, and lose it a moment later. A clipboard manager keeps a history so you can go back — he..._
-- [How to Automatically Power On a PC After a Power Outage：Dell BIOS Setting Guide](https://esolia.co.jp/blog/en/posts/20260630-automatically-power-on-a-pc-en/) — _Learn how to configure Dell Optiplex BIOS settings so that your PC automatically powers on after pow..._
 
 ### 日本語
 
+- [runas コマンドとは](https://esolia.co.jp/blog/posts/20260929-runas-コマンドとは-ja/)
 - [キーボードの歴史とファンクションキー](https://esolia.co.jp/blog/posts/20260922-キーボードの歴史とファンクションキー-ja/)
 - [Win + Vでは物足りないときのクリップボード管理ツール](https://esolia.co.jp/blog/posts/20260920-クリップボード管理ツール-ja/)
-- [停電後にPCを自動起動させる方法:Dell BIOS設定解説](https://esolia.co.jp/blog/posts/20260630-停電後にpcを自動起動-ja/)
 
 ## Build Stats
 
