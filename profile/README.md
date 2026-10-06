@@ -1,6 +1,6 @@
 [![Proven.lol Lightweight Proof](https://img.shields.io/badge/Proven.lol-Lightweight_Proof-green?style=flat-square&logo=cachet)](https://proven.lol/fbd788)
 
-**Last Updated:** October 4th, 2026 at 2:44:24 AM GMT+9 &nbsp; **Today is:** Tuesday, October 6, 2026
+**Last Updated:** October 6th, 2026 at 1:39:57 AM GMT+9 &nbsp; **Today is:** Wednesday, October 7, 2026
 
 ## Welcome 👋
 
@@ -146,15 +146,15 @@ Scan results feed a signed evidence bundle — SBOM, policy decision, and manife
 
 ### English
 
+- [The Hidden Dangers of Email Attachments](https://esolia.co.jp/blog/en/posts/20261006-email-attachment-en/) — _Explains the risks of ZIP bombs and macro viruses hidden in email attachments. Provides easy-to-unde..._
 - [Understanding the runas Command - Running Apps with Another Account Without Logging Off](https://esolia.co.jp/blog/en/posts/20260929-runas-command-en/) — _Learn how to use the Windows runas command to run apps or admin consoles with admin rights only when..._
 - [Keyboard Layout History and the Role of Function Keys](https://esolia.co.jp/blog/en/posts/20260922-keyboard-function-keys-en/) — _Explains the different types of keyboard layouts, the differences between Japanese and English keybo..._
-- [If Win + V Is Not Enough: Clipboard Managers for Windows](https://esolia.co.jp/blog/en/posts/20260920-clipboard-managers-windows-en/) — _Copy, paste, and lose it a moment later. A clipboard manager keeps a history so you can go back — he..._
 
 ### 日本語
 
+- [添付ファイルの罠](https://esolia.co.jp/blog/posts/20261006-添付ファイルの罠-ja/)
 - [runas コマンドとは](https://esolia.co.jp/blog/posts/20260929-runas-コマンドとは-ja/)
 - [キーボードの歴史とファンクションキー](https://esolia.co.jp/blog/posts/20260922-キーボードの歴史とファンクションキー-ja/)
-- [Win + Vでは物足りないときのクリップボード管理ツール](https://esolia.co.jp/blog/posts/20260920-クリップボード管理ツール-ja/)
 
 ## Build Stats
 
