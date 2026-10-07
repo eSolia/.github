@@ -1,6 +1,6 @@
 [![Proven.lol Lightweight Proof](https://img.shields.io/badge/Proven.lol-Lightweight_Proof-green?style=flat-square&logo=cachet)](https://proven.lol/fbd788)
 
-**Last Updated:** October 6th, 2026 at 1:39:57 AM GMT+9 &nbsp; **Today is:** Wednesday, October 7, 2026
+**Last Updated:** October 7th, 2026 at 1:39:23 AM GMT+9 &nbsp; **Today is:** Thursday, October 8, 2026
 
 ## Welcome 👋
 
@@ -146,22 +146,22 @@ Scan results feed a signed evidence bundle — SBOM, policy decision, and manife
 
 ### English
 
-- [The Hidden Dangers of Email Attachments](https://esolia.co.jp/blog/en/posts/20261006-email-attachment-en/) — _Explains the risks of ZIP bombs and macro viruses hidden in email attachments. Provides easy-to-unde..._
-- [Understanding the runas Command - Running Apps with Another Account Without Logging Off](https://esolia.co.jp/blog/en/posts/20260929-runas-command-en/) — _Learn how to use the Windows runas command to run apps or admin consoles with admin rights only when..._
-- [Keyboard Layout History and the Role of Function Keys](https://esolia.co.jp/blog/en/posts/20260922-keyboard-function-keys-en/) — _Explains the different types of keyboard layouts, the differences between Japanese and English keybo..._
+- [How to spot ZIP bombs and macro viruses in email attachments](https://esolia.co.jp/blog/en/posts/20261006-email-attachment-en/) — _A tiny "Invoice.zip" or an "Enable Content" prompt is a red flag. Signs of ZIP bombs and macro virus..._
+- [Windows runas: open admin tools without logging off](https://esolia.co.jp/blog/en/posts/20260929-runas-command-en/) — _Work as a standard user but need admin rights for Device Manager or Services? runas opens them under..._
+- [QWERTY vs. JIS keyboards and what the F1–F12 keys do](https://esolia.co.jp/blog/en/posts/20260922-keyboard-function-keys-en/) — _Why is QWERTY laid out the way it is, and how does a JIS keyboard differ from US? Plus what F1–F12 d..._
 
 ### 日本語
 
-- [添付ファイルの罠](https://esolia.co.jp/blog/posts/20261006-添付ファイルの罠-ja/)
-- [runas コマンドとは](https://esolia.co.jp/blog/posts/20260929-runas-コマンドとは-ja/)
-- [キーボードの歴史とファンクションキー](https://esolia.co.jp/blog/posts/20260922-キーボードの歴史とファンクションキー-ja/)
+- [メール添付の罠：ZIP爆弾とマクロウィルスの見分け方](https://esolia.co.jp/blog/posts/20261006-添付ファイルの罠-ja/)
+- [runasコマンド：ログオフせず管理者権限でアプリを起動](https://esolia.co.jp/blog/posts/20260929-runas-コマンドとは-ja/)
+- [キーボード配列の歴史とF1〜F12・Fnキーの使い方](https://esolia.co.jp/blog/posts/20260922-キーボードの歴史とファンクションキー-ja/)
 
 ## Build Stats
 
 | Item | Value |
 | --- | --- |
 | Repo Total Files | 0 |
-| Repo Size in KB | 141 |
+| Repo Size in KB | 140 |
 | Lume Version | v3.2.4 |
 | Deno Version | 2.9.7 |
 | V8 Version | 15.0.245.2-rusty |
