@@ -1,6 +1,6 @@
 [![Proven.lol Lightweight Proof](https://img.shields.io/badge/Proven.lol-Lightweight_Proof-green?style=flat-square&logo=cachet)](https://proven.lol/fbd788)
 
-**Last Updated:** October 19th, 2026 at 1:35:18 AM GMT+9 &nbsp; **Today is:** Tuesday, October 20, 2026
+**Last Updated:** October 20th, 2026 at 1:39:10 AM GMT+9 &nbsp; **Today is:** Wednesday, October 21, 2026
 
 ## Welcome 👋
 
@@ -146,15 +146,15 @@ Scan results feed a signed evidence bundle — SBOM, policy decision, and manife
 
 ### English
 
+- [Beyond File Explorer: Better File Managers for Windows](https://esolia.co.jp/blog/en/posts/20261020-explorer-alternatives-windows-en/) — _File Explorer does the basics, but if you move files around all day, a dual-pane file manager saves ..._
 - [Stay Focused While Working from Home! How to Create a Comfortable Digital Environment](https://esolia.co.jp/blog/en/posts/20261013-comfortable-digital-environment-en/) — _Struggling with eye strain, shoulder pain, or lack of focus while working from home? Discover IT-bas..._
 - [How to spot ZIP bombs and macro viruses in email attachments](https://esolia.co.jp/blog/en/posts/20261006-email-attachment-en/) — _A tiny "Invoice.zip" or an "Enable Content" prompt is a red flag. Signs of ZIP bombs and macro virus..._
-- [Windows runas: open admin tools without logging off](https://esolia.co.jp/blog/en/posts/20260929-runas-command-en/) — _Work as a standard user but need admin rights for Device Manager or Services? runas opens them under..._
 
 ### 日本語
 
+- [エクスプローラーの一歩先へ：Windowsで使えるファイル管理ツール](https://esolia.co.jp/blog/posts/20261020-エクスプローラー代替ツール-ja/)
 - [在宅勤務で集中力を保つ！快適デジタル環境の整え方](https://esolia.co.jp/blog/posts/20261013-快適-デジタル環境-ja/)
 - [メール添付の罠：ZIP爆弾とマクロウィルスの見分け方](https://esolia.co.jp/blog/posts/20261006-添付ファイルの罠-ja/)
-- [runasコマンド：ログオフせず管理者権限でアプリを起動](https://esolia.co.jp/blog/posts/20260929-runas-コマンドとは-ja/)
 
 ## Build Stats
 
