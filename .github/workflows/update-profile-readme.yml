@@ -22,10 +22,27 @@ jobs:
       contents: write
 
     steps:
+      # InfoSec: on main, only the eSolia Bot Push App may push without a PR
+      # (devkit ruleset require-review-bot-push, eSolia/devkit#694); GitHub
+      # doesn't accept GITHUB_TOKEN as a ruleset bypass. The App has
+      # Contents: write on esolia-2025, codex and .github only, and this
+      # short-lived token is scoped to this repo. Pull requests keep
+      # GITHUB_TOKEN: a fork's PR gets no secrets, and those pushes go to
+      # the PR's own branch.
+      - name: Get the bot App's token
+        if: github.event_name != 'pull_request'
+        id: app-token
+        uses: actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510 # v3.3.0
+        with:
+          client-id: ${{ vars.BOT_PUSH_APP_CLIENT_ID }}
+          private-key: ${{ secrets.BOT_PUSH_APP_PRIVATE_KEY }}
+          permission-contents: write
+
       - name: Clone repository
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           ref: ${{ github.head_ref }}
+          token: ${{ steps.app-token.outputs.token || github.token }}
           persist-credentials: true  # Required for git-auto-commit to push
 
       - name: Setup Deno environment
@@ -39,5 +56,7 @@ jobs:
       - name: Commit changes
         uses: stefanzweifel/git-auto-commit-action@04702edda442b2e678b25b537cec683a1493fcb9 # v7.1.0
         with:
-          commit_message: Apply changes during gh actions build
+          # [skip ci]: an App push starts push workflows, and this one would
+          # otherwise run again only to find nothing to commit.
+          commit_message: "Apply changes during gh actions build [skip ci]"
           status_options: '--untracked-files=no'
