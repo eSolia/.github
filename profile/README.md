@@ -1,6 +1,6 @@
 [![Proven.lol Lightweight Proof](https://img.shields.io/badge/Proven.lol-Lightweight_Proof-green?style=flat-square&logo=cachet)](https://proven.lol/fbd788)
 
-**Last Updated:** November 10th, 2026 at 1:31:53 AM GMT+9 &nbsp; **Today is:** Wednesday, November 11, 2026
+**Last Updated:** November 11th, 2026 at 1:31:55 AM GMT+9 &nbsp; **Today is:** Thursday, November 12, 2026
 
 ## Welcome 👋
 
@@ -146,15 +146,15 @@ Scan results feed a signed evidence bundle — SBOM, policy decision, and manife
 
 ### English
 
+- [Why restarting your PC fixes many problems: A simple explanation](https://esolia.co.jp/blog/en/posts/20260528-restarting-your-pc-en/) — _Why do IT support teams often say “Please restart your computer”? This article explains how restarti..._
 - [Critical PHP flaws: five questions to ask your web team today](https://esolia.co.jp/blog/en/posts/20261022-php-critical-vulnerability-en/) — _Two critical PHP vulnerabilities let attackers run their own code on unpatched web servers, and Japa..._
 - [Beyond File Explorer: Better File Managers for Windows](https://esolia.co.jp/blog/en/posts/20261020-explorer-alternatives-windows-en/) — _File Explorer does the basics, but if you move files around all day, a dual-pane file manager saves ..._
-- [Stay Focused While Working from Home! How to Create a Comfortable Digital Environment](https://esolia.co.jp/blog/en/posts/20261013-comfortable-digital-environment-en/) — _Struggling with eye strain, shoulder pain, or lack of focus while working from home? Discover IT-bas..._
 
 ### 日本語
 
+- [パソコン再起動でなぜ直る？IT担当者がまず「再起動してください」と言う理由](https://esolia.co.jp/blog/posts/20260528-再起動してください-ja/)
 - [PHPの重大な脆弱性：今日、Web担当者に確認したい5つのこと](https://esolia.co.jp/blog/posts/20261022-php重大脆弱性-確認事項-ja/)
 - [エクスプローラーの一歩先へ：Windowsで使えるファイル管理ツール](https://esolia.co.jp/blog/posts/20261020-エクスプローラー代替ツール-ja/)
-- [在宅勤務で集中力を保つ！快適デジタル環境の整え方](https://esolia.co.jp/blog/posts/20261013-快適-デジタル環境-ja/)
 
 ## Build Stats
 
